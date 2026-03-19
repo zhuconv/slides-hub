@@ -31,7 +31,7 @@ for (const { name } of projects) {
 
   try {
     execSync(
-      `npx slidev build "${slidesFile}" --base /${name}/ --out "${outDir}"`,
+      `npx slidev build "${slidesFile}" --base /slides-hub/${name}/ --out "${outDir}"`,
       { cwd: projDir, stdio: "inherit" }
     );
     built.push(name);
@@ -61,7 +61,7 @@ const indexHtml = `<!DOCTYPE html>
 <body>
   <h1>Slides Hub</h1>
   <ul>
-    ${built.map(n => `<li><a href="/${n}/">${n}</a></li>`).join("\n    ")}
+    ${built.map(n => `<li><a href="/slides-hub/${n}/">${n}</a></li>`).join("\n    ")}
   </ul>
   <p class="date">Built: ${new Date().toISOString().slice(0, 10)}</p>
 </body>
