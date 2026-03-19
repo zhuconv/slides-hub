@@ -1,0 +1,809 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "mcp-excalidraw-server",
+  "elements": [
+    {
+      "id": "title",
+      "type": "text",
+      "x": 180,
+      "y": 10,
+      "strokeColor": "#1e1e1e",
+      "text": "Aesthetic Preference Agent System",
+      "fontSize": 28,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.361Z",
+      "updatedAt": "2026-03-19T03:27:23.361Z",
+      "version": 1
+    },
+    {
+      "id": "orch",
+      "type": "rectangle",
+      "x": 50,
+      "y": 60,
+      "width": 900,
+      "height": 50,
+      "backgroundColor": "#343a40",
+      "strokeColor": "#343a40",
+      "createdAt": "2026-03-19T03:27:23.362Z",
+      "updatedAt": "2026-03-19T03:27:23.362Z",
+      "version": 1
+    },
+    {
+      "id": "orch_t",
+      "type": "text",
+      "x": 280,
+      "y": 72,
+      "strokeColor": "#ffffff",
+      "text": "Orchestrator (session.py)",
+      "fontSize": 20,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.362Z",
+      "updatedAt": "2026-03-19T03:27:23.362Z",
+      "version": 1
+    },
+    {
+      "id": "loop",
+      "type": "rectangle",
+      "x": 50,
+      "y": 130,
+      "width": 900,
+      "height": 600,
+      "backgroundColor": "transparent",
+      "strokeColor": "#adb5bd",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "createdAt": "2026-03-19T03:27:23.362Z",
+      "updatedAt": "2026-03-19T03:27:23.362Z",
+      "version": 1
+    },
+    {
+      "id": "loop_t",
+      "type": "text",
+      "x": 60,
+      "y": 135,
+      "strokeColor": "#495057",
+      "text": "Each Round:",
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.362Z",
+      "updatedAt": "2026-03-19T03:27:23.362Z",
+      "version": 1
+    },
+    {
+      "id": "vp",
+      "type": "rectangle",
+      "x": 620,
+      "y": 160,
+      "width": 200,
+      "height": 55,
+      "backgroundColor": "#12b886",
+      "strokeColor": "#0ca678",
+      "createdAt": "2026-03-19T03:27:23.362Z",
+      "updatedAt": "2026-03-19T03:27:23.362Z",
+      "version": 1
+    },
+    {
+      "id": "vp_t",
+      "type": "text",
+      "x": 640,
+      "y": 168,
+      "strokeColor": "#ffffff",
+      "text": "VisualProfile\n5-axis · 2592 profiles",
+      "fontSize": 13,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.362Z",
+      "updatedAt": "2026-03-19T03:27:23.362Z",
+      "version": 1
+    },
+    {
+      "id": "bp",
+      "type": "rectangle",
+      "x": 620,
+      "y": 225,
+      "width": 200,
+      "height": 40,
+      "backgroundColor": "#e9ecef",
+      "strokeColor": "#adb5bd",
+      "createdAt": "2026-03-19T03:27:23.362Z",
+      "updatedAt": "2026-03-19T03:27:23.362Z",
+      "version": 1
+    },
+    {
+      "id": "bp_t",
+      "type": "text",
+      "x": 640,
+      "y": 232,
+      "strokeColor": "#495057",
+      "text": "4 base prompts (fixed)",
+      "fontSize": 13,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.362Z",
+      "updatedAt": "2026-03-19T03:27:23.362Z",
+      "version": 1
+    },
+    {
+      "id": "gen",
+      "type": "rectangle",
+      "x": 80,
+      "y": 160,
+      "width": 220,
+      "height": 80,
+      "backgroundColor": "#2e86c1",
+      "strokeColor": "#2874a6",
+      "createdAt": "2026-03-19T03:27:23.362Z",
+      "updatedAt": "2026-03-19T03:27:23.362Z",
+      "version": 1
+    },
+    {
+      "id": "gen_t",
+      "type": "text",
+      "x": 100,
+      "y": 172,
+      "strokeColor": "#ffffff",
+      "text": "1. Generation Agent\ntemplate-based prompts",
+      "fontSize": 14,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.362Z",
+      "updatedAt": "2026-03-19T03:27:23.362Z",
+      "version": 1
+    },
+    {
+      "id": "sd15",
+      "type": "rectangle",
+      "x": 330,
+      "y": 170,
+      "width": 150,
+      "height": 60,
+      "backgroundColor": "#f39c12",
+      "strokeColor": "#d68910",
+      "createdAt": "2026-03-19T03:27:23.362Z",
+      "updatedAt": "2026-03-19T03:27:23.362Z",
+      "version": 1
+    },
+    {
+      "id": "sd15_t",
+      "type": "text",
+      "x": 355,
+      "y": 182,
+      "strokeColor": "#ffffff",
+      "text": "SD1.5\ndiffusers pipeline",
+      "fontSize": 13,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "out1",
+      "type": "text",
+      "x": 510,
+      "y": 175,
+      "strokeColor": "#495057",
+      "text": "4 × (preferred,\n   dispreferred)\n= 8 images",
+      "fontSize": 12,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "eval",
+      "type": "rectangle",
+      "x": 80,
+      "y": 300,
+      "width": 220,
+      "height": 80,
+      "backgroundColor": "#27ae60",
+      "strokeColor": "#1e8449",
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "eval_t",
+      "type": "text",
+      "x": 100,
+      "y": 312,
+      "strokeColor": "#ffffff",
+      "text": "2. Evaluation Agent\nClaude vision · temp=0",
+      "fontSize": 14,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "claude",
+      "type": "rectangle",
+      "x": 330,
+      "y": 310,
+      "width": 150,
+      "height": 60,
+      "backgroundColor": "#2980b9",
+      "strokeColor": "#2471a3",
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "claude_t",
+      "type": "text",
+      "x": 355,
+      "y": 322,
+      "strokeColor": "#ffffff",
+      "text": "Claude API\nstructured JSON",
+      "fontSize": 13,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "gt",
+      "type": "rectangle",
+      "x": 620,
+      "y": 310,
+      "width": 200,
+      "height": 55,
+      "backgroundColor": "#c0392b",
+      "strokeColor": "#a93226",
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "gt_t",
+      "type": "text",
+      "x": 650,
+      "y": 320,
+      "strokeColor": "#ffffff",
+      "text": "GT Profiles\n(hidden from system)",
+      "fontSize": 13,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "out2",
+      "type": "text",
+      "x": 510,
+      "y": 315,
+      "strokeColor": "#495057",
+      "text": "scores 1-10\n{\"score\": N}",
+      "fontSize": 12,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "inv",
+      "type": "rectangle",
+      "x": 80,
+      "y": 440,
+      "width": 220,
+      "height": 100,
+      "backgroundColor": "#c0392b",
+      "strokeColor": "#a93226",
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "inv_t",
+      "type": "text",
+      "x": 100,
+      "y": 455,
+      "strokeColor": "#ffffff",
+      "text": "3. Inversion Agent\n4-step pipeline",
+      "fontSize": 14,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "stepA",
+      "type": "rectangle",
+      "x": 330,
+      "y": 440,
+      "width": 140,
+      "height": 45,
+      "backgroundColor": "#e74c3c",
+      "strokeColor": "#cb4335",
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "stepA_t",
+      "type": "text",
+      "x": 345,
+      "y": 450,
+      "strokeColor": "#ffffff",
+      "text": "A. Δ optimize\nnoise pred loss",
+      "fontSize": 11,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "stepB",
+      "type": "rectangle",
+      "x": 490,
+      "y": 440,
+      "width": 120,
+      "height": 45,
+      "backgroundColor": "#e67e22",
+      "strokeColor": "#ca6f1e",
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "stepB_t",
+      "type": "text",
+      "x": 510,
+      "y": 450,
+      "strokeColor": "#ffffff",
+      "text": "B. E2T\nembed → text",
+      "fontSize": 11,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "stepC",
+      "type": "rectangle",
+      "x": 330,
+      "y": 495,
+      "width": 140,
+      "height": 45,
+      "backgroundColor": "#d35400",
+      "strokeColor": "#ba4a00",
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "stepC_t",
+      "type": "text",
+      "x": 345,
+      "y": 505,
+      "strokeColor": "#ffffff",
+      "text": "C. Claude diff\ntext → attrs",
+      "fontSize": 11,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "stepD",
+      "type": "rectangle",
+      "x": 490,
+      "y": 495,
+      "width": 120,
+      "height": 45,
+      "backgroundColor": "#a93226",
+      "strokeColor": "#922b21",
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "stepD_t",
+      "type": "text",
+      "x": 505,
+      "y": 505,
+      "strokeColor": "#ffffff",
+      "text": "D. Vocab map\n→ profile",
+      "fontSize": 11,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "refined",
+      "type": "text",
+      "x": 640,
+      "y": 470,
+      "strokeColor": "#0ca678",
+      "text": "Refined\nVisualProfile",
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "db",
+      "type": "rectangle",
+      "x": 80,
+      "y": 600,
+      "width": 220,
+      "height": 70,
+      "backgroundColor": "#8e44ad",
+      "strokeColor": "#7d3c98",
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "db_t",
+      "type": "text",
+      "x": 100,
+      "y": 615,
+      "strokeColor": "#ffffff",
+      "text": "4. Database\nSessionDatabase",
+      "fontSize": 14,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.363Z",
+      "updatedAt": "2026-03-19T03:27:23.363Z",
+      "version": 1
+    },
+    {
+      "id": "conv",
+      "type": "diamond",
+      "x": 500,
+      "y": 590,
+      "width": 180,
+      "height": 90,
+      "backgroundColor": "#6c757d",
+      "strokeColor": "#495057",
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "conv_t",
+      "type": "text",
+      "x": 535,
+      "y": 620,
+      "strokeColor": "#ffffff",
+      "text": "Converged?",
+      "fontSize": 14,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "stop",
+      "type": "rectangle",
+      "x": 750,
+      "y": 605,
+      "width": 150,
+      "height": 50,
+      "backgroundColor": "#27ae60",
+      "strokeColor": "#1e8449",
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "stop_t",
+      "type": "text",
+      "x": 775,
+      "y": 618,
+      "strokeColor": "#ffffff",
+      "text": "STOP\nProfile Found!",
+      "fontSize": 13,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "a_gen_sd",
+      "type": "arrow",
+      "x": 308,
+      "y": 200,
+      "width": 30,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          14,
+          0
+        ]
+      ],
+      "start": {
+        "id": "gen"
+      },
+      "end": {
+        "id": "sd15"
+      },
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "a_vp_gen",
+      "type": "arrow",
+      "x": 612.0022240632953,
+      "y": 190.04711735699777,
+      "width": 0,
+      "height": 0,
+      "strokeColor": "#0ca678",
+      "strokeStyle": "dashed",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -304.00444812659066,
+          7.169916229400684
+        ]
+      ],
+      "start": {
+        "id": "vp"
+      },
+      "end": {
+        "id": "gen"
+      },
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "a_gen_eval",
+      "type": "arrow",
+      "x": 190,
+      "y": 248,
+      "width": 0,
+      "height": 60,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          44
+        ]
+      ],
+      "start": {
+        "id": "gen"
+      },
+      "end": {
+        "id": "eval"
+      },
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "a_eval_claude",
+      "type": "arrow",
+      "x": 308,
+      "y": 340,
+      "width": 30,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          14,
+          0
+        ]
+      ],
+      "start": {
+        "id": "eval"
+      },
+      "end": {
+        "id": "claude"
+      },
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "a_gt_claude",
+      "type": "arrow",
+      "x": 612.000251940731,
+      "y": 338.3571408576132,
+      "width": 0,
+      "height": 0,
+      "strokeColor": "#c0392b",
+      "strokeStyle": "dashed",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -124.00050388146201,
+          0.9841309831862759
+        ]
+      ],
+      "start": {
+        "id": "gt"
+      },
+      "end": {
+        "id": "claude"
+      },
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "a_eval_inv",
+      "type": "arrow",
+      "x": 190,
+      "y": 388,
+      "width": 0,
+      "height": 60,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          44
+        ]
+      ],
+      "start": {
+        "id": "eval"
+      },
+      "end": {
+        "id": "inv"
+      },
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "a_inv_db",
+      "type": "arrow",
+      "x": 190,
+      "y": 548,
+      "width": 0,
+      "height": 60,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          44
+        ]
+      ],
+      "start": {
+        "id": "inv"
+      },
+      "end": {
+        "id": "db"
+      },
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "a_db_conv",
+      "type": "arrow",
+      "x": 308,
+      "y": 635,
+      "width": 200,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          184,
+          0
+        ]
+      ],
+      "start": {
+        "id": "db"
+      },
+      "end": {
+        "id": "conv"
+      },
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "a_conv_stop",
+      "type": "arrow",
+      "x": 684.3247204527015,
+      "y": 632.9930910541979,
+      "width": 70,
+      "height": 0,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          57.67708970684191,
+          -1.2271721214221998
+        ]
+      ],
+      "start": {
+        "id": "conv"
+      },
+      "end": {
+        "id": "stop"
+      },
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "a_conv_vp",
+      "type": "arrow",
+      "x": 603.6463925183426,
+      "y": 588.0249180618591,
+      "width": 0,
+      "height": 0,
+      "strokeColor": "#e74c3c",
+      "strokeStyle": "dashed",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          106.1330222940137,
+          -365.3425190505475
+        ]
+      ],
+      "start": {
+        "id": "conv"
+      },
+      "end": {
+        "id": "vp"
+      },
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "yes_label",
+      "type": "text",
+      "x": 700,
+      "y": 610,
+      "strokeColor": "#27ae60",
+      "text": "YES",
+      "fontSize": 12,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    },
+    {
+      "id": "no_label",
+      "type": "text",
+      "x": 600,
+      "y": 570,
+      "strokeColor": "#e74c3c",
+      "text": "NO →\nnext round",
+      "fontSize": 11,
+      "fontFamily": 2,
+      "createdAt": "2026-03-19T03:27:23.364Z",
+      "updatedAt": "2026-03-19T03:27:23.364Z",
+      "version": 1
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff",
+    "gridSize": null
+  }
+}
