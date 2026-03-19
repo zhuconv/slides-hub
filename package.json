@@ -1,0 +1,13 @@
+{
+  "name": "slides-hub",
+  "private": true,
+  "scripts": {
+    "dev": "slidev",
+    "build": "node build-all.mjs",
+    "sync": "node sync-slides.mjs"
+  },
+  "dependencies": {
+    "@slidev/cli": "latest",
+    "@slidev/theme-default": "latest"
+  }
+}
