@@ -1,6 +1,8 @@
 [
   {
     "name": "aesthetic-agent",
-    "src": "/work/11012/jiajunzhu2002/vista/AestheticAgent"
+    "src": "/work/11012/jiajunzhu2002/vista/AestheticAgent",
+    "slides": "slides.md",
+    "assets": ["public", "slides_assets"]
   }
 ]
