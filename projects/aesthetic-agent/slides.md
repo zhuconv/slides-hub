@@ -4,6 +4,16 @@ title: "Aesthetic Preference Agent System"
 info: Implementation Report
 ---
 
+<style>
+  :root { --slidev-code-font-size: 0.9em; }
+  .slidev-layout { font-size: 1.15em; }
+  table { font-size: 1.05em; }
+  h1 { font-size: 2em !important; }
+  h2 { font-size: 1.6em !important; }
+  li { font-size: 1.1em; }
+  p { font-size: 1.1em; }
+</style>
+
 # Aesthetic Preference Agent System
 
 Iterative aesthetic preference discovery via multi-agent loop
@@ -101,16 +111,10 @@ Each method finds different axes. Best single-round: Δ+E2T (3/5). Most stable: 
 
 # Conclusion
 
-**1. All pipeline components work — but the task is genuinely hard.**
+**All pipeline components work, but the SD1.5 PoC pipeline has clear limitations that prevent full convergence.**
 
-- SD1.5 generation, Claude evaluation, Δ optimization, embedding matching — all functional
-- 26/26 tests passed on GH200 120GB
-- Noise prediction loss converges (1.0-3.0), numerically stable in fp32
-- Embedding-space profile matching is fast, stable, and interpretable
-- Claude CLI evaluator provides meaningful (if noisy) image-level feedback
+**Next steps:**
 
-**2. Next step: fix the plateau problem.**
-
-- Noise prediction loss reconstructs images, doesn't directly optimize for profile discovery
-- Warm-init creates fixed points — need exploration mechanisms
-- Promising directions: contrastive loss (push Δ_pos away from Δ_neg), coordinate descent (one axis at a time), trained E2T model (replace NN-based PoC)
+1. Upgrade to a modern pipeline (SD3.5 / FLUX) with stronger text-image alignment and richer embedding space
+2. Re-evaluate text-only refiner and embedding matching on the new pipeline — expectation is at least 80% axis accuracy (4/5) before Δ optimization
+3. Train a proper E2T model and transition from discrete profile classification to open-ended style generation
