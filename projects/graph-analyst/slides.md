@@ -66,7 +66,7 @@ Structured mutations + template code gen + L1 filter + DB-driven prompt
 | AUC-ROC | 0.873 | **0.959** | +0.086 |
 | Training Time | ~30 min | **~4s** | ~450x |
 
-**Why XGB-Graph?** GADBench (2024): tree ensembles + neighbor agg beat GNNs on tabular-graph. Parameterless 2-hop mean aggregation, no message-passing overhead.
+**Why XGB-Graph?** GADBench (2024): tree ensembles + neighbor agg beat GNNs on tabular-graph.
 
 ---
 
@@ -75,51 +75,36 @@ Structured mutations + template code gen + L1 filter + DB-driven prompt
 | | Old + GraphSAGE | Old + XGB-Graph | **EvoAgent + XGB** |
 |:--|:-:|:-:|:-:|
 | Baseline R | 0.618 | 0.815 | 0.815 |
-| **Final R** | 0.622 (+0.4pp) | 0.815 (no change) | **0.847 (+3.2pp)** |
+| **Final R** | 0.622 (+0.4pp) | 0.815 (no Δ) | **0.847 (+3.2pp)** |
 | Final P | 0.770 | 0.744 | **0.815** |
 | Final F1 | 0.821 | 0.869 | **0.901** |
 | Phase B Time | ~26 min | ~23 min | **~6 min** |
-| Retrains | 6 | 6 | 6 |
 | Rounds Improved | 1/2 | **0/2** | **2/2** |
 
-- **Old fails on strong baseline**: 0 improvements in 6 XGB-Graph retrains
-- **EvoAgent: every round improves**: structured mutations + L1 filter, 4x faster
+Old fails on strong baseline: 0 improvements in 6 XGB retrains. EvoAgent: 2/2 rounds, **4x faster**.
 
 ---
 
 # Results: EvoAgent Iteration Trajectory
 
-### Round 1 (baseline R=0.815)
-| Iter | Recall | Status |
-|:----:|:------:|:------:|
-| 1 | 0.796 | rejected |
-| 2 | 0.837 | improving |
-| 3 | **0.842** | **ACCEPTED** ✓ |
+| Round | Iter | Recall | Status | Δ from baseline |
+|:-----:|:----:|:------:|:------:|:-------:|
+| **R1** (base=0.815) | 1 | 0.796 | rejected | -1.9pp |
+| | 2 | 0.837 | improving | +2.2pp |
+| | 3 | **0.842** | **ACCEPTED** ✓ | **+2.7pp** |
+| **R2** (base=0.842) | 1 | 0.798 | rejected | -4.4pp |
+| | 2 | 0.822 | rejected | -2.0pp |
+| | 3 | **0.847** | **ACCEPTED** ✓ | **+0.5pp** |
 
-R: 0.815 → **0.842** (+2.7pp)
-
-### Round 2 (new baseline R=0.842)
-| Iter | Recall | Status |
-|:----:|:------:|:------:|
-| 1 | 0.798 | rejected |
-| 2 | 0.822 | rejected |
-| 3 | **0.847** | **ACCEPTED** ✓ |
-
-R: 0.842 → **0.847** (+0.5pp). Each round's search improves upon prior champion.
+Final: R = 0.815 → 0.842 → **0.847** (+3.2pp cumulative). Each round improves upon prior champion.
 
 ---
 
 # Results: Search Efficiency
 
-### Old Approach (Pilot C)
-- LLM writes **free-form Python** → MCP **multi-turn** (~15 min/round)
-- No code constraints → often **hurts recall**
-- XGB-Graph: **6 retrains, 0 accepted** (~23 min, 0% success)
+**Old Approach (Pilot C)**: LLM writes free-form Python → MCP multi-turn (~15 min/round) → often hurts recall → XGB-Graph: **6 retrains, 0 accepted**
 
-### EvoAgent
-- LLM proposes **structured mutation** (JSON) → **single SDK call** (~30s/iter)
-- **Template code gen** → always valid code
-- XGB-Graph: **6 retrains, 2 accepted** (~6 min, 100% round success)
+**EvoAgent**: LLM proposes structured mutation (JSON) → single SDK call (~30s/iter) → template code gen → always valid → **6 retrains, 2 accepted**
 
 | Metric | Old | EvoAgent | Speedup |
 |:-------|:---:|:--------:|:-------:|
