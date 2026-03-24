@@ -4,5 +4,10 @@
     "src": "/work/11012/jiajunzhu2002/vista/AestheticAgent",
     "slides": "slides.md",
     "assets": ["public", "slides_assets"]
+  },
+  {
+    "name": "graph-analyst",
+    "slides": "slides.md",
+    "assets": ["evoagent_pipeline.png"]
   }
 ]
