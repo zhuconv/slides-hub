@@ -108,7 +108,9 @@ Best model at each round. Color = which model holds the best candidate.
 
 # Conclusion & Next Steps
 
-**Result**: Multi-model search (3.2/5 avg, 4.9 margin) outperforms single-model evolve (1.8/5, 4.2) and text-only (1.4/5, 3.0). **Key insight**: generator choice is part of the aesthetic search space &mdash; no single model dominates all styles.
+**Result**: Multi-model search (3.2/5 avg accuracy, 4.9 margin) outperforms single-model evolve (1.8/5, 4.2) and text-only (1.4/5, 3.0).
+
+**Key insight**: Generator choice is part of the aesthetic search space &mdash; no single model dominates all styles.
 
 <div style="margin-top: 0.8em; border-top: 1px solid #ddd; padding-top: 0.8em;">
 
@@ -141,5 +143,5 @@ Models: FLUX.1-schnell, SD3.5-medium, SD1.5 | Scorer: Claude Sonnet | Seed: 42 |
 ---
 layout: image
 image: /benchmark_convergence.png
-backgroundSize: 75%
+backgroundSize: 65%
 ---
