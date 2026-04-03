@@ -143,5 +143,5 @@ Models: FLUX.1-schnell, SD3.5-medium, SD1.5 | Scorer: Claude Sonnet | Seed: 42 |
 ---
 layout: image
 image: /benchmark_convergence.png
-backgroundSize: 65%
+backgroundSize: contain
 ---
