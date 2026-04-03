@@ -106,27 +106,19 @@ Best model at each round. Color = which model holds the best candidate.
 
 ---
 
-# Limitations & Next Steps
+# Conclusion & Next Steps
 
-**Current limitations**:
-- Circular evaluation (same Claude family for scoring + mutations)
-- Single seed, 4 fixed prompts, unequal compute budgets
-- Margin-based selection does not perfectly recover GT profiles
+**Result**: Multi-model search (3.2/5 avg, 4.9 margin) outperforms single-model evolve (1.8/5, 4.2) and text-only (1.4/5, 3.0). **Key insight**: generator choice is part of the aesthetic search space &mdash; no single model dominates all styles.
+
+<div style="margin-top: 0.8em; border-top: 1px solid #ddd; padding-top: 0.8em;">
 
 **Next steps**:
-- Held-out prompt evaluation + independent judge
-- Multi-seed runs with confidence intervals
-- Best-fixed-model baselines (evolve_sd15, evolve_sd35)
 
----
+1. **Align the base model with user preference** &mdash; go beyond profile discovery to fine-tune or steer the generator itself toward the discovered aesthetic
+2. **Standardize as an agent benchmark task** &mdash; package the 5-axis preference recovery protocol as a reproducible AgentBench task with public leaderboard
+3. **Human agreement test** &mdash; since we use LLM-as-a-judge, validate scorer alignment with real humans who have genuine aesthetic preferences
 
-# Conclusion
-
-**AestheticAgent** discovers hidden aesthetic preferences through evolutionary search over 5-axis visual style profiles.
-
-**Result**: Multi-model search (3.2/5 avg accuracy, 4.9 margin) outperforms single-model evolve (1.8/5, 4.2) and text-only (1.4/5, 3.0) across five profiles.
-
-**Key insight**: Generator choice is part of the aesthetic search space &mdash; FLUX excels at minimalist styles, SD3.5 at surrealism, SD1.5 at pop art. Multi-model search discovers these pairings automatically.
+</div>
 
 ---
 
