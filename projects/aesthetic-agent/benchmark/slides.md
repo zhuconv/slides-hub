@@ -44,7 +44,7 @@ Previously ([slides](https://zhuconv.github.io/slides-hub/aesthetic-agent/)), we
 
 **Finding**: Text-only and CFG embedding optimization showed **no significant gap** (both plateau at 2/5). The E2T inversion was unstable. SD1.5 bottleneck limited all methods.
 
-**This work**: Instead of improving the inversion pipeline, we ask — **can evolutionary search + multi-model selection do better?** Upgraded to FLUX/SD3.5/SD1.5.
+**This work**: Instead of improving the inversion pipeline, we aim for **better agent orchestration based purely on text-only reasoning** — evolutionary search + multi-model selection. Upgraded to FLUX/SD3.5/SD1.5.
 
 </div>
 
