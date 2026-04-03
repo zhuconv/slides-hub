@@ -41,7 +41,7 @@ Jiajun Zhu &mdash; April 2026
 | | Text-Only | Evolve (Single-Model) | Multi-Model Evolve |
 |---|---|---|---|
 | Strategy | Claude refines profiles from scores | Structured mutations + hypothesis tracking | + cross-model exploration (FLUX/SD3.5/SD1.5) |
-| Search | No memory, single profile/round | L1 filter + L2 eval, ~4 candidates/round | + forced model mutations + re-eval every 3 rounds |
+| Search | Unstructured history, 1 profile/round | L1 filter + L2 eval, ~4 candidates/round | + forced model mutations + re-eval every 3 rounds |
 
 ---
 layout: image
