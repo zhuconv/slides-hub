@@ -89,22 +89,24 @@ Given a **hidden aesthetic preference** defined by 5 axes, discover it through i
 
 # Benchmark Protocol
 
+<div style="font-size: 0.88em;">
+
 | Parameter | Value |
 |-----------|-------|
-| Profiles tested | minimalist, dark_anime, vibrant_pop, warm_impressionist, vibrant_surreal |
-| Runs per method | 1 (seed=42 for all) |
-| Text-Only rounds | 8 (4 image pairs per round = 64 images total) |
-| Evolve/Multi rounds | 10 (~4 candidates/round, 4 pairs each = ~320 images total) |
-| Base prompts | 4 fixed (portrait, landscape, animal, still\_life) |
-| Image resolution | 512 &times; 512 |
-| Scorer | Claude Sonnet (reads images via SDK) |
-| Mutation proposer | Claude Sonnet (text-only, no image access) |
-| Hardware | 3 &times; NVIDIA RTX A6000 (48GB) |
-| Selection metric | Preference margin (avg\_pref &minus; avg\_dispref) |
+| Profiles | minimalist, dark_anime, vibrant_pop, warm_impressionist, vibrant_surreal |
+| Seeds | 1 (seed=42 for all methods) |
+| Text-Only | 8 rounds, 4 pairs/round = 64 images |
+| Evolve / Multi | 10 rounds, ~4 candidates/round, 4 pairs each = ~320 images |
+| Base prompts | 4 fixed (portrait, landscape, animal, still\_life) at 512&times;512 |
+| Scorer / Proposer | Claude Sonnet via SDK |
+| Hardware | 3&times; NVIDIA RTX A6000 (48GB) |
+| Selection | Preference margin (avg\_pref &minus; avg\_dispref) |
+
+</div>
 
 <div class="footnote">
 
-Note: Text-Only uses fewer total evaluations (64 vs ~320 images). Evolve methods have higher evaluation budget by design (more candidates explored per round).
+Note: Text-Only uses fewer evaluations (64 vs ~320). Evolve methods have higher budget by design.
 
 </div>
 
@@ -118,25 +120,20 @@ backgroundSize: 90%
 
 # Results Summary
 
-| Profile | Text-Only Liked Acc. | Evolve Liked Acc. | Multi Liked Acc. | Multi Best Model |
-|---------|:---------:|:------:|:-----------:|:---------------:|
-| minimalist | 0/5 | 2/5 | **3/5** | flux |
-| dark_anime | 2/5 | 1/5 | **3/5** | flux |
-| vibrant_pop | 3/5 | 0/5 | **3/5** | sd15 |
-| warm_impressionist | 1/5 | **3/5** | 2/5 | flux |
-| vibrant_surreal | 1/5 | 3/5 | **5/5** | sd35 |
-| **Average** | **1.4/5** | **1.8/5** | **3.2/5** | |
+<div style="font-size: 0.9em;">
 
-| Metric | Text-Only | Evolve | Multi-Model |
-|--------|:---------:|:------:|:-----------:|
-| Avg Liked Accuracy | 1.4/5 | 1.8/5 | **3.2/5** |
-| Avg Preference Margin | 3.0 | 4.2 | **4.9** |
-
-<div class="footnote">
-
-Text-Only: final profile accuracy. Evolve/Multi: best candidate by margin. Single seed; no confidence intervals.
+| Profile | Text-Only | Evolve | Multi-Model | Best Model |
+|---------|:---------:|:------:|:-----------:|:----------:|
+| minimalist | 0/5 (2.8) | 2/5 (3.5) | **3/5** (3.8) | flux |
+| dark_anime | 2/5 (1.0) | 1/5 (5.0) | **3/5** (5.0) | flux |
+| vibrant_pop | 3/5 (3.8) | 0/5 (2.8) | **3/5** (5.5) | sd15 |
+| warm_impress. | 1/5 (5.8) | **3/5** (5.5) | 2/5 (5.2) | flux |
+| vibrant_surr. | 1/5 (1.5) | 3/5 (4.0) | **5/5** (5.0) | sd35 |
+| **Average** | **1.4/5** (3.0) | **1.8/5** (4.2) | **3.2/5** (4.9) | |
 
 </div>
+
+<div class="small" style="color:#888;">Cells: liked accuracy (margin). Text-Only = final profile; Evolve/Multi = best candidate. Single seed.</div>
 
 ---
 
