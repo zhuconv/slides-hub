@@ -13,6 +13,7 @@ author: "Jiajun Zhu"
   h2 { font-size: 1.5em !important; }
   .small { font-size: 0.85em; }
   .footnote { font-size: 0.75em; color: #888; margin-top: 1em; }
+  .slidev-layout p { color: #1a1a1a !important; opacity: 1 !important; }
 </style>
 
 # AestheticAgent
@@ -108,9 +109,9 @@ Best model at each round. Color = which model holds the best candidate.
 
 # Conclusion & Next Steps
 
-**Result**: Multi-model search (3.2/5 avg accuracy, 4.9 margin) outperforms single-model evolve (1.8/5, 4.2) and text-only (1.4/5, 3.0).
+<p style="color: #1a1a1a;">Multi-model search <strong>(3.2/5 avg accuracy, 4.9 margin)</strong> outperforms single-model evolve (1.8/5, 4.2) and text-only (1.4/5, 3.0).</p>
 
-**Key insight**: Generator choice is part of the aesthetic search space &mdash; no single model dominates all styles.
+<p style="color: #1a1a1a;">Generator choice is part of the aesthetic search space — <strong>no single model dominates all styles</strong>.</p>
 
 <div style="margin-top: 0.8em; border-top: 1px solid #ddd; padding-top: 0.8em;">
 
