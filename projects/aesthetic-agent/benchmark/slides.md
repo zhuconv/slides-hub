@@ -1,7 +1,7 @@
 ---
 theme: default
 title: "AestheticAgent: Multi-Model Evolutionary Preference Discovery"
-info: "Benchmark Report — Text-Only vs Evolve vs Multi-Model Evolve"
+info: "Pilot Benchmark Report — Text-Only vs Evolve vs Multi-Model Evolve"
 author: "Jiajun Zhu"
 ---
 
@@ -58,7 +58,7 @@ Given a **hidden aesthetic preference** defined by 5 axes, discover it through i
 
 ### Text-Only (Baseline)
 - Claude refines profiles based on score history
-- Single profile updated per round
+- Liked/disliked profile pair updated per round
 - No structured search or memory
 - **8 rounds, 4 image pairs/round**
 
@@ -118,7 +118,7 @@ backgroundSize: 90%
 
 # Results Summary
 
-| Profile | Text-Only | Evolve | Multi-Model | Multi Best Model |
+| Profile | Text-Only Liked Acc. | Evolve Liked Acc. | Multi Liked Acc. | Multi Best Model |
 |---------|:---------:|:------:|:-----------:|:---------------:|
 | minimalist | 0/5 | 2/5 | **3/5** | flux |
 | dark_anime | 2/5 | 1/5 | **3/5** | flux |
@@ -189,12 +189,6 @@ Best model at each round (Multi-Model Search). Color = which model holds the bes
 
 </div>
 </div>
-
----
-layout: image
-image: /benchmark_convergence.png
-backgroundSize: 75%
----
 
 ---
 
@@ -308,10 +302,18 @@ Design choices in the evolutionary search (not yet validated by ablation):
 
 <div class="small" style="margin-top:1em">
 
-**Models**: FLUX.1-schnell (4 steps, cfg=0), SD3.5-medium (28 steps, cfg=7), SD1.5 (25 steps, cfg=7.5)
+**Image models**: FLUX.1-schnell (4 steps, cfg=0), SD3.5-medium (28 steps, cfg=7), SD1.5 (25 steps, cfg=7.5)
+
+**Scorer/Proposer**: Claude Sonnet (claude-sonnet-4-5-20250514) via claude-agent-sdk
 
 **Base prompts**: "a young woman with freckles", "a lone tree in a vast field", "a ginger cat on a windowsill", "sunflowers in a glass mason jar"
 
 **Seed**: 42 for all methods | **Hardware**: 3x NVIDIA RTX A6000 (48GB)
 
 </div>
+
+---
+layout: image
+image: /benchmark_convergence.png
+backgroundSize: 75%
+---
