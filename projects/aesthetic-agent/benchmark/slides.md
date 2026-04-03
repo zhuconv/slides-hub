@@ -30,6 +30,26 @@ Jiajun Zhu &mdash; April 2026
 
 ---
 
+# Recap: Previous Exploration
+
+<div style="font-size: 0.95em;">
+
+Previously ([slides](https://zhuconv.github.io/slides-hub/aesthetic-agent/)), we explored the **image-to-text inversion reasoning** pipeline on SD1.5:
+
+| | Text-Only Refiner | &Delta;+E2T+Claude Diff | &Delta;+Embedding Matching |
+|---|---|---|---|
+| Liked peak | 2/5 | **3/5** | 2/5 |
+| Liked final | 2/5 | 2/5 | 2/5 |
+| Stability | Drifts | Regresses | Rock solid |
+
+**Finding**: Text-only and CFG embedding optimization showed **no significant gap** (both plateau at 2/5). The E2T inversion was unstable. SD1.5 bottleneck limited all methods.
+
+**This work**: Instead of improving the inversion pipeline, we ask — **can evolutionary search + multi-model selection do better?** Upgraded to FLUX/SD3.5/SD1.5.
+
+</div>
+
+---
+
 # Problem & Approach
 
 **Task**: Discover a hidden 5-axis aesthetic preference through iterative image generation and scoring.
