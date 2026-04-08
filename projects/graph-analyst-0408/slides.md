@@ -139,10 +139,8 @@ class: p-0
 </div>
 <div>
 
-### Next Steps
-1. **Cross-validation** in inner loop (k-fold instead of single val split)
-2. **Holdout validation** — split val into search + eval to detect overfitting
-3. **Investigate** why IEEE-CIS generalizes but others don't
+### Next Step
+- **Fix val→test generalization**: investigate why bilevel feature improvements overfit on val but don't transfer to test
 
 </div>
 </div>
