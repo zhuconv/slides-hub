@@ -22,5 +22,10 @@
     "assets": [
       "public"
     ]
+  },
+  {
+    "name": "graph-analyst-0408",
+    "slides": "slides.md",
+    "assets": ["public"]
   }
 ]
