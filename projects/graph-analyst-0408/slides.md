@@ -60,7 +60,7 @@ Jiajun Zhu · UT Austin · April 2026
 <div>
 
 ### Generalized Pipeline
-- **5 datasets**, **7 model types** (GNN, tree, MLP, RNN)
+- **3 datasets**, **7 model types** (GNN, tree, MLP, RNN)
 - `DatasetConfig` registry: dataset-specific metrics, models, capabilities
 - Edgeless dataset support (IBM AML TX: 5M nodes, no graph)
 
@@ -104,24 +104,19 @@ class: p-0
 
 # Results
 
-### Val Improvement (Phase A+B per pipeline)
+<div class="text-sm">
 
-| Dataset | Champion | Base | + Bilevel | Δ |
-|---------|----------|:----:|:---------:|:-:|
-| **YelpChi** | XGB-Graph | 0.794 | **0.804** | +1.0pp |
-| **IEEE-CIS** | RF-Graph | 0.933 | 0.933 | — |
-| **IBM AML TX** | RNN Context | 0.587 | **0.593** | +0.6pp |
+| Dataset | Pipeline | Val Base→Bilevel | Test Base→Bilevel | Generalizes? |
+|---------|----------|:----------------:|:-----------------:|:------------:|
+| **YelpChi** | XGB | 0.794 → **0.804** (+1.0) | 0.794 → 0.781 (-1.2) | ❌ |
+| **IEEE-CIS** | XGB | 0.918 → **0.923** (+0.5) | 0.918 → **0.922** (+0.4) | ✅ |
+| **IBM AML TX** | RNN | 0.587 → **0.593** (+0.6) | 0.776 → 0.582 (-19.4) | ❌ |
 
-### Test Set Generalization
-
-| Dataset | Base (test) | + Bilevel (test) | Δ | Generalizes? |
-|---------|:-----------:|:----------------:|:-:|:------------:|
-| **IEEE-CIS** | 0.918 | **0.922** | **+0.4pp** | ✅ |
-| YelpChi | 0.794 | 0.781 | -1.2pp | ❌ |
-| IBM AML TX | 0.776 | 0.582 | -19.4pp | ❌ |
+</div>
 
 <div class="mt-2 p-2 bg-green-50 rounded border border-green-300 text-sm">
-<strong>IEEE-CIS: real test improvement.</strong> YelpChi & IBM AML TX overfit on val.
+✅ <strong>IEEE-CIS: val → test generalizes (+0.4pp AUC-ROC)</strong><br/>
+❌ YelpChi & IBM AML TX: val improves but test degrades (overfit)
 </div>
 
 ---
@@ -132,7 +127,7 @@ class: p-0
 <div>
 
 ### What Works ✅
-- **Generalized pipeline**: 5 datasets, 7 models, one command
+- **Generalized pipeline**: 3 datasets, 7 models, one command
 - **Bilevel Phase A+B improves val** on all datasets
 - **IEEE-CIS**: +0.4pp AUC-ROC generalizes to test
 
