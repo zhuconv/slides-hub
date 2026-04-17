@@ -26,6 +26,16 @@
   {
     "name": "graph-analyst-0408",
     "slides": "slides.md",
-    "assets": ["public"]
+    "assets": [
+      "public"
+    ]
+  },
+  {
+    "name": "aesthetic-agent/bench-dev",
+    "src": "uploaded",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
   }
 ]
