@@ -99,26 +99,19 @@ Pilot ordering (`multi_evolve` &gt; `evolve` &gt; `text_only`) holds on the benc
 
 ---
 
-# AestheticMCQ: what and why
+# AestheticMCQ
 
-**Each item** = 1 synthetic image + 4 candidate 5-axis profiles (one is the GT injected into the generator).
+**What**: a human-labeled MCQ dataset. Each item = 1 synthetic image + 4 candidate 5-axis profiles; humans pick the best match.
 
-**Annotator task**: pick the profile that best describes the image.
+**Why**: every AestheticBench metric traces back to the VLM judge's calls. Without external human ground truth, we can't tell whether the leaderboard reflects reasoning or just judge miscalibration.
 
-**Headline metric**: VLM-vs-human-majority agreement.
+**Metric**: VLM-vs-human-majority agreement.
 
-**Why**: every AestheticBench metric traces back to the simulated user's judgments. Without external ground truth, we can't tell whether the leaderboard reflects reasoning or just judge miscalibration.
+**Shipped** (foundation PR, **39 tests passing**):
 
----
-
-# AestheticMCQ: what we shipped
-
-Foundation PR &mdash; CPU-only, zero API cost, **39 tests passing**:
-
-- Profile space + prompt rendering, byte-equal to AestheticBench
-- Four distractor strategies + deterministic instance planner
-- FastAPI + SQLite annotation web app with per-annotator token auth
-- Sanity viewer to eyeball planned items before burning GPU
+- MCQ assembly with four distractor strategies + deterministic instance planner
+- FastAPI + SQLite annotation web app
+- Byte-equal to AestheticBench's profile space and prompt templates
 
 <div class="small muted" style="margin-top: 1em;">
 
