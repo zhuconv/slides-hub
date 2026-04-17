@@ -1,283 +1,227 @@
 ---
 theme: default
-title: "AestheticBench: A Two-Tier Benchmark for Aesthetic Preference Discovery"
-info: "Local Bench Implementation — Dev Report"
+title: "AestheticBench + AestheticMCQ"
+info: "Dev report"
 author: "Jiajun Zhu"
+fonts:
+  sans: "Inter"
 ---
 
 <style>
-  :root { --slidev-code-font-size: 0.78em; }
-  .slidev-layout { font-size: 1.0em; }
-  table { font-size: 0.88em; }
-  h1 { font-size: 1.85em !important; }
-  h2 { font-size: 1.4em !important; }
-  .small { font-size: 0.82em; }
-  .footnote { font-size: 0.72em; color: #888; margin-top: 1em; }
-  .slidev-layout p { color: #1a1a1a !important; opacity: 1 !important; }
-  pre { font-size: 0.78em !important; line-height: 1.25em !important; }
+  :root { --slidev-code-font-size: 0.72em; }
+  .slidev-layout { font-size: 0.95em; padding: 2.2em 2.5em !important; }
+  table { font-size: 0.82em; }
+  th, td { padding: 0.2em 0.45em !important; }
+  h1 { font-size: 1.75em !important; margin-bottom: 0.35em !important; }
+  h2 { font-size: 1.25em !important; margin-bottom: 0.25em !important; }
+  .small { font-size: 0.8em; }
+  .muted { color: #666; }
+  .slidev-layout p { color: #1a1a1a !important; opacity: 1 !important; margin: 0.35em 0 !important; }
+  .slidev-layout ul, .slidev-layout ol { margin: 0.25em 0 !important; }
+  .slidev-layout li { margin: 0.18em 0 !important; }
+  pre { font-size: 0.78em !important; line-height: 1.2em !important; margin: 0.3em 0 !important; }
 </style>
 
-# AestheticBench
+# AestheticBench + AestheticMCQ
 
-## A Two-Tier Benchmark for Aesthetic Preference Discovery
+## From a pilot study to a reproducible benchmark + its human calibration set
 
-<div style="margin-top: 2em; color: #555; font-size: 0.95em;">
+<div style="margin-top: 2.2em; color: #555; font-size: 0.95em;">
 
 Jiajun Zhu &mdash; April 2026
 
-**Dev report**: from a pilot study ([prior slides](https://zhuconv.github.io/slides-hub/aesthetic-agent/benchmark/)) to a reproducible benchmark with a clean agent/environment boundary, curated instances, and real scorer-backed results.
+</div>
+
+---
+
+# Recap: last update
+
+<div style="font-size: 0.92em;">
+
+[Prior slides](https://zhuconv.github.io/slides-hub/aesthetic-agent/benchmark/) compared three agents on 5 hand-picked aesthetic profiles (SD1.5 + FLUX + SD3.5, LLM-as-a-judge):
+
+| | Text-Only | Evolve | Multi-Model Evolve |
+|---|:---:|:---:|:---:|
+| Mean liked accuracy (/5) | 1.4 | 1.8 | **3.2** |
+| Preference margin | 3.0 | 4.2 | **4.9** |
+
+**Findings**: multi-model beats single-model beats text-only. Generator choice is part of the search space &mdash; no single model dominates all styles.
+
+**Open issues from that study**
+
+- 5 profiles, no difficulty split, no public/private split &rarr; not a benchmark
+- Agent, scorer, and generation pipeline were entangled
+- LLM-as-a-judge was never calibrated against humans
+
+This report: two sibling repos that address both gaps.
 
 </div>
 
 ---
 
-# From Pilot Study to Benchmark
+# Two sibling repos
 
-<div style="font-size: 0.95em;">
+<div class="grid grid-cols-2 gap-6" style="font-size: 0.92em;">
+<div>
 
-The pilot established that **generator choice matters** and **multi-model evolve beats single-model and text-only** on 5 hand-picked profiles. But that setup was not a benchmark:
+## AestheticBench
 
-- Agent was entangled with the scorer and generation pipeline
-- Only 5 instances, no difficulty labels, no public/private split
-- No standard interface for third-party agents
-- Hard to compare LLM reasoning vs. end-to-end agent systems independently
+**What**: reproducible benchmark for aesthetic preference discovery.
 
-**AestheticBench** formalizes the pilot as a reproducible evaluation:
+**Why**: make the pilot comparable, extensible, and third-party-runnable.
 
-1. Clean agent &harr; environment boundary (two tiers)
-2. 50 curated instances spanning easy / medium / hard
-3. Standard metrics, trajectory logging, and submission format
-4. Real LLM scorer (Claude or GPT, incl. local CLIProxyAPI-backed Codex)
+**Achieved**: two-tier environment, 50 curated instances, real-scorer results on an early slice.
 
 </div>
+<div>
+
+## AestheticMCQ
+
+**What**: human-labeled MCQ dataset &mdash; "which 5-axis profile best describes this image?"
+
+**Why**: AB's simulated user is a VLM judge &mdash; nobody has measured its agreement with real humans.
+
+**Achieved**: foundation PR done (dataset plumbing + annotation web app), byte-equal to AB.
+
+</div>
+</div>
+
+Both repos share the same 5-axis / 2,592-profile space, the same prompt templates, and the same model specs &mdash; enforced by byte-equality tests.
 
 ---
 
-# Two-Tier Design
+# AestheticBench: two-tier design
 
-<div class="grid grid-cols-2 gap-4" style="font-size: 0.9em;">
+<div class="grid grid-cols-2 gap-4" style="font-size: 0.88em;">
 <div>
 
 **Tier 1 &mdash; Core** (ranks LLMs)
 
-```
-Agent = LLM (bare)
-   |  tool calls
-   v
-Environment
-  tools: generate_image, get_feedback,
-         compare_images, chat,
-         submit_prediction
-  scorer + simulated user
-```
+LLM calls standard tools; environment owns generation. Only reasoning varies.
 
-Agent picks tools &amp; arguments. Environment owns generation. Only the LLM's reasoning varies.
+```
+Agent = LLM
+  | tool calls
+  v
+Environment: generate_image, get_feedback,
+             compare_images, chat,
+             submit_prediction
+```
 
 </div>
 <div>
 
 **Tier 2 &mdash; Open** (ranks agent systems)
 
+Agent is a black box; generation + model choice + search strategy all on the agent side.
+
 ```
 Agent = black box
-   |  images + messages
-   v
-Environment
-  API: submit_image, compare_images,
-       chat, submit_prediction
-  scorer + simulated user
+  | images + messages
+  v
+Environment: submit_image, compare_images,
+             chat, submit_prediction
 ```
 
-Agent owns generation, model choice, prompt engineering, and search strategy end-to-end.
-
 </div>
 </div>
 
-**Shared**: scorer, simulated user, GT profiles, metrics, trajectory format. Separate leaderboards.
+<div style="font-size: 0.88em; margin-top: 0.4em;">
 
----
+Shared across tiers: scorer, simulated user, GT profiles, metrics, trajectory logging. Separate Tier-1 / Tier-2 leaderboards.
 
-# Profile Space &amp; Instances
-
-<div style="font-size: 0.95em;">
-
-**VisualProfile &mdash; 5 axes, 2,592 combinations**
-
-| Axis | Values | Count |
-|---|---|:---:|
-| art_style | Anime, Impressionism, Minimalism, Pop Art, Surrealism, Realism, Classical, Abstract | 8 |
-| color | Warm, Cool, Vibrant, Earth, Monochrome, Neutral | 6 |
-| art_medium | Digital, Oil Painting, Pencil, Watercolor, Ink, Charcoal | 6 |
-| detail | Fine, Moderate, Minimal | 3 |
-| saturation | Vivid, Muted, Moderate | 3 |
-
-**Anthology instance set (default, 50 instances)** &mdash; hand-curated coherent aesthetics with difficulty labels:
-
-| Difficulty | Count | Example |
-|---|:---:|---|
-| Easy | 15 | `charcoal_portrait`, `candy_anime`, `vibrant_pop` |
-| Medium | 20 | `ghibli_wash`, `frost_realism`, `wabi_sabi` |
-| Hard | 15 | `anime_oil` (anime in oil paint), `color_field` (minimalism + vivid) |
-
-Also supports `--instance-set random` for arbitrary programmatic sampling across the full 2,592 space.
+**Instances**: 50-profile curated anthology (15 easy / 20 medium / 15 hard) + random sampler over the full 2,592 space.
 
 </div>
 
 ---
 
-# Environment &amp; Agent Protocols
-
-<div style="font-size: 0.85em;">
-
-```python
-# Tier 1 — the LLM never touches a diffusion model
-class CoreAgent(Protocol):
-    def on_session_start(self, config: SessionConfig, tools: list[ToolDef]) -> None: ...
-    def next_tool_call(self, history: list[ToolResult]) -> ToolCall | None: ...
-
-# Tier 2 — the agent owns generation
-class OpenAgent(Protocol):
-    def on_session_start(self, config: SessionConfig) -> None: ...
-    def next_action(self, feedback: dict | None) -> Action | None: ...
-```
-
-**Environment** (`src/environment.py`) exposes both interfaces behind one class, backed by:
-
-- `scorer.py` &mdash; LLM vision scorer (1&ndash;10 absolute or A/B pairwise). Supports Anthropic, OpenAI, and any OpenAI-compatible proxy (`base_url` + `api_key`). Validated against a local **CLIProxyAPI** instance exposing `gpt-5.4`.
-- `simulated_user.py` &mdash; natural-language persona for optional `chat` channel, gated by `chat_enabled`.
-- `trajectory.py` &mdash; auto-recorded JSONL log of every tool call / action.
-- `generation_backend.py` &mdash; real diffusers pipelines (FLUX, SD3.5, SD1.5) for Tier 1 and Tier 2 baselines.
-
-</div>
-
----
-
-# Metrics &amp; Harness
+# AestheticBench: what we shipped
 
 <div style="font-size: 0.9em;">
 
-**Primary metrics** (leaderboard)
+- `Environment` class exposing both tiers from one implementation (`src/environment.py`)
+- Liked-only scorer supporting Anthropic, OpenAI, and local CLIProxyAPI-backed Codex/GPT
+- Three open-tier baselines as bench-native `OpenAgent`s: `text_only`, `evolve`, `multi_evolve`
+- Real diffusers generation in the agent path (FLUX / SD3.5 / SD1.5)
+- Harness: agent &times; tier &times; instances &times; K trials &rarr; `results.json` + `trajectory.jsonl`
+- **275 tests passing** on the `reproduce` branch
 
-| Metric | Definition | Range |
-|---|---|:---:|
-| Axis accuracy | Predicted axes matching GT | 0&ndash;5 |
-| Final score | Avg simulated-user score of last round | 1&ndash;10 |
-| Rounds to 3/5 | First round with &ge; 3 axes correct | 1&ndash;budget |
-| Efficiency | axis_accuracy / total_images | &ge; 0 |
-| pass@k | P(&ge; 1 of k trials reaches &ge; 3/5 accuracy) | 0&ndash;1 |
+**Early result slice** &mdash; Tier 2, Open, budget = 120, GPT-5.4 scorer, 4 easy instances:
 
-**Batch runner** (`src/harness/runner.py`): agent &times; tier &times; setting &times; instances &times; K trials &rarr; `results.json` + per-session `trajectory.jsonl`.
+| Agent | Mean axis acc (/5) | Final score (/10) | pass@1 |
+|---|:---:|:---:|:---:|
+| `text_only`    | 2.50 | 6.50 | 0.50 |
+| `evolve`       | 2.75 | 5.63 | 0.50 |
+| `multi_evolve` | **3.00** | **6.44** | **0.75** |
 
-Ranking: axis_accuracy &gt; pass@k &gt; efficiency.
-
-</div>
-
----
-
-# Tier-2 Baselines: What&rsquo;s Included
-
-<div style="font-size: 0.92em;">
-
-Three reference `OpenAgent`s, all sharing a common state-machine / support layer (`src/agents/open_support.py`):
-
-| Agent | Strategy |
-|---|---|
-| `text_only` | Claude refines a single profile from absolute scores; no structured search |
-| `evolve` | AlphaEvolve-Lite: structured mutations, tournament selection, hypothesis tracking, L1/L2 eval |
-| `multi_evolve` | `evolve` + forced model mutations (FLUX / SD3.5 / SD1.5) + cross-model re-eval every 3 rounds |
-
-**Shared machinery added in this branch**
-
-- Real diffusers generation (no mock fallback in the agent path)
-- Retry-based scorer failure handling (no silent defaults)
-- Candidate-level 4-prompt aggregation in absolute mode
-- Budget-aware multi-candidate evaluation for `evolve` / `multi_evolve`
-- Evidence-based early stop
-- Candidate-round accounting in env / metrics (not raw prompt rounds)
-
-Validated: **275 tests passing** on the `reproduce` branch.
+Pilot ordering (`multi_evolve` &gt; `evolve` &gt; `text_only`) holds on the benchmark harness with a real remote scorer. Remaining 8 (medium + hard) instances pending a dedicated GPU.
 
 </div>
 
 ---
 
-# Real Result Slice (Tier 2, Open)
+# AestheticMCQ: what and why
 
 <div style="font-size: 0.9em;">
 
-Setting: `max_images=120` budget, absolute feedback, GPT-5.4 scorer via local CLIProxyAPI, real diffusers on GPU, seed=202, recommended 4-prompt bundle per candidate. **4 easy anthology instances**: `bold_abstract`, `charcoal_portrait`, `retro_comic`, `vibrant_pop`.
+**Each item** = 1 synthetic image + 4 candidate 5-axis profiles (one is the GT profile injected into the generator) + correct index.
 
-| Agent | Mean axis acc (/5) | Final score (/10) | Rounds used | pass@1 |
-|---|:---:|:---:|:---:|:---:|
-| `text_only`    | 2.50 | 6.50  | 21.2 | 0.50 |
-| `evolve`       | 2.75 | 5.625 | 23.2 | 0.50 |
-| `multi_evolve` | **3.00** | 6.438 | **19.0** | **0.75** |
+**Annotator task**: pick the profile that best describes the image.
 
-**Ordering**: `multi_evolve` &gt; `evolve` &gt; `text_only` &mdash; consistent with the pilot study, now on the benchmark harness with a real remote scorer.
+**Headline metric**: VLM-vs-human-majority agreement &mdash; how often a candidate VLM judge picks the same option as the human majority.
 
-</div>
+**Why it matters**: every AB metric traces back to the simulated user's judgments. If the VLM judge miscalibrates on, e.g., `anime + oil painting + minimal detail`, then AB's rankings on `anime_oil` mean something different from what the leaderboard says. AMCQ gives us the external ground truth to check that.
 
-<div class="small" style="color:#888; margin-top: 0.6em;">
-This is a slice, not the full 12-instance balanced set. The remaining 8 (medium + hard) runs hit CUDA OOM from external GPU contention on GPU2 and were discarded &mdash; the result files exist but are marked invalid and must not be aggregated.
-</div>
-
----
-
-# What&rsquo;s Known, What&rsquo;s Pending
-
-<div style="font-size: 0.92em;">
-
-**Known good**
-
-- Two-tier environment + both agent protocols implemented
-- 50-instance anthology curated and validated
-- Liked-only scorer (Anthropic / OpenAI / local proxy) with retry
-- 3 open-tier baselines refactored as bench-native `OpenAgent`s
-- Harness, metrics, trajectory, results format all wired through
-- 4-easy-instance slice confirms pilot ordering on real scorer + real diffusers
-
-**Pending before a publishable final result**
-
-1. Full 12-instance balanced run (4 easy + 4 medium + 4 hard) for each of `text_only`, `evolve`, `multi_evolve` &mdash; one agent per free GPU
-2. Tier-1 baselines (same three strategies but routed through `generate_image` tool)
-3. Dialogue-enabled (`chat_enabled=true`) runs &mdash; simulated user persona already exists
-4. Scorer consistency audit (target &sigma; &lt; 0.5) + 100-sample human validation
-5. Private instance pool rotation and public leaderboard hosting
+**Distractor mix** (`configs/distractor_policy.yaml`): 40% 1-axis swap, 30% 2-axis swap, 15% weighted-Hamming cluster, 15% uniform random &mdash; hardness spectrum from fine-grained discrimination down to sanity check.
 
 </div>
 
 ---
 
-# Reproducing &amp; Extending
+# AestheticMCQ: what we shipped
 
 <div style="font-size: 0.88em;">
 
-**Install &amp; run a smoke test** (mock scorer, no GPU)
+**Foundation PR** &mdash; CPU-only, zero API cost, 39 tests passing:
 
-```bash
-pip install -e ".[generation]"
-python -m src.harness.runner \
-    --agent random --tier core \
-    --instance-set anthology --use-mock-scorer \
-    --output-dir outputs/random_baseline
-```
+- Profile space + prompt rendering, byte-equal to AB (`test_vocab_is_byte_equal_to_ab`, `test_prompt_templates_byte_equal_to_ab`, `test_model_specs_match_ab`)
+- All four distractor strategies + deterministic instance planner &rarr; `plan.jsonl`
+- FastAPI + SQLite annotation web service with per-annotator token auth
+- `sanity_view.py` to eyeball planned items before burning GPU
 
-**Real scorer via local CLIProxyAPI-backed Codex / GPT**
+**Not yet built (next PRs)**: image generation (Stage C), auto-QA filter (Stage D), label ingest + HF export (Stages E/G). No real images generated yet.
 
-```bash
-./cli-proxy-api --codex-login
-export AESTHETICBENCH_OPENAI_BASE_URL="http://127.0.0.1:8317/v1"
-export AESTHETICBENCH_OPENAI_API_KEY="sk-dummy"
-```
+**Compatibility pins &mdash; why the byte-equality tests exist**
 
-**Reproducing the open-tier slice**
+If AB edits a prompt template or swaps a checkpoint without us noticing, AMCQ ends up measuring a different image distribution and its calibration number stops being about AB. The byte-equality tests fail loudly on such drift &mdash; divergence becomes a visible, reviewed merge instead of a silent one.
 
-```bash
-CUDA_VISIBLE_DEVICES=0 python scripts/run_open_budget_eval.py \
-    --agent multi_evolve --seed 202 --budget 120 --gpu 0
-```
+</div>
 
-**Writing a new agent**: implement `CoreAgent` (Tier 1) or `OpenAgent` (Tier 2) from `src/agents/protocol.py`. Both take `SessionConfig` on start, and the harness handles the rest.
+---
+
+# Next step
+
+<div style="font-size: 0.95em;">
+
+Once AMCQ image generation + labeling land, **bench each candidate API in both roles**:
+
+- **As aesthetic judge** &mdash; VLM-vs-human-majority agreement on AMCQ. This tells us how much to trust the simulated user's scores.
+- **As aesthetic agent** &mdash; pass@k on AestheticBench Tier 1 (`CoreAgent`). Same LLM, same tools, same 50 instances &mdash; isolates reasoning quality from generation quality.
+
+<div style="margin-top: 0.6em;">
+
+**Candidates**: Claude 4.x (Opus / Sonnet), GPT-5.x (incl. local CLIProxyAPI-backed Codex), Gemini 2.x.
+
+**Deliverable**: one table per model with two columns &mdash; judge agreement (from AMCQ) and agent pass@k (from AB Tier 1) &mdash; so an API that scores images well but reasons poorly (or vice versa) is immediately visible.
+
+</div>
+
+<div style="margin-top: 0.6em;" class="muted small">
+
+Also pending before either column is publishable: full 12-instance balanced AB run (dedicated GPU, no OOM contention) to replace the current 4-easy slice.
+
+</div>
 
 </div>
 
@@ -285,12 +229,12 @@ CUDA_VISIBLE_DEVICES=0 python scripts/run_open_budget_eval.py \
 
 # Summary
 
-<p style="color: #1a1a1a;"><strong>AestheticBench</strong> turns the pilot multi-model aesthetic-discovery study into a reproducible, two-tier benchmark with 50 curated instances, a clean agent/environment boundary, real LLM scoring, and three open-tier baselines.</p>
+<p style="color: #1a1a1a;"><strong>AestheticBench</strong> turns the pilot study into a two-tier benchmark with 50 curated instances, three open-tier baselines, and a real LLM scorer. Early slice confirms the pilot ordering (<code>multi_evolve</code> &gt; <code>evolve</code> &gt; <code>text_only</code>).</p>
 
-<p style="color: #1a1a1a;"><strong>Early evidence:</strong> on a 4-easy-instance slice with a real GPT-5.4 scorer and real diffusers, the pilot ordering holds &mdash; <code>multi_evolve</code> (3.00 / 0.75 pass@1) &gt; <code>evolve</code> (2.75 / 0.50) &gt; <code>text_only</code> (2.50 / 0.50).</p>
+<p style="color: #1a1a1a;"><strong>AestheticMCQ</strong> is the external human ground truth that calibrates AB's VLM judge. Foundation PR is in; byte-equality with AB keeps the two artifacts in sync.</p>
 
-<p style="color: #1a1a1a;"><strong>Immediate next step:</strong> a clean full 12-instance balanced run on dedicated GPUs to replace the contaminated remaining-8 attempts and produce the first publishable Tier-2 leaderboard row.</p>
+<p style="color: #1a1a1a;"><strong>Next:</strong> benchmark API endpoints in both roles &mdash; aesthetic judge (AMCQ agreement) and aesthetic agent (AB Tier-1 pass@k) &mdash; to separate scoring ability from reasoning ability in one report.</p>
 
-<div class="footnote">
-Repo: <code>AestheticBench-report</code>, branch <code>reproduce</code>. Tests: 275 passing. Prior slides: <a href="https://zhuconv.github.io/slides-hub/aesthetic-agent/benchmark/">aesthetic-agent/benchmark</a>.
+<div class="muted small" style="margin-top: 1.2em; border-top: 1px solid #ddd; padding-top: 0.6em;">
+Repos: <code>AestheticBench-report</code> (reproduce branch, 275 tests), <code>AMCQ</code> (foundation PR, 39 tests). Prior slides: <a href="https://zhuconv.github.io/slides-hub/aesthetic-agent/benchmark/">aesthetic-agent/benchmark</a>.
 </div>
