@@ -85,6 +85,12 @@ Instances: 50-profile curated anthology (15 easy / 20 medium / 15 hard).
 
 ---
 
+# Framework
+
+<img src="/framework.jpg" style="width: 82%; display: block; margin: 0.5em auto 0;" />
+
+---
+
 # AestheticBench: early result
 
 Tier 2, Open, budget = 120, GPT-5.4 scorer, 4 easy instances:
