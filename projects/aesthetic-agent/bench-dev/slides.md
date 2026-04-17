@@ -97,8 +97,6 @@ Tier 2, Open, budget = 120, GPT-5.4 scorer, 4 easy instances:
 
 Pilot ordering (`multi_evolve` &gt; `evolve` &gt; `text_only`) holds on the benchmark harness with a real remote scorer.
 
-<div class="small" style="margin-top: 1em;">Remaining 8 (medium + hard) instances pending a dedicated GPU — two prior attempts hit CUDA OOM from external contention.</div>
-
 ---
 
 # AestheticMCQ: what and why
