@@ -107,9 +107,9 @@ Pilot ordering (`multi_evolve` &gt; `evolve` &gt; `text_only`) holds on the benc
 
 **Metric**: VLM-vs-human-majority agreement.
 
-**Shipped** (foundation PR, **39 tests passing**):
+**Shipped**:
 
-- MCQ assembly with four distractor strategies + deterministic instance planner
+- MCQ assembly with four distractor strategies
 - FastAPI + SQLite annotation web app
 - Byte-equal to AestheticBench's profile space and prompt templates
 
