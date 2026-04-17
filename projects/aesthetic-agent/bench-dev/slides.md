@@ -85,17 +85,6 @@ Instances: 50-profile curated anthology (15 easy / 20 medium / 15 hard).
 
 ---
 
-# AestheticBench: what we shipped
-
-- `Environment` class exposing both tiers from one implementation
-- Liked-only scorer: Anthropic, OpenAI, and local CLIProxyAPI-backed Codex/GPT
-- Three open-tier baselines: `text_only`, `evolve`, `multi_evolve`
-- Real diffusers generation in the agent path (FLUX / SD3.5 / SD1.5)
-- Harness: agent &times; tier &times; instances &times; K trials
-- **275 tests passing** on the `reproduce` branch
-
----
-
 # AestheticBench: early result
 
 Tier 2, Open, budget = 120, GPT-5.4 scorer, 4 easy instances:
