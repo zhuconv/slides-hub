@@ -222,10 +222,6 @@ Why this matters: if the addon lifts the harness on <em>every</em> task, the <co
 </div>
 </div>
 
-<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Both sides point the same way: expose the <em>patterns</em> (why a node failed, which feature family is proposed, what the leaderboard says) as first-class interaction surfaces, not hidden search state.
-</div>
-
 ---
 
 # Next step
