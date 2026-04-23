@@ -152,7 +152,7 @@ Both call an LLM to expand a candidate, keep a hall-of-fame on disk, and aggrega
 
 ### Protocol
 
-1. **Take MLEvolve's best `solution.py`** per task — 100 % tabular, never reads the graph, already tuned by MLEvolve's 8-agent loop
+1. **Take MLEvolve's best `solution.py`** per task — already tuned by MLEvolve's 8-agent loop
 2. **Wrap only the CSV pre-loader** so the 5 `gp_*` graph-pattern columns reach the feature matrix
 3. **Byte-for-byte unchanged** everywhere else — preprocessing, XGB+LGBM / transformer-tab stacks, thresholding, early-stopping
 4. **Any Δ must come from the 5 added columns** — this isolates *feature discovery* (our contribution) from *search orchestration* (MLEvolve's)
