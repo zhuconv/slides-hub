@@ -254,7 +254,7 @@ Surfaced by the failure-pattern miner over 500 misclassified val rows / round ac
 
 ### Production-side (Observability is important)
 
-- Their shipped product behaves like **a CFO-style coworker with deep finance-data access** — not a fully-automated pipeline; the system narrates what it saw, what it tried, and why it picked the number it did
+- Their shipped product behaves like **a CFO-style coworker with deep finance-data access and traceability** — not a fully-automated pipeline
 - Customers buy *trust + iteration*, not end-to-end autonomy
 - ⇒ we need **human-in-the-loop hooks** (mid-run edits, "why did you pick X?" queries, approve/reject feature ops) even if the underlying search is autonomous
 - Trust comes step-by-step: suggestion-mode → accept-mode → full autonomy per customer maturity
