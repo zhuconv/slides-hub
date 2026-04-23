@@ -91,9 +91,9 @@ Controller ── (Plan → Code → Execute → Parse → Refine)* ── Aggre
 <div class="grid grid-cols-2 gap-4 mt-4 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
 
-### AI-Build-AI — linear state machine
+### AI-Build-AI — Manager-driven sequential search
 
-- **Controller**: one persistent Claude-SDK Manager LLM with MCP tool-calls driving a hand-specified state sequence
+- **Controller**: a persistent Claude-SDK **Manager LLM** that picks the next tool each turn along a canonical pipeline (`setup → designer → coder(smoke) → coder(tuner) → designer(reviser) → aggregator`), with N candidate designs alive in parallel
 - **Safety layer**: SDK hooks (restricted write dirs, bash guards, daily-budget sleeps)
 
 </div>
@@ -101,19 +101,19 @@ Controller ── (Plan → Code → Execute → Parse → Refine)* ── Aggre
 
 ### MLEvolve — Monte Carlo Graph Search
 
-- **Controller**: UCT search over a `SearchNode` journal with time-aware explore/exploit and cross-branch fusion after 50 % of budget; global BM25 + FAISS memory across runs
+- **Controller**: **UCT search** over a `SearchNode` journal, multiple branches alive in parallel with time-aware explore/exploit and cross-branch fusion after 50 % of budget (LLM called per node to expand)
 - **Safety layer**: dedicated `code_review_agent` pre-execution gate
 
 </div>
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Both keep a hall-of-fame of candidates on disk, bounded by wall-clock + call count, and aggregate into one <code>submission.csv</code>. The search topology (state machine vs MCGS) is what actually changes behavior at budget limits.
+Both call an LLM to expand a candidate, keep a hall-of-fame on disk, and aggregate into one <code>submission.csv</code>. The difference is <em>how candidates are organized</em> — sequential pipeline vs. UCT tree — which is what actually changes behavior at budget limits.
 </div>
 
 ---
 
-# Leaderboard snapshot — live from 🤗 Space, 2026-04-23
+# Leaderboard snapshot
 
 <div class="text-xs mt-3">
 
@@ -134,7 +134,7 @@ Both keep a hall-of-fame of candidates on disk, bounded by wall-clock + call cou
 | **`graphloomer-claude-sonnet-4-6`** (ours) | **0.842** | 0.701 | 0.159 | 0.851 | **0.638** |
 | `mlevolve-gpt-5.4` | 0.810 | 0.768 | 0.077 | 0.891 | 0.637 |
 
-<div class="opacity-60 mt-1">† <code>open-aibuildai-*</code> = open-source/community AI-Build-AI variant; <code>aibuildai-*</code> = upstream. Both use <code>claude-sonnet-4-6</code>.</div>
+<div class="opacity-60 mt-1">† <code>open-aibuildai-*</code> = <strong>our reproduction</strong> (AI-Build-AI only released a binary on GitHub, so we re-implemented it from source); <code>aibuildai-*</code> = upstream binary. Both use <code>claude-sonnet-4-6</code>.</div>
 
 </div>
 
