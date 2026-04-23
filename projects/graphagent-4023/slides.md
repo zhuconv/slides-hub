@@ -45,7 +45,7 @@ Prior deck: <a href="https://zhuconv.github.io/slides-hub/graph-analyst-0408/1" 
 
 ---
 
-# 1 · GraphTestbed — a Kaggle-style leaderboard
+# GraphTestbed — a Kaggle-style leaderboard
 
 <div class="grid grid-cols-2 gap-6 mt-2 text-sm">
 <div>
@@ -92,7 +92,7 @@ Repo · [github.com/zhuconv/GraphTestbed](https://github.com/zhuconv/GraphTestbe
 
 ---
 
-# 2 · Introduction of Two SOTA Baselines
+# Introduction of Two SOTA Baselines
 
 <div class="text-sm mt-2">
 
@@ -145,16 +145,16 @@ Candidates kept alive on disk, bounded by wall-clock + call count.
 
 ---
 
-# Leaderboard snapshot (live from 🤗 Space, 2026-04-23)
+# Leaderboard snapshot — live from 🤗 Space, 2026-04-23
 
 <div class="text-xs mt-3">
 
-| Agent | `figraph` AUC | `arxiv-citation` AUC | `ibm-aml` F1 | `ieee-fraud` AUC |
-|---|:-:|:-:|:-:|:-:|
-| `open-aibuildai-claude-sonnet-4-6` | **0.890** 🥇 | **0.777** 🥇 | **0.171** 🥇 | 0.926 |
-| `aibuildai-claude-sonnet-4-6` | 0.819 | 0.772 | 0.169 | **0.928** 🥇 |
-| `mlevolve-gpt-5.4` | 0.810 | 0.768 | 0.077 | 0.891 |
-| **`graphloomer-claude-sonnet-4-6`** (ours) | **0.842** 🥈 | 0.701 | 0.159 | 0.851 |
+| Agent | `figraph` AUC | `arxiv-citation` AUC | `ibm-aml` F1 | `ieee-fraud` AUC | **Avg** |
+|---|:-:|:-:|:-:|:-:|:-:|
+| `open-aibuildai-claude-sonnet-4-6` | **0.890** 🥇 | **0.777** 🥇 | **0.171** 🥇 | 0.926 | **0.691** 🥇 |
+| `aibuildai-claude-sonnet-4-6` | 0.819 | 0.772 | 0.169 | **0.928** 🥇 | **0.672** 🥈 |
+| **`graphloomer-claude-sonnet-4-6`** (ours) | **0.842** 🥈 | 0.701 | 0.159 | 0.851 | **0.638** 🥉 |
+| `mlevolve-gpt-5.4` | 0.810 | 0.768 | 0.077 | 0.891 | 0.637 |
 
 </div>
 
@@ -164,7 +164,7 @@ Candidates kept alive on disk, bounded by wall-clock + call count.
 
 ---
 
-# 3a · What we actually want to validate
+# Discovered graph-feature patterns are transferable
 
 <div class="text-sm mt-3">
 
@@ -201,7 +201,7 @@ If the patterns generalize, MLEvolve's tabular best gets better with zero change
 
 ---
 
-# 3b · What we discovered + addon results
+# Discovered graph-feature patterns are transferable
 
 <div class="grid grid-cols-2 gap-4 mt-2 text-sm">
 <div>
@@ -238,7 +238,7 @@ Surfaced by the failure-pattern miner over 500 misclassified val rows / round ac
 
 ---
 
-# 4 · Insights
+# Insights
 
 <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
@@ -268,40 +268,27 @@ Both insights point the same direction: expose the <em>patterns</em> (why a node
 
 ---
 
-# 5 · Next step — extending to a multi-agent system
+# Next step — extending to a multi-agent system
 
-<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
-<div>
+<div class="grid grid-cols-2 gap-6 mt-8 text-sm">
+<div class="p-4 bg-blue-50 rounded border border-blue-200">
 
 ### Option A — build our own
+
 - Promote the 5-role skeleton (controller / planner / coder / executor / refiner) into a **graph-native harness**
 - Reuse MLEvolve's MCGS + global memory
 - Add a **DiagnosisAgent** with the failure-pattern skill as a first-class tool (already built in GraphLoomer)
 - Expose HITL breakpoints at diagnosis + feature-proposal stages (Sapien insight)
 
 </div>
-<div>
+<div class="p-4 bg-green-50 rounded border border-green-200">
 
 ### Option B — augment SOTA harnesses
+
 - Ship a **graph-tool plugin** to MLEvolve / AI-Build-AI: `get_failure_patterns`, `graph_aggregate`, `add_graph_pattern_features`
 - Zero changes to their controller / search — just more tools in the catalog
 - Measured directly on GraphTestbed
 - Lower cost, faster to iterate, broader impact
 
 </div>
-</div>
-
-<div class="mt-4 text-sm">
-
-### Concrete plan for next sprint
-
-1. **Week 1** — Package `failure_patterns` + `graph_pattern_features` as an MCP server → drop-in for any agent harness
-2. **Week 2** — Submit augmented MLEvolve / AI-Build-AI runs on all 4 GraphTestbed tasks; compare against bare harnesses
-3. **Week 3** — Prototype HITL breakpoint at the diagnosis stage; user study with 1–2 beta testers
-4. **Week 4** — Write up: "Graph-aware tools lift tabular LLM-agent harnesses across tasks"
-
-</div>
-
-<div class="mt-3 p-2 bg-green-50 rounded border border-green-300 text-xs">
-Bet: Option B ships a paper + a public leaderboard result in 4 weeks; Option A is a 2-quarter project. Do B first, iterate A underneath.
 </div>
