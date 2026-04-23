@@ -252,9 +252,9 @@ Surfaced by the failure-pattern miner over 500 misclassified val rows / round ac
 </div>
 <div class="p-3 bg-purple-50 rounded border border-purple-200">
 
-### Product-side (Sapien co-founder / chief scientist chat)
+### Production-side (Observability is important)
 
-- Their shipped product behaves like **a coworker with deep data access**, not a fully-automated pipeline
+- Their shipped product behaves like **a CFO-style coworker with deep finance-data access** — not a fully-automated pipeline; the system narrates what it saw, what it tried, and why it picked the number it did
 - Customers buy *trust + iteration*, not end-to-end autonomy
 - ⇒ we need **human-in-the-loop hooks** (mid-run edits, "why did you pick X?" queries, approve/reject feature ops) even if the underlying search is autonomous
 - Trust comes step-by-step: suggestion-mode → accept-mode → full autonomy per customer maturity
