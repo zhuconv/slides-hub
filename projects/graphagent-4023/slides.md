@@ -205,8 +205,8 @@ Why this matters: if the addon lifts the harness on <em>every</em> task, the <co
 
 ### Method-side
 
-1. **Failure-pattern mining beats per-row failure chat.** Analyzing 500 misclassified rows at once surfaces clusters (homophily violation, hub, bridge) that single-row inspection misses — and the percentages literally travel into the LLM's feature proposals as justification.
-2. **Free-form python op > structured catalog** when a pattern couples edge construction + aggregation (e.g., cosine-weighted label aggregation). Sandbox + leakage gate are non-negotiable.
+1. **Should we keep the structured catalog (with free-form python op support)?** **Yes.** When a pattern couples edge construction + aggregation (e.g., cosine-weighted label aggregation), the free-form escape hatch is essential — but the structured catalog is what saves most of the debug effort. Without any constraint, some bugs are always unexpected; the catalog acts as a guardrail and free-form is the release valve.
+2. **Do graph-pattern features as first-class support actually help?** **Yes — but the lift is modest in our current runs.** Likely a function of the current environment / data, or that we haven't given the design a long full-budget run yet. Worth confirming with longer sweeps before scaling the abstraction.
 
 </div>
 <div class="p-3 bg-purple-50 rounded border border-purple-200">
