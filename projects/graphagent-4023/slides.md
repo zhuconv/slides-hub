@@ -228,33 +228,23 @@ Both sides point the same way: expose the <em>patterns</em> (why a node failed, 
 
 ---
 
-# Next step — and what I'd like the group to weigh in on
+# Next step
 
-<div class="grid grid-cols-2 gap-4 mt-3 text-xs">
-<div class="p-3 bg-gray-50 rounded border border-gray-300 opacity-90">
+<div class="grid grid-cols-2 gap-6 mt-8 text-sm">
+<div class="p-4 bg-blue-50 rounded border border-blue-200">
 
 ### Option A — build our own graph-native harness
 
 - Promote the 5-role skeleton into a controller that uses failure-pattern mining as a first-class tool
 - Reuse MLEvolve's MCGS + global memory
-- **Cost:** ~2 quarters (controller rewrite + MCGS integration + task-sweep)
 
 </div>
-<div class="p-3 bg-green-50 rounded border-2 border-green-500">
+<div class="p-4 bg-green-50 rounded border border-green-200">
 
-### Option B — ship a graph-tool plugin  <span class="text-green-700 text-[10px]">(recommended)</span>
+### Option B — ship a graph-tool plugin
 
 - Package `get_failure_patterns`, `graph_aggregate`, `add_graph_pattern_features` as an **MCP server** — drop-in for MLEvolve / AI-Build-AI
 - Zero changes to their controller — just more tools in the catalog
-- **Cost:** ~2 weeks — reuses GraphTestbed + today's 3/3 lift as evidence
 
 </div>
-</div>
-
-<div class="mt-3 p-3 bg-yellow-50 rounded border border-yellow-300 text-xs">
-
-**Recommendation.** Start **Option B** — turns today's transferability result into a 4-week paper on a public leaderboard. HITL (Sapien insight) layers on either option later.
-
-**Ask.** Beyond the 4 GraphTestbed tasks, is there a specific task / harness pairing you'd most want to see in the plugin's first evaluation round?
-
 </div>
