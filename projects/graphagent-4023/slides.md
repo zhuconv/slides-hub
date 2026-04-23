@@ -18,10 +18,15 @@ Jiajun Zhu · UT Austin · April 2026
 
 ---
 
-# Recap: Previous Meeting (April 8)
+# Recap
 
-<div class="grid grid-cols-2 gap-6 mt-2">
-<div class="p-3 bg-blue-50 rounded border border-blue-200 text-sm">
+<div class="text-sm mt-4">
+
+Prior deck: <a href="https://zhuconv.github.io/slides-hub/graph-analyst-0408/1" target="_blank" class="text-blue-700 underline">zhuconv.github.io/slides-hub/graph-analyst-0408</a>
+
+</div>
+
+<div class="p-4 mt-4 bg-blue-50 rounded border border-blue-200 text-sm">
 
 ### Where we left off
 
@@ -31,23 +36,11 @@ Jiajun Zhu · UT Austin · April 2026
 - **YelpChi / IBM AML** overfit on tiny val sets
 
 ### Open problems
+
 - Val→test generalization on small positive counts
 - Evaluation still runs locally — agents could peek at test labels
 - No comparison against LLM-agent baselines for tabular-graph ML
 
-</div>
-<div class="p-3 bg-green-50 rounded border border-green-200 text-sm flex flex-col justify-center">
-
-### Slides from last time
-<a href="https://zhuconv.github.io/slides-hub/graph-analyst-0408/1" target="_blank" class="text-blue-700 underline">
-zhuconv.github.io/slides-hub/graph-analyst-0408
-</a>
-
-<div class="mt-3 opacity-70">
-This deck: what we did in the last sprint — a leaderboard, two baselines, and a generalizable trick that lifts them.
-</div>
-
-</div>
 </div>
 
 ---
@@ -65,10 +58,11 @@ This deck: what we did in the last sprint — a leaderboard, two baselines, and 
 - CSV-only contract → any harness (python, notebook, remote agent) works
 
 ### CLI
+
 ```bash
 pip install git+https://github.com/zhuconv/GraphTestbed
 gtb submit figraph --file preds.csv --agent my-agent
-# ✓ Scored  primary (auc_roc): 0.844  rank: #1
+# ✓ Scored  primary (auc_roc): 0.842  rank: #2
 gtb leaderboard figraph
 ```
 
@@ -86,7 +80,7 @@ gtb leaderboard figraph
 
 ### Hosted
 
-Leaderboard · [huggingface.co/spaces/lanczos/graphtestbed](https://huggingface.co/spaces/lanczos/graphtestbed)  
+Leaderboard · [🤗 lanczos/graphtestbed](https://huggingface.co/spaces/lanczos/graphtestbed)  
 Repo · [github.com/zhuconv/GraphTestbed](https://github.com/zhuconv/GraphTestbed)
 
 </div>
@@ -98,11 +92,11 @@ Repo · [github.com/zhuconv/GraphTestbed](https://github.com/zhuconv/GraphTestbe
 
 ---
 
-# 2 · Two baselines under one minimal framework
+# 2 · Introduction of Two SOTA Baselines
 
 <div class="text-sm mt-2">
 
-Both are LLM-driven ML-engineering agents wired into GraphTestbed via `agents/ai_build_ai/` and `agents/mlevolve/`. Read through the source code + paper — they fit one skeleton:
+Both are LLM-driven ML-engineering agents wired into GraphTestbed via `agents/ai_build_ai/` and `agents/mlevolve/`. Read through source + paper — they fit one skeleton:
 
 ```
 Controller ── (Plan → Code → Execute → Parse → Refine)* ── Aggregate ── submission.csv
@@ -140,153 +134,106 @@ Candidates kept alive on disk, bounded by wall-clock + call count.
 - UCT with time-aware explore/exploit, branch fusion after 50 % of budget
 - **Global memory** (BM25 + FAISS) across runs
 - Dedicated `code_review_agent` pre-execution gate
-- Default: `gpt-5.3-codex-spark`
+- Default: `gpt-5.4`
 
 </div>
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-<strong>What is shared:</strong> both iterate plan→code→execute→refine; both keep a hall-of-fame; both aggregate into one submission.csv. <strong>What differs:</strong> search topology (linear state machine vs MCGS) and safety layer (SDK hooks vs prompt-based review).
+<strong>Shared:</strong> both iterate plan→code→execute→refine; both keep a hall-of-fame; both aggregate into one <code>submission.csv</code>. <strong>Differ:</strong> search topology (linear state machine vs MCGS) and safety layer (SDK hooks vs prompt-based review).
 </div>
 
 ---
 
-# Leaderboard snapshot (figraph · AUC-ROC)
+# Leaderboard snapshot (live from 🤗 Space, 2026-04-23)
 
-<div class="text-sm mt-4">
+<div class="text-xs mt-3">
 
-| Rank | Agent | Test AUC-ROC | Note |
-|:-:|---|:-:|---|
-| prior #1 | `aibuildai-claude-sonnet-4-6` | 0.819 | leader to beat |
-| — | `autopipe-dev-baseline` | 0.788 | prior GraphLoomer replay |
-| #4 | `autopipe-dev` (champion) | 0.814 | 15-min budget, 4 free-form python ops |
-| #2 | `gp-patterns-mle-style-baseline` | 0.842 | MLEvolve-style XGB+LGBM on raw 772 cols |
-| **#1** | **`gp-patterns-mle-style`** | **0.844** | same ensemble + 5 `gp_*` cols → **+0.025 vs. prior leader** |
+| Agent | `figraph` AUC | `arxiv-citation` AUC | `ibm-aml` F1 | `ieee-fraud` AUC |
+|---|:-:|:-:|:-:|:-:|
+| `open-aibuildai-claude-sonnet-4-6` | **0.890** 🥇 | **0.777** 🥇 | **0.171** 🥇 | 0.926 |
+| `aibuildai-claude-sonnet-4-6` | 0.819 | 0.772 | 0.169 | **0.928** 🥇 |
+| `mlevolve-gpt-5.4` | 0.810 | 0.768 | 0.077 | 0.891 |
+| **`graphloomer-claude-sonnet-4-6`** (ours) | **0.842** 🥈 | 0.701 | 0.159 | 0.851 |
 
 </div>
 
-<div class="mt-4 p-2 bg-green-50 rounded border border-green-300 text-xs">
-Beating the leader required (a) a leaderboard to measure against and (b) the 5 distilled columns — not a new harness. Next slide: <em>what</em> those columns are.
+<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+<strong>Honest reading:</strong> our harness is competitive but <em>not SOTA</em> across all tasks. On <code>figraph</code> it clears both AI-Build-AI variants we bench against; on the other three it trails. The win we actually want to demonstrate is <strong>not</strong> "we beat the leader" — it's that the <em>graph-feature patterns</em> our pipeline discovers are <em>transferable</em>. Next two slides set this up.
 </div>
 
 ---
 
-# 3 · Case study — why a tabular pipeline breaks on a hub
+# 3a · What we actually want to validate
+
+<div class="text-sm mt-3">
+
+**Claim.** Our pipeline may not be SOTA end-to-end, but it *discovers good graph-pattern features*. If that claim is true, dropping those features into a strong tabular harness should lift it — without touching the rest of the harness.
+
+</div>
+
+<div class="grid grid-cols-2 gap-4 mt-4 text-sm">
+<div class="p-3 bg-blue-50 rounded border border-blue-200">
+
+### Setup
+
+- Take **MLEvolve's best `solution.py`** per task (100% tabular — never reads the graph)
+- Wrap only the CSV pre-loader so the 5 `gp_*` graph-pattern columns reach the feature matrix
+- **Byte-for-byte unchanged**: preprocessing, XGB+LGBM / transformer-tab stacks, thresholding, early-stopping
+- Any Δ must come from the 5 added columns
+
+</div>
+<div class="p-3 bg-green-50 rounded border border-green-200">
+
+### Why this is a clean test
+
+- Separates *feature discovery* (our contribution) from *search orchestration* (MLEvolve's contribution)
+- The `solution.py` was already tuned by MLEvolve's 8-agent loop — any extra signal is strictly from the graph side
+- Works as a sanity check that our `gp_*` aggregator is a **portable addon**, not a method tied to our controller
+- Same 5 columns applied to 3 different task types (anomaly / future-prediction / minority-F1)
+
+</div>
+</div>
+
+<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+If the patterns generalize, MLEvolve's tabular best gets better with zero changes to its code. That is the bar.
+</div>
+
+---
+
+# 3b · What we discovered + addon results
 
 <div class="grid grid-cols-2 gap-4 mt-2 text-sm">
 <div>
 
-### Node `L601398` (figraph val set)
+### 5 graph-pattern columns (distilled)
 
-- Degree z-score: **+35.98** (hub)
-- **2,444 unique neighbors**; 6,167 train-labeled
-- Neighbor positive fraction: **0.069** — identical to the population base rate
-- A plain `mean_neighbor_label` feature says "nothing" → MLEvolve's tabular solution misclassifies it
+- `gp_degree_z` — hub/periphery flag (topology only)
+- `gp_train_neighbor_count` — neighborhood size
+- `gp_neighbor_label_pos_frac` — classical label-prop, leakage-masked
+- `gp_neighbor_label_variance` — **mixed/bridge flag** (new)
+- `gp_cosine_weighted_label` — **feature-similarity-weighted label-prop** (new, free-form origin)
 
-<div class="mt-3 p-2 bg-red-50 rounded border border-red-300 text-xs">
-Naïve feature reads = base rate ⇒ the tree model sees an <em>average-looking</em> node even though it is an extreme hub.
-</div>
+Surfaced by the failure-pattern miner over 500 misclassified val rows / round across 8 canonical clusters (hub, isolated, homophily violation, bridge, feature-cohesion outlier, …).
 
 </div>
 <div>
 
-### Naïve vs. `gp_*` features
+### Addon Δ on MLEvolve best `solution.py`
 
-| Feature | Naïve | `gp_*` augmented |
-|---|---:|---:|
-| Neighborhood signal | `mean_nbr_label = 0.069` (base rate) | `gp_degree_z = +35.98` |
-| Aggregate | unweighted mean over 2,356 labeled nbrs | `gp_cosine_weighted_label` |
-| Size encoding | absent | `gp_train_neighbor_count = 6,167` |
-| Net | indistinguishable from avg | sharp, predictive |
-
-<div class="mt-3 p-2 bg-green-50 rounded border border-green-300 text-xs">
-One scalar (<code>gp_degree_z</code>) flips the feature vector from noise to 36-σ hub signature — <strong>no changes to the agent framework</strong>.
-</div>
-
-</div>
-</div>
-
----
-
-# 3 · The 5 reusable columns (H1 + H2 distilled)
-
-<div class="text-sm mt-3">
-
-From GraphLoomer's `dev` branch: bulk failure-pattern mining (500 failures / round, 8 canonical structural clusters) + free-form python op family. Three patterns survive as reusable tricks:
-
-</div>
-
-<div class="grid grid-cols-3 gap-3 mt-3 text-xs">
-<div class="p-2 bg-blue-50 rounded border border-blue-200">
-
-### Trick A — Neighbor-label variance
-`gp_neighbor_label_variance`
-
-Bridge / mixed neighborhoods: mean ≈ base rate is useless, but variance ≈ 0.25 flags genuine uncertainty. Topology + train marginals only.
-
-</div>
-<div class="p-2 bg-blue-50 rounded border border-blue-200">
-
-### Trick B — Cosine-weighted nbr label
-`gp_cosine_weighted_label`
-
-Hub / feature-cohesion-gap cases: weight neighbors by `cos(self, neighbor)` on the caller's own numeric features. Catalog-external, free-form origin.
-
-</div>
-<div class="p-2 bg-blue-50 rounded border border-blue-200">
-
-### Trick C — Degree z-score gating
-`gp_degree_z`
-
-Graph-only scalar; tells the tree "this is a hub" so it gates neighbor-aggregate features instead of averaging them into the base rate.
-
-</div>
-</div>
-
-<div class="text-xs mt-3">
-+ `gp_train_neighbor_count`, `gp_neighbor_label_pos_frac` — the supporting columns the three tricks ride on.<br/>
-Shipped as a one-line import: <code>autopipe.data.graph_pattern_features.add_graph_pattern_features(df, edges, train_mask)</code>.
-</div>
-
----
-
-# 3 · Generalization test — patch MLEvolve's `solution.py`
-
-<div class="text-sm mt-2">
-
-Byte-for-byte unmodified MLEvolve best-solution files. Only the CSV pre-loader is wrapped so the 5 `gp_*` columns reach the feature matrix — identical preprocessing, identical XGB+LGBM / transformer-tab stacks, identical thresholding afterwards.
-
-</div>
-
-<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
-<div>
-
-### Patched MLEvolve `solution.py`
-
-| Task | Unpatched val | Patched val | Δ |
+| Task | Unpatched val | + `gp_*` val | Δ |
 |---|---:|---:|---:|
 | `figraph` | 0.8025 | **0.8100** | **+0.0075** |
 | `arxiv-citation` | 0.7341 | **0.7384** | **+0.0043** |
+| `ibm-aml` (val F1) | 0.036 | **0.082** | **+130 % rel.** |
 
-On arxiv the patched val (0.7384) clears the leaderboard #1 (0.736) on MLEvolve's own slice — a distribution-shift gap on the gtb test set remains.
-
-</div>
-<div>
-
-### Third task — `ibm-aml` (F1 on 0.08 % minority)
-
-| Metric | Baseline | +5 `gp_*` | Δ |
-|---|---:|---:|---:|
-| val AUC-ROC | 0.9252 | **0.9413** | +0.016 |
-| val F1 (best thr.) | 0.036 | **0.082** | **+130 % relative** |
-
-Test F1 at top-1.0 % threshold: 0.014 → **0.023** on the real leaderboard.
+3 / 3 tasks lifted on a harness that never read the graph. Arxiv patched val (0.7384) even clears the leaderboard #1 on MLEvolve's own slice.
 
 </div>
 </div>
 
 <div class="mt-3 p-2 bg-green-50 rounded border border-green-300 text-xs">
-<strong>Read:</strong> 5 columns lift 3 out of 3 tasks on a framework that was 100 % tabular. The trick is <em>generalizable to any multi-agent ML harness</em>, not tied to our search loop.
+<strong>Read:</strong> the 5 columns carry signal XGB+LGBM cannot recover from the raw tabular view alone. Claim supported — the <em>features</em> are portable even though our harness isn't SOTA end-to-end.
 </div>
 
 ---
@@ -299,7 +246,7 @@ Test F1 at top-1.0 % threshold: 0.014 → **0.023** on the real leaderboard.
 ### Method-side
 
 1. **Failure-pattern mining beats per-row failure chat.** Analyzing 500 misclassified rows at once surfaces clusters (homophily violation, hub, bridge) that single-row inspection misses — and the percentages literally travel into the LLM's feature proposals as justification.
-2. **Free-form python op > structured catalog** when a pattern couples edge construction + aggregation (e.g., cosine-weighted label aggregation). But sandbox + leakage gate are non-negotiable.
+2. **Free-form python op > structured catalog** when a pattern couples edge construction + aggregation (e.g., cosine-weighted label aggregation). Sandbox + leakage gate are non-negotiable.
 3. **Graph signal is distillable.** 5 columns encode what the full pipeline learns. Ship the columns, not the pipeline.
 
 </div>
@@ -310,7 +257,7 @@ Test F1 at top-1.0 % threshold: 0.014 → **0.023** on the real leaderboard.
 - Their shipped product behaves like **a coworker with deep data access**, not a fully-automated pipeline
 - Customers buy *trust + iteration*, not end-to-end autonomy
 - ⇒ we need **human-in-the-loop hooks** (mid-run edits, "why did you pick X?" queries, approve/reject feature ops) even if the underlying search is autonomous
-- Trust comes step-by-step: start with suggestion-mode → accept-mode → full autonomy per customer maturity
+- Trust comes step-by-step: suggestion-mode → accept-mode → full autonomy per customer maturity
 
 </div>
 </div>
@@ -357,19 +304,4 @@ Both insights point the same direction: expose the <em>patterns</em> (why a node
 
 <div class="mt-3 p-2 bg-green-50 rounded border border-green-300 text-xs">
 Bet: Option B ships a paper + a public leaderboard result in 4 weeks; Option A is a 2-quarter project. Do B first, iterate A underneath.
-</div>
-
----
-layout: center
-class: text-center
----
-
-# Questions?
-
-<div class="mt-6 text-sm opacity-70">
-
-GraphTestbed · [github.com/zhuconv/GraphTestbed](https://github.com/zhuconv/GraphTestbed) · [🤗 lanczos/graphtestbed](https://huggingface.co/spaces/lanczos/graphtestbed)
-
-Prior deck · [zhuconv.github.io/slides-hub/graph-analyst-0408](https://zhuconv.github.io/slides-hub/graph-analyst-0408/1)
-
 </div>
