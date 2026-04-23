@@ -10,7 +10,7 @@ mdc: true
 
 # GraphAgent — Leaderboard · Baselines · Augmentation
 
-## From hardcoded pipelines to a benchmark-driven multi-agent system
+## From a hardcoded pipeline to a hosted benchmark + LLM-agent baselines
 
 <div class="abs-br m-6 text-sm opacity-50">
 Jiajun Zhu · UT Austin · April 2026
@@ -30,16 +30,12 @@ Prior deck: <a href="https://zhuconv.github.io/slides-hub/graph-analyst-0408/1" 
 
 ### Where we left off
 
-- **GraphAnalyst bilevel pipeline** — outer loop evolves model + hyperparams; inner loop does failure analysis + feature engineering
-- Generalized from YelpChi-only to **3 datasets**, **7 model types**
-- **IEEE-CIS** generalized val→test (+0.4 AUC-ROC)
-- **YelpChi / IBM AML** overfit on tiny val sets
+- **GraphAnalyst bilevel pipeline** on 3 datasets / 7 model types — generalized val→test on IEEE-CIS (+0.4 AUC-ROC) but overfit on small-val tasks (YelpChi, IBM AML)
 
-### Open problems
+### Open problems this sprint closes
 
-- Val→test generalization on small positive counts
-- Evaluation still runs locally — agents could peek at test labels
-- No comparison against LLM-agent baselines for tabular-graph ML
+- Evaluation still runs **locally** — agents could `pd.concat([train, val, test])` and peek at test labels
+- **No comparison** against LLM-agent baselines for tabular-graph ML
 
 </div>
 
@@ -47,47 +43,35 @@ Prior deck: <a href="https://zhuconv.github.io/slides-hub/graph-analyst-0408/1" 
 
 # GraphTestbed — a Kaggle-style leaderboard
 
-<div class="grid grid-cols-2 gap-6 mt-2 text-sm">
+<div class="grid grid-cols-2 gap-6 mt-3 text-sm">
 <div>
 
 ### Why a hosted API, not local eval
 
-- Local eval ⇒ agent can `pd.concat([train, val, test])` and cheat
-- Hosted scoring API holds GT on server, never ships labels
-- **5 submissions / day / IP / task**, scores rounded to 3dp → probing is statistically uninformative
-- CSV-only contract → any harness (python, notebook, remote agent) works
-
-### CLI
-
-```bash
-pip install git+https://github.com/zhuconv/GraphTestbed
-gtb submit figraph --file preds.csv --agent my-agent
-# ✓ Scored  primary (auc_roc): 0.842  rank: #2
-gtb leaderboard figraph
-```
+- **Server-side GT** — agent can't `pd.concat([train, val, test])` because test labels never ship
+- **5 submissions / day / IP / task**, scores rounded to 3dp → score-probing is statistically uninformative on a 19k-row test set
 
 </div>
 <div>
 
 ### Tasks live today
 
-| Task | Metric | Test rows | Backend |
-|---|:-:|---:|---|
-| `figraph` | AUC-ROC | 3,596 | local GT |
-| `arxiv-citation` | AUC-ROC | 193,696 | local GT |
-| `ibm-aml` | F1 (minority) | 863,900 | local GT |
-| `ieee-fraud-detection` | AUC-ROC | 506,691 | Kaggle passthrough |
-
-### Hosted
-
-Leaderboard · [🤗 lanczos/graphtestbed](https://huggingface.co/spaces/lanczos/graphtestbed)  
-Repo · [github.com/zhuconv/GraphTestbed](https://github.com/zhuconv/GraphTestbed)
+| Task | Metric | Test rows |
+|---|:-:|---:|
+| `figraph` | AUC-ROC | 3,596 |
+| `arxiv-citation` | AUC-ROC | 193,696 |
+| `ibm-aml` | F1 (minority) | 863,900 |
+| `ieee-fraud-detection` | AUC-ROC | 506,691 |
 
 </div>
 </div>
 
 <div class="mt-4 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-<strong>Point:</strong> the leaderboard is the objective function. Any harness we build gets scored against the same CSV contract — no more hidden train/val leaks.
+<strong>Point:</strong> the leaderboard is the objective function — any harness we build gets scored against the same CSV contract, no hidden train/val leaks.
+</div>
+
+<div class="mt-2 text-xs opacity-60">
+🤗 <a href="https://huggingface.co/spaces/lanczos/graphtestbed">lanczos/graphtestbed</a> · <a href="https://github.com/zhuconv/GraphTestbed">github.com/zhuconv/GraphTestbed</a>
 </div>
 
 ---
@@ -96,7 +80,7 @@ Repo · [github.com/zhuconv/GraphTestbed](https://github.com/zhuconv/GraphTestbe
 
 <div class="text-sm mt-2">
 
-Both are LLM-driven ML-engineering agents wired into GraphTestbed via `agents/ai_build_ai/` and `agents/mlevolve/`. Read through source + paper — they fit one skeleton:
+**Same 5-role skeleton, two search topologies.** Both are LLM-driven ML-engineering agents, wired into GraphTestbed via `agents/ai_build_ai/` and `agents/mlevolve/`:
 
 ```
 Controller ── (Plan → Code → Execute → Parse → Refine)* ── Aggregate ── submission.csv
@@ -104,43 +88,27 @@ Controller ── (Plan → Code → Execute → Parse → Refine)* ── Aggre
 
 </div>
 
-<div class="grid grid-cols-3 gap-3 mt-3 text-xs">
-<div class="p-2 bg-gray-50 rounded border">
+<div class="grid grid-cols-2 gap-4 mt-4 text-sm">
+<div class="p-3 bg-blue-50 rounded border border-blue-200">
 
-### Role (unified)
-1. **Controller / search driver**
-2. **Planner / Designer**
-3. **Coder / Implementer**
-4. **Executor + Parser**
-5. **Refiner / Selector**
+### AI-Build-AI — linear state machine
 
-Candidates kept alive on disk, bounded by wall-clock + call count.
+- **Controller**: one persistent Claude-SDK Manager LLM with MCP tool-calls driving a hand-specified state sequence
+- **Safety layer**: SDK hooks (restricted write dirs, bash guards, daily-budget sleeps)
 
 </div>
-<div class="p-2 bg-blue-50 rounded border border-blue-200">
+<div class="p-3 bg-green-50 rounded border border-green-200">
 
-### AI-Build-AI
-- 5 Claude-SDK sub-agents; one **persistent Manager** LLM with MCP tool-calls
-- Two-mode coder: `coder` (1-epoch smoke test) vs `tuner` (full run)
-- Pydantic-typed I/O between agents
-- Safety hooks: restricted write dirs, bash guards, daily-budget sleeps
-- Default: `claude-sonnet-4-6`
+### MLEvolve — Monte Carlo Graph Search
 
-</div>
-<div class="p-2 bg-green-50 rounded border border-green-200">
-
-### MLEvolve
-- 8 prompt-based agents; search is **Monte Carlo Graph Search** over `SearchNode` journal
-- UCT with time-aware explore/exploit, branch fusion after 50 % of budget
-- **Global memory** (BM25 + FAISS) across runs
-- Dedicated `code_review_agent` pre-execution gate
-- Default: `gpt-5.4`
+- **Controller**: UCT search over a `SearchNode` journal with time-aware explore/exploit and cross-branch fusion after 50 % of budget; global BM25 + FAISS memory across runs
+- **Safety layer**: dedicated `code_review_agent` pre-execution gate
 
 </div>
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-<strong>Shared:</strong> both iterate plan→code→execute→refine; both keep a hall-of-fame; both aggregate into one <code>submission.csv</code>. <strong>Differ:</strong> search topology (linear state machine vs MCGS) and safety layer (SDK hooks vs prompt-based review).
+Both keep a hall-of-fame of candidates on disk, bounded by wall-clock + call count, and aggregate into one <code>submission.csv</code>. The search topology (state machine vs MCGS) is what actually changes behavior at budget limits.
 </div>
 
 ---
@@ -149,72 +117,72 @@ Candidates kept alive on disk, bounded by wall-clock + call count.
 
 <div class="text-xs mt-3">
 
+**GraphLoomer** = our harness: GraphAnalyst's bilevel pipeline (0408 deck) wired through the 5-role skeleton, plus a bulk failure-pattern mining skill + free-form python op family.
+
+</div>
+
+<div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+<strong>Honest reading, up front:</strong> our harness is <em>not</em> SOTA end-to-end — we're 3rd of 4 on average. What the next two slides argue is a narrower but sharper win: the <em>graph-feature patterns</em> our pipeline discovers are <strong>transferable</strong> — they lift MLEvolve's own best solution by zero-code changes.
+</div>
+
+<div class="text-xs mt-3">
+
 | Agent | `figraph` AUC | `arxiv-citation` AUC | `ibm-aml` F1 | `ieee-fraud` AUC | **Avg** |
 |---|:-:|:-:|:-:|:-:|:-:|
-| `open-aibuildai-claude-sonnet-4-6` | **0.890** 🥇 | **0.777** 🥇 | **0.171** 🥇 | 0.926 | **0.691** 🥇 |
-| `aibuildai-claude-sonnet-4-6` | 0.819 | 0.772 | 0.169 | **0.928** 🥇 | **0.672** 🥈 |
-| **`graphloomer-claude-sonnet-4-6`** (ours) | **0.842** 🥈 | 0.701 | 0.159 | 0.851 | **0.638** 🥉 |
+| `open-aibuildai-claude-sonnet-4-6` † | **0.890** | **0.777** | **0.171** | 0.926 | **0.691** |
+| `aibuildai-claude-sonnet-4-6` | 0.819 | 0.772 | 0.169 | **0.928** | **0.672** |
+| **`graphloomer-claude-sonnet-4-6`** (ours) | **0.842** | 0.701 | 0.159 | 0.851 | **0.638** |
 | `mlevolve-gpt-5.4` | 0.810 | 0.768 | 0.077 | 0.891 | 0.637 |
 
-</div>
+<div class="opacity-60 mt-1">† <code>open-aibuildai-*</code> = open-source/community AI-Build-AI variant; <code>aibuildai-*</code> = upstream. Both use <code>claude-sonnet-4-6</code>.</div>
 
-<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-<strong>Honest reading:</strong> our harness is competitive but <em>not SOTA</em> across all tasks. On <code>figraph</code> it clears both AI-Build-AI variants we bench against; on the other three it trails. The win we actually want to demonstrate is <strong>not</strong> "we beat the leader" — it's that the <em>graph-feature patterns</em> our pipeline discovers are <em>transferable</em>. Next two slides set this up.
 </div>
 
 ---
 
-# Discovered graph-feature patterns are transferable
+# Transferability test — setup
 
-<div class="text-sm mt-3">
+<div class="text-sm mt-4">
 
-**Claim.** Our pipeline may not be SOTA end-to-end, but it *discovers good graph-pattern features*. If that claim is true, dropping those features into a strong tabular harness should lift it — without touching the rest of the harness.
+**Claim.** Our pipeline may not win end-to-end, but the features it *discovers* should be strong enough that dropping them into a tuned tabular harness lifts it — with zero changes to the harness.
+
+</div>
+
+<div class="p-4 mt-5 bg-blue-50 rounded border border-blue-200 text-sm">
+
+### Protocol
+
+1. **Take MLEvolve's best `solution.py`** per task — 100 % tabular, never reads the graph, already tuned by MLEvolve's 8-agent loop
+2. **Wrap only the CSV pre-loader** so the 5 `gp_*` graph-pattern columns reach the feature matrix
+3. **Byte-for-byte unchanged** everywhere else — preprocessing, XGB+LGBM / transformer-tab stacks, thresholding, early-stopping
+4. **Any Δ must come from the 5 added columns** — this isolates *feature discovery* (our contribution) from *search orchestration* (MLEvolve's)
 
 </div>
 
-<div class="grid grid-cols-2 gap-4 mt-4 text-sm">
-<div class="p-3 bg-blue-50 rounded border border-blue-200">
-
-### Setup
-
-- Take **MLEvolve's best `solution.py`** per task (100% tabular — never reads the graph)
-- Wrap only the CSV pre-loader so the 5 `gp_*` graph-pattern columns reach the feature matrix
-- **Byte-for-byte unchanged**: preprocessing, XGB+LGBM / transformer-tab stacks, thresholding, early-stopping
-- Any Δ must come from the 5 added columns
-
-</div>
-<div class="p-3 bg-green-50 rounded border border-green-200">
-
-### Why this is a clean test
-
-- Separates *feature discovery* (our contribution) from *search orchestration* (MLEvolve's contribution)
-- The `solution.py` was already tuned by MLEvolve's 8-agent loop — any extra signal is strictly from the graph side
-- Works as a sanity check that our `gp_*` aggregator is a **portable addon**, not a method tied to our controller
-- Same 5 columns applied to 3 different task types (anomaly / future-prediction / minority-F1)
-
-</div>
-</div>
-
-<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-If the patterns generalize, MLEvolve's tabular best gets better with zero changes to its code. That is the bar.
+<div class="mt-4 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+Why this matters: if the addon lifts the harness on <em>every</em> task, the <code>gp_*</code> aggregator is a portable artifact, not a method bolted to our specific controller.
 </div>
 
 ---
 
-# Discovered graph-feature patterns are transferable
+# Transferability test — patterns lift MLEvolve's best on 3/3 tasks
 
-<div class="grid grid-cols-2 gap-4 mt-2 text-sm">
+<div class="mt-2 p-2 bg-green-50 rounded border border-green-300 text-xs">
+<strong>Punch line:</strong> on <code>arxiv-citation</code> the patched MLEvolve solution hits <strong>val 0.7384 — above the leaderboard #1 (0.736)</strong> on MLEvolve's own slice. Claim supported: the <em>features</em> are portable even though our harness isn't.
+</div>
+
+<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
 <div>
 
 ### 5 graph-pattern columns (distilled)
 
-- `gp_degree_z` — hub/periphery flag (topology only)
+- `gp_degree_z` — hub/periphery flag
 - `gp_train_neighbor_count` — neighborhood size
-- `gp_neighbor_label_pos_frac` — classical label-prop, leakage-masked
+- `gp_neighbor_label_pos_frac` — leakage-masked label-prop
 - `gp_neighbor_label_variance` — **mixed/bridge flag** (new)
 - `gp_cosine_weighted_label` — **feature-similarity-weighted label-prop** (new, free-form origin)
 
-Surfaced by the failure-pattern miner over 500 misclassified val rows / round across 8 canonical clusters (hub, isolated, homophily violation, bridge, feature-cohesion outlier, …).
+<div class="text-xs opacity-70 mt-2">Mined from 500 misclassified val rows / round — see 0408 deck for pipeline details.</div>
 
 </div>
 <div>
@@ -225,20 +193,16 @@ Surfaced by the failure-pattern miner over 500 misclassified val rows / round ac
 |---|---:|---:|---:|
 | `figraph` | 0.8025 | **0.8100** | **+0.0075** |
 | `arxiv-citation` | 0.7341 | **0.7384** | **+0.0043** |
-| `ibm-aml` (val F1) | 0.036 | **0.082** | **+130 % rel.** |
+| `ibm-aml` (val F1) | 0.036 | **0.082** | +0.046 abs. |
 
-3 / 3 tasks lifted on a harness that never read the graph. Arxiv patched val (0.7384) even clears the leaderboard #1 on MLEvolve's own slice.
+<div class="text-xs opacity-70 mt-1">Caveat: ibm-aml baseline F1=0.036 is near-broken, so the "+130 % relative" is flattering; the absolute gain +0.046 is the honest number.</div>
 
 </div>
-</div>
-
-<div class="mt-3 p-2 bg-green-50 rounded border border-green-300 text-xs">
-<strong>Read:</strong> the 5 columns carry signal XGB+LGBM cannot recover from the raw tabular view alone. Claim supported — the <em>features</em> are portable even though our harness isn't SOTA end-to-end.
 </div>
 
 ---
 
-# Insights
+# What we learned — method side + industry signal
 
 <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
@@ -247,48 +211,54 @@ Surfaced by the failure-pattern miner over 500 misclassified val rows / round ac
 
 1. **Failure-pattern mining beats per-row failure chat.** Analyzing 500 misclassified rows at once surfaces clusters (homophily violation, hub, bridge) that single-row inspection misses — and the percentages literally travel into the LLM's feature proposals as justification.
 2. **Free-form python op > structured catalog** when a pattern couples edge construction + aggregation (e.g., cosine-weighted label aggregation). Sandbox + leakage gate are non-negotiable.
-3. **Graph signal is distillable.** 5 columns encode what the full pipeline learns. Ship the columns, not the pipeline.
 
 </div>
 <div class="p-3 bg-purple-50 rounded border border-purple-200">
 
-### Production-side (Observability is important)
+### Production-side — observability is important
+
+<div class="text-xs opacity-70 mb-1">Signal from chat with Sapien's chief scientist, April 2026.</div>
 
 - Their shipped product behaves like **a CFO-style coworker with deep finance-data access and traceability** — not a fully-automated pipeline
 - Customers buy *trust + iteration*, not end-to-end autonomy
-- ⇒ we need **human-in-the-loop hooks** (mid-run edits, "why did you pick X?" queries, approve/reject feature ops) even if the underlying search is autonomous
-- Trust comes step-by-step: suggestion-mode → accept-mode → full autonomy per customer maturity
+- ⇒ we need **human-in-the-loop hooks** (mid-run edits, "why did you pick X?", approve/reject feature ops) even when search is autonomous
 
 </div>
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Both insights point the same direction: expose the <em>patterns</em> (why a node failed, which feature family is proposed, what the leaderboard says) as first-class interaction surfaces, not hidden search state.
+Both sides point the same way: expose the <em>patterns</em> (why a node failed, which feature family is proposed, what the leaderboard says) as first-class interaction surfaces, not hidden search state.
 </div>
 
 ---
 
-# Next step — extending to a multi-agent system
+# Next step — and what I'd like the group to weigh in on
 
-<div class="grid grid-cols-2 gap-6 mt-8 text-sm">
-<div class="p-4 bg-blue-50 rounded border border-blue-200">
+<div class="grid grid-cols-2 gap-4 mt-3 text-xs">
+<div class="p-3 bg-gray-50 rounded border border-gray-300 opacity-90">
 
-### Option A — build our own
+### Option A — build our own graph-native harness
 
-- Promote the 5-role skeleton (controller / planner / coder / executor / refiner) into a **graph-native harness**
+- Promote the 5-role skeleton into a controller that uses failure-pattern mining as a first-class tool
 - Reuse MLEvolve's MCGS + global memory
-- Add a **DiagnosisAgent** with the failure-pattern skill as a first-class tool (already built in GraphLoomer)
-- Expose HITL breakpoints at diagnosis + feature-proposal stages (Sapien insight)
+- **Cost:** ~2 quarters (controller rewrite + MCGS integration + task-sweep)
 
 </div>
-<div class="p-4 bg-green-50 rounded border border-green-200">
+<div class="p-3 bg-green-50 rounded border-2 border-green-500">
 
-### Option B — augment SOTA harnesses
+### Option B — ship a graph-tool plugin  <span class="text-green-700 text-[10px]">(recommended)</span>
 
-- Ship a **graph-tool plugin** to MLEvolve / AI-Build-AI: `get_failure_patterns`, `graph_aggregate`, `add_graph_pattern_features`
-- Zero changes to their controller / search — just more tools in the catalog
-- Measured directly on GraphTestbed
-- Lower cost, faster to iterate, broader impact
+- Package `get_failure_patterns`, `graph_aggregate`, `add_graph_pattern_features` as an **MCP server** — drop-in for MLEvolve / AI-Build-AI
+- Zero changes to their controller — just more tools in the catalog
+- **Cost:** ~2 weeks — reuses GraphTestbed + today's 3/3 lift as evidence
 
 </div>
+</div>
+
+<div class="mt-3 p-3 bg-yellow-50 rounded border border-yellow-300 text-xs">
+
+**Recommendation.** Start **Option B** — turns today's transferability result into a 4-week paper on a public leaderboard. HITL (Sapien insight) layers on either option later.
+
+**Ask.** Beyond the 4 GraphTestbed tasks, is there a specific task / harness pairing you'd most want to see in the plugin's first evaluation round?
+
 </div>
