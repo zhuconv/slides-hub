@@ -37,5 +37,12 @@
     "assets": [
       "public"
     ]
+  },
+  {
+    "name": "graphagent-4023",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
   }
 ]
