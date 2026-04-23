@@ -167,11 +167,7 @@ Why this matters: if the addon lifts the harness on <em>every</em> task, the <co
 
 # Transferability test — patterns lift MLEvolve's best on 3/3 tasks
 
-<div class="mt-2 p-2 bg-green-50 rounded border border-green-300 text-xs">
-<strong>Punch line:</strong> on <code>arxiv-citation</code> the patched MLEvolve solution hits <strong>val 0.7384 — above the leaderboard #1 (0.736)</strong> on MLEvolve's own slice. Claim supported: the <em>features</em> are portable even though our harness isn't.
-</div>
-
-<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
+<div class="grid grid-cols-2 gap-4 mt-4 text-sm">
 <div>
 
 ### 5 graph-pattern columns (distilled)
@@ -202,7 +198,7 @@ Why this matters: if the addon lifts the harness on <em>every</em> task, the <co
 
 ---
 
-# What we learned — method side + industry signal
+# What we learned
 
 <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
