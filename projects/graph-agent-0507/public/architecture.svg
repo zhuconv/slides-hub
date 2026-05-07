@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="560" viewBox="0 0 1280 560" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/>
+    </marker>
+    <marker id="arr-loop" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9673a6"/>
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+
+  <!-- Stage labels -->
+  <text x="200" y="40" text-anchor="middle" font-size="16" font-weight="bold" fill="#888" letter-spacing="2">SETUP</text>
+  <text x="640" y="40" text-anchor="middle" font-size="16" font-weight="bold" fill="#888" letter-spacing="2">SEARCH LOOP</text>
+  <text x="1080" y="40" text-anchor="middle" font-size="16" font-weight="bold" fill="#888" letter-spacing="2">PREDICT</text>
+
+  <!-- Stage separators -->
+  <line x1="400" y1="60" x2="400" y2="500" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="880" y1="60" x2="880" y2="500" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- ====== SETUP ====== -->
+  <rect x="40" y="80" width="320" height="80" rx="10" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+  <text x="200" y="115" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Raw tables</text>
+  <text x="200" y="138" text-anchor="middle" font-size="13" fill="#555">+ instruction.md</text>
+
+  <rect x="40" y="200" width="320" height="80" rx="10" fill="#e1d5e7" stroke="#9673a6" stroke-width="2"/>
+  <text x="200" y="235" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Setup Agent (LLM)</text>
+  <text x="200" y="258" text-anchor="middle" font-size="12" fill="#555">extracts task contract</text>
+
+  <rect x="40" y="320" width="320" height="80" rx="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="200" y="355" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Lane Builder</text>
+  <text x="200" y="378" text-anchor="middle" font-size="12" fill="#555">8 lane types → many instances</text>
+
+  <!-- arrows within setup -->
+  <line x1="200" y1="160" x2="200" y2="200" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="200" y1="280" x2="200" y2="320" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- bridge arrow setup → loop -->
+  <line x1="360" y1="360" x2="475" y2="360" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ====== SEARCH LOOP ====== -->
+  <rect x="480" y="80" width="320" height="80" rx="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="640" y="115" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Controller</text>
+  <text x="640" y="138" text-anchor="middle" font-size="12" fill="#555">picks lanes · sets AllowedSpace</text>
+
+  <rect x="480" y="200" width="320" height="80" rx="10" fill="#e1d5e7" stroke="#9673a6" stroke-width="2"/>
+  <text x="640" y="235" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">N Workers (LLM, parallel)</text>
+  <text x="640" y="258" text-anchor="middle" font-size="12" fill="#555">one atomic feature spec each</text>
+
+  <rect x="480" y="320" width="320" height="80" rx="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="640" y="355" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Materialize · Evaluate</text>
+  <text x="640" y="378" text-anchor="middle" font-size="12" fill="#555">DuckDB + univariate / set-level</text>
+
+  <!-- arrows within loop -->
+  <line x1="640" y1="160" x2="640" y2="200" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="640" y1="280" x2="640" y2="320" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- loop-back arrow (right side, curved) -->
+  <path d="M 800 360 C 860 360, 860 120, 800 120" fill="none" stroke="#9673a6" stroke-width="2" marker-end="url(#arr-loop)"/>
+  <text x="868" y="244" font-size="12" fill="#9673a6" font-style="italic">round k+1</text>
+
+  <!-- store cylinder beneath the loop -->
+  <ellipse cx="640" cy="450" rx="120" ry="10" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+  <path d="M 520 450 L 520 480 A 120 10 0 0 0 760 480 L 760 450 Z" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+  <ellipse cx="640" cy="450" rx="120" ry="10" fill="none" stroke="#82b366" stroke-width="2"/>
+  <text x="640" y="478" text-anchor="middle" font-size="13" font-weight="bold" fill="#222">store.sqlite</text>
+  <line x1="640" y1="400" x2="640" y2="440" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- bridge arrow loop → predict (skip the cylinder, take the top) -->
+  <path d="M 800 120 L 870 120 L 870 200" fill="none" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ====== PREDICT ====== -->
+  <rect x="920" y="80" width="320" height="80" rx="10" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+  <text x="1080" y="115" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Best feature set</text>
+  <text x="1080" y="138" text-anchor="middle" font-size="12" fill="#555">picked from store by primary metric</text>
+
+  <rect x="920" y="200" width="320" height="80" rx="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="1080" y="235" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Matrix Assembler</text>
+  <text x="1080" y="258" text-anchor="middle" font-size="12" fill="#555">train · val · test → tmp_matrix</text>
+
+  <rect x="920" y="320" width="320" height="80" rx="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="1080" y="350" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">Cross-class ensemble</text>
+  <text x="1080" y="372" text-anchor="middle" font-size="12" fill="#555">hist_gbdt · lightgbm · logistic</text>
+
+  <rect x="920" y="440" width="320" height="60" rx="10" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+  <text x="1080" y="475" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">submission.csv</text>
+
+  <!-- arrows within predict -->
+  <line x1="1080" y1="160" x2="1080" y2="200" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="1080" y1="280" x2="1080" y2="320" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="1080" y1="400" x2="1080" y2="440" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ====== Legend ====== -->
+  <g transform="translate(40, 525)">
+    <rect x="0" y="0" width="14" height="14" fill="#e1d5e7" stroke="#9673a6" stroke-width="1.5"/>
+    <text x="20" y="12" font-size="12" fill="#444">LLM</text>
+    <rect x="80" y="0" width="14" height="14" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+    <text x="100" y="12" font-size="12" fill="#444">Compute</text>
+    <rect x="180" y="0" width="14" height="14" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+    <text x="200" y="12" font-size="12" fill="#444">Store</text>
+    <rect x="260" y="0" width="14" height="14" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5"/>
+    <text x="280" y="12" font-size="12" fill="#444">I/O</text>
+  </g>
+</svg>
