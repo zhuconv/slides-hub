@@ -125,18 +125,24 @@ Next 3 slides: one architectural pillar each, contrasted with the prior design.
 class: compact
 ---
 
-# Pillar 3 — A typed operator bank (8 lanes)
+# Pillar 3 — A typed operator bank (8 lane types)
 
-<div class="grid grid-cols-2 gap-3 mt-2 text-sm">
+<div class="text-xs mt-1">
+
+The bank has **8 hardcoded lane *types*** in <code>SearchLaneBuilder</code>. Each round, the builder expands them into many concrete **lane *instances*** keyed by (target entity × relation pair × direction). The Worker LLM proposes feature SQL <em>within</em> a given instance — it never invents a new lane type. That constraint is what makes the materializer's typed validation possible.
+
+</div>
+
+<div class="grid grid-cols-2 gap-3 mt-1 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
 
-### Local lanes (single-table)
+### Local lane types (single-table)
 - `direct_numeric` · pass-through numeric col
 - `local_column_transform` · log1p / clip / bucket
 - `local_expr` · DSL expr over base cols
 - `sparse_cross` · cat × cat hashed cross
 
-### Relational lanes (per relation pair, time-respecting)
+### Relational lane types (per relation pair, time-respecting)
 - `shared_key_group_aggregate` · join + group-by on shared FK
 - `account_history` · windowed aggs over entity history
 - `account_static_aggregate` · `(table, agg, value_col)` snapshot
@@ -145,13 +151,14 @@ class: compact
 </div>
 <div class="p-3 bg-green-50 rounded border border-green-200">
 
-### Why *typed* + concise
-- Every lane has a strict **input dtype, output dtype, time-policy** contract — materializer rejects illegal specs before SQL runs
+### Why a closed, typed lane *type* set
+- Each lane type fixes an **input dtype, output dtype, time policy, allowed aggs/windows**; the materializer rejects illegal specs before SQL runs
 - LLM degree-of-freedom **capped to options the validator understands**; sonnet still 37 % materialize-fail on ibm-aml — free-form would be much worse
-- Borrows *MLEvolve's* `code_review_agent` pre-execution gate (typed instead of NL); extends *GraphLoomer's* "no free-form" stance
+- A new lane type is a **code change**, not an LLM choice — keeps the validator and downstream guarantees intact
+- Borrows *MLEvolve's* `code_review_agent` pre-execution gate (typed, not NL); extends *GraphLoomer's* "no free-form" stance
 
 ### vs prior
-GraphLoomer's catalog was structured but mostly local; relational walks needed Python escape hatches. **GraphML-FS makes 3-step relational walks first-class** — exactly the lanes that pay off on `ibm-aml` and `arxiv-citation`.
+GraphLoomer's catalog was structured but mostly local; relational walks needed Python escape hatches. **GraphML-FS makes 3-step relational walks first-class** — exactly the lane types that pay off on `ibm-aml` and `arxiv-citation`.
 
 </div>
 </div>
@@ -244,7 +251,7 @@ Adding deep operators forces a split between **differentiable** (gradients flow 
 
 <div class="text-sm mt-2">
 
-GraphML-FS's 8-lane bank is one instance of a broader thesis: **lift graph structure from a hard-coded part of the architecture to a searchable, executable, composable operator catalog**.
+GraphML-FS's 8 lane *types* are one instance of a broader thesis: **lift graph structure from a hard-coded part of the architecture to a searchable, executable, composable operator catalog**. (Inside each type the LLM still searches over SQL; the *types* themselves are a closed code-level set.)
 
 </div>
 
