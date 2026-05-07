@@ -36,8 +36,9 @@
   <line x1="200" y1="160" x2="200" y2="200" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
   <line x1="200" y1="280" x2="200" y2="320" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
 
-  <!-- bridge arrow setup → loop -->
-  <line x1="360" y1="360" x2="475" y2="360" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- bridge arrow setup → loop: Lane Builder feeds the Controller (lanes + AllowedSpace) -->
+  <path d="M 360 360 L 440 360 L 440 120 L 480 120" fill="none" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="450" y="245" font-size="11" fill="#555" font-style="italic">lanes</text>
 
   <!-- ====== SEARCH LOOP ====== -->
   <rect x="480" y="80" width="320" height="80" rx="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
@@ -56,9 +57,9 @@
   <line x1="640" y1="160" x2="640" y2="200" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
   <line x1="640" y1="280" x2="640" y2="320" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
 
-  <!-- loop-back arrow (right side, curved) -->
-  <path d="M 800 360 C 860 360, 860 120, 800 120" fill="none" stroke="#9673a6" stroke-width="2" marker-end="url(#arr-loop)"/>
-  <text x="868" y="244" font-size="12" fill="#9673a6" font-style="italic">round k+1</text>
+  <!-- loop-back arrow (right side, curved) — enters Controller's right-bottom -->
+  <path d="M 800 360 C 855 360, 855 145, 800 145" fill="none" stroke="#9673a6" stroke-width="2" marker-end="url(#arr-loop)"/>
+  <text x="862" y="248" font-size="12" fill="#9673a6" font-style="italic">round k+1</text>
 
   <!-- store cylinder beneath the loop -->
   <ellipse cx="640" cy="450" rx="120" ry="10" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
@@ -67,8 +68,9 @@
   <text x="640" y="478" text-anchor="middle" font-size="13" font-weight="bold" fill="#222">store.sqlite</text>
   <line x1="640" y1="400" x2="640" y2="440" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
 
-  <!-- bridge arrow loop → predict (skip the cylinder, take the top) -->
-  <path d="M 800 120 L 870 120 L 870 200" fill="none" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- bridge arrow loop → predict: Controller "stop" hands off to Best feature set -->
+  <line x1="800" y1="100" x2="920" y2="100" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="860" y="92" text-anchor="middle" font-size="11" fill="#555" font-style="italic">stop</text>
 
   <!-- ====== PREDICT ====== -->
   <rect x="920" y="80" width="320" height="80" rx="10" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
