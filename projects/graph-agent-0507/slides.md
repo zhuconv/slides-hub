@@ -212,6 +212,10 @@ Closes via: **K-fold OOF** ensemble members, **Platt / isotonic** calibration be
 </div>
 </div>
 
-<div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+<div class="mt-2 p-2 bg-purple-50 rounded border border-purple-200 text-xs">
+<strong>Exploration reminder · pre-NN vs post-NN graph aggregation.</strong> In our framework this is a <em>stacking</em> question: should an operator emit a column the downstream consumes (<strong>wide / pre-NN aggregation</strong>) or wrap a model whose predictions are then aggregated (<strong>deep / post-NN aggregation</strong>)? Adding deep operators forces a split between <em>differentiable</em> (gradients flow end-to-end) and <em>non-differentiable</em> (current 8 lanes) operators, which raises orchestration + canonical-hash complexity. Parked, not yet on the roadmap.
+</div>
+
+<div class="mt-1 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
 Code: <code>github.com/zhuconv/AgenticFS</code> · branch <code>main</code> · 39 tests, 3 commits past the graphagent-4023 state.
 </div>
