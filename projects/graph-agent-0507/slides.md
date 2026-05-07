@@ -137,48 +137,37 @@ The downstream — impute → fit hist_gbdt / lightgbm / logistic → threshold 
 </div>
 
 ---
-class: compact
----
 
 # Pillar 3 — typed operator bank: 8 lane *types*
 
-<div class="grid grid-cols-2 gap-3 mt-2 text-xs">
-<div class="p-2 bg-purple-50 rounded border border-purple-200">
+<div class="grid grid-cols-2 gap-4 mt-4 text-sm">
+<div class="p-3 bg-purple-50 rounded border border-purple-200">
 
-### Local lane types (single-table)
-- **Pass-through** *(`direct_numeric`)*
-- **Column transform** *(`local_column_transform`)* — log1p / clip / bucket
-- **DSL expression** *(`local_expr`)* — expr over base cols
-- **Hashed sparse cross** *(`sparse_cross`)* — cat × cat
+### Local
+- **Pass-through**
+- **Column transform** — log1p / clip / bucket
+- **DSL expression** — expr over base cols
+- **Hashed sparse cross** — cat × cat
 
-### Relational lane types (multi-table)
-- **First-order group aggregate** *(`shared_key_group_aggregate`)* — 1-hop join + group-by  
-  <span class="opacity-70">*e.g. for each `customer`, count of their `orders`*</span>
-- **Co-neighbor snapshot** *(`*_static_aggregate`)* — 2-hop self-loop, no window  
-  <span class="opacity-70">*e.g. for each `account`, count of all txns it appeared in*</span>
-- **Co-neighbor windowed history** *(`*_history`)* — 2-hop self-loop, time-windowed  
-  <span class="opacity-70">*e.g. for each `account`, sum of txn amounts in last 7d*</span>
-- **Role-mixed co-neighbor history** *(`*_mixed_history`)* — 2-hop, two relation roles, windowed  
-  <span class="opacity-70">*e.g. for each `account` as sender, mean balance of recent recipients*</span>
+### Relational *(time-respecting)*
+- **First-order group aggregate** — *count of orders per customer*
+- **Co-neighbor snapshot** — *count of txns per account*
+- **Co-neighbor windowed history** — *7d txn sum per account*
+- **Role-mixed co-neighbor history** — *mean recipient balance per sender*
 
 </div>
-<div class="p-2 bg-green-50 rounded border border-green-200">
+<div class="p-3 bg-green-50 rounded border border-green-200">
 
-### Why a closed, typed set
+### Why a closed set
 
-- Each type fixes **input dtype, output dtype, time policy, allowed aggs/windows**
+- Each type fixes **input / output dtype, time policy, allowed aggs**
 - Validator rejects illegal specs **before** SQL runs
-- LLM degrees of freedom **capped to options the validator understands**
 - A new lane type is a **code change**, not an LLM choice
 
-### Why these names
-
-The bank is dataset-agnostic; the `account_*` prefix is just a naming artifact from the first dataset's target entity (`Account` on ibm-aml). All three relational variants are **2-hop self-loops via a shared connector** — they differ only on (time-windowed?) and (same vs different relation on the two hops).
-
 </div>
 </div>
 
-<div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+<div class="mt-4 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
 The Worker LLM picks SQL <em>within</em> a lane instance — never invents a new lane type. Sonnet still hits 37 % materialize-fail with this guardrail; free-form would be much worse.
 </div>
 
