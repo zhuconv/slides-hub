@@ -129,28 +129,27 @@ Everything but step 1 is deterministic. <code>store.sqlite</code> persists featu
 
 ---
 
-# Leaderboard — top of 3 / 4 tasks
+# Leaderboard — first on 3 / 4 tasks
 
 <div class="text-xs mt-3">
 
-**Best of our submissions per task** (`graphfs-claude-sonnet-4-6` standalone for 3/4; `autoresearch-ibm-aml-may2` adds neg-undersampling on top of the same pipeline):
+Single submission `graphfs-claude-sonnet-4-6` (the system in this deck — `graphml run` with sonnet-4-6 → `graphml ensemble`):
 
-| Task | Metric | **GraphML-FS (best ours)** | rank | next-best non-ours | gap |
+| Task | Metric | **GraphML-FS** | rank | next-best | gap |
 |---|:-:|---:|:-:|---:|:-:|
-| `figraph` | AUC-ROC | **0.896** ‡ | **#1** | 0.890 (open-aibuildai) | +0.006 |
+| `figraph` | AUC-ROC | **0.895** | **#1** | 0.890 (open-aibuildai) | +0.005 |
 | `arxiv-citation` | AUC-ROC | **0.789** | **#1** | 0.777 (open-aibuildai) | +0.012 |
-| `ibm-aml` | F1 (minority) | **0.591** ‡ | **#1** | 0.171 (open-aibuildai) | +0.420 |
-| `ieee-fraud-detection` | AUC | 0.924 ‡ | #3 | 0.928 (aibuildai) | −0.004 |
+| `ibm-aml` | F1 (minority) | **0.184** | **#1** | 0.171 (open-aibuildai) | +0.013 |
+| `ieee-fraud-detection` | AUC | 0.921 | #3 | 0.928 (aibuildai) | −0.007 |
 
 </div>
 
-<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-‡ With negative-undersampling head (autoresearch run); pure ensemble + sonnet-4-6 search lands at <code>arxiv 0.789 / figraph 0.895 / ieee 0.921 / ibm-aml 0.184</code>.
-The decisive ibm-aml gap (+0.42) is from the relational <code>shared_key_group_aggregate</code> + 3-step <code>account_mixed_history</code> lanes; competitors run a single-table tabular harness.
+<div class="mt-3 p-2 bg-blue-50 rounded border border-blue-200 text-xs">
+<strong>Headline</strong>: GraphML-FS is the only system on <a href="https://huggingface.co/spaces/lanczos/graphtestbed">graphtestbed</a> that holds first place on more than one task — and is within 0.7 % of the leader on the one task it doesn't lead.
 </div>
 
-<div class="mt-2 p-2 bg-blue-50 rounded border border-blue-200 text-xs">
-<strong>Headline</strong>: GraphML-FS is the only system on the leaderboard that achieves first place on more than one task — and is within 0.4 % of leader on the only task it doesn't lead.
+<div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+The decisive lifts on <code>ibm-aml</code> (+1.3 pp F1) and <code>arxiv-citation</code> (+1.2 pp AUC) come from the relational lanes — <code>shared_key_group_aggregate</code> + 3-step <code>account_mixed_history</code> on ibm-aml; <code>account_history</code> joins on paperAuthors / paperCategories on arxiv. Competitors run single-table tabular harnesses and never construct these.
 </div>
 
 ---
@@ -159,27 +158,26 @@ The decisive ibm-aml gap (+0.42) is from the relational <code>shared_key_group_a
 
 <div class="text-sm mt-3">
 
-Same matrix, same code, only the **input** to ensemble changes:
+Offline ablation on the autoresearch <code>gpt-5.4</code> run dir — same matrix, same ensemble code, only the **input / extras** change:
 
-| Config | val F1 | **test F1** | rank | Δ vs prior |
-|---|---:|---:|:-:|---:|
-| `base_only` (raw 7 cols) + single hist_gbdt | 0.136 | 0.103 | #7 | — |
-| `base_only` + 3-class ensemble | 0.132 | 0.148 | #7 | **+0.045** (ensemble alone) |
-| 51 searched features + single hist_gbdt | 0.378 | ≈0.30 | #2 | **+0.15** (search-time features) |
-| 51 searched + 3-class ensemble | 0.358 | **0.309** | #2 | +0.01 (ensemble on top of search) |
-| 51 searched + ensemble + neg-undersample | — | **0.591** | #1 | **+0.28** (NS on imbalanced) |
+| Config | val F1 | **test F1** | Δ vs prior | what's responsible |
+|---|---:|---:|---:|---|
+| `base_only` (raw 7 cols) + single hist_gbdt | 0.136 | 0.103 | — | baseline |
+| `base_only` + 3-class ensemble | 0.132 | 0.148 | +0.045 | ensemble alone (small) |
+| 51 searched features + 3-class ensemble | 0.358 | **0.309** | +0.16 | **search-time atomic features** |
+| 51 searched + ensemble + neg-undersample (offline) | — | **0.591** | +0.28 | NS head for imbalance — not in <code>main</code> branch yet |
 
 </div>
 
 <div class="mt-3 grid grid-cols-2 gap-3 text-xs">
 <div class="p-2 bg-blue-50 rounded border border-blue-200">
 
-**Search features = 3× lift over raw alone.**  Test 0.103 → 0.309. Confirms LLM-proposed atomic features are the load-bearing piece, not the model class.
+**Search features = ~3× lift over raw.**  Test 0.103 → 0.309 with everything else fixed. The LLM-proposed atomic features in the relational lanes are the dominant component on `ibm-aml`.
 
 </div>
 <div class="p-2 bg-purple-50 rounded border border-purple-200">
 
-**NS = 1.9× lift on top of search.**  Only fires for severe binary imbalance (lightgbm + minority_f1). Generic feature; configurable via `GRAPHML_UNDERSAMPLE_RATIO`.
+**NS as a future leaderboard push.**  An offline experiment showed +0.28 on top of search+ensemble (0.309 → 0.591). Lives on a feature branch; only fires for binary-imbalanced minority_f1 with lightgbm. Easy to merge — the path to a strict 4/4 leaderboard sweep.
 
 </div>
 </div>
