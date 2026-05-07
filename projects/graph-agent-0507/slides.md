@@ -9,18 +9,22 @@ mdc: true
 ---
 
 <style>
-.slidev-layout { font-size: 0.92em; padding: 1.5rem 2.5rem !important; }
-.slidev-layout h1 { font-size: 1.55em !important; line-height: 1.15 !important; margin-bottom: 0.3em !important; }
-.slidev-layout h2 { font-size: 1.1em !important; line-height: 1.2 !important; }
-.slidev-layout h3 { font-size: 0.95em !important; line-height: 1.2 !important; margin: 0.3em 0 0.2em 0 !important; }
-.slidev-layout p, .slidev-layout li { line-height: 1.32 !important; }
-.slidev-layout ul, .slidev-layout ol { margin: 0.2em 0 !important; padding-left: 1.1em !important; }
-.slidev-layout li { margin: 0.1em 0 !important; }
-.slidev-layout table { font-size: 0.78em !important; }
-.slidev-layout table td, .slidev-layout table th { padding: 0.18em 0.4em !important; }
-.slidev-layout .p-3 { padding: 0.5rem 0.7rem !important; }
-.slidev-layout .p-4 { padding: 0.6rem 0.85rem !important; }
-.slidev-layout .mt-3, .slidev-layout .mt-4 { margin-top: 0.5rem !important; }
+/* Light global tweaks — let slidev defaults breathe; per-slide compression below */
+.slidev-layout table td, .slidev-layout table th { padding: 0.25em 0.5em !important; }
+.slidev-layout li { margin: 0.15em 0 !important; }
+/* The .compact class compresses dense slides only */
+.slidev-layout.compact h1 { font-size: 1.6em !important; line-height: 1.15 !important; margin-bottom: 0.4em !important; }
+.slidev-layout.compact h2 { font-size: 1.1em !important; }
+.slidev-layout.compact h3 { font-size: 1em !important; line-height: 1.2 !important; margin: 0.2em 0 0.2em 0 !important; }
+.slidev-layout.compact p, .slidev-layout.compact li { line-height: 1.35 !important; font-size: 0.95em !important; }
+.slidev-layout.compact ul, .slidev-layout.compact ol { margin: 0.2em 0 !important; padding-left: 1.1em !important; }
+.slidev-layout.compact li { margin: 0.08em 0 !important; }
+.slidev-layout.compact table { font-size: 0.85em !important; }
+.slidev-layout.compact .p-3 { padding: 0.55rem 0.7rem !important; }
+.slidev-layout.compact .p-4 { padding: 0.6rem 0.9rem !important; }
+.slidev-layout.compact .p-2 { padding: 0.45rem 0.6rem !important; }
+.slidev-layout.compact .mt-3 { margin-top: 0.5rem !important; }
+.slidev-layout.compact .mt-4 { margin-top: 0.6rem !important; }
 </style>
 
 # GraphML-FS
@@ -118,6 +122,8 @@ Next 3 slides: one architectural pillar each, contrasted with the prior design.
 </div>
 
 ---
+class: compact
+---
 
 # Pillar 3 — A typed operator bank (8 lanes)
 
@@ -178,6 +184,8 @@ Single submission `graphfs-claude-sonnet-4-6` on the public leaderboard (<a href
 </div>
 
 ---
+class: compact
+---
 
 # Next steps
 
@@ -226,6 +234,118 @@ A *stacking* question in our framework:
 - **deep / post-NN** — operator wraps a model whose predictions are then aggregated
 
 Adding deep operators forces a split between **differentiable** (gradients flow end-to-end) and **non-differentiable** lanes — raises orchestration + canonical-hash complexity. **Parked**, not yet on the roadmap.
+
+</div>
+</div>
+
+---
+
+# Bigger picture — "graph learning is operator learning"
+
+<div class="text-sm mt-2">
+
+GraphML-FS's 8-lane bank is one instance of a broader thesis: **lift graph structure from a hard-coded part of the architecture to a searchable, executable, composable operator catalog**.
+
+</div>
+
+<div class="grid grid-cols-2 gap-3 mt-2 text-xs">
+<div class="p-2 bg-blue-50 rounded border border-blue-200">
+
+### Where prior Graph FMs hard-code the operator
+- **GNN / OFA** — fixed local message-passing; repeats one A-neighbor reduction
+- **PE / Tokenizer Transformer** (Graphormer, OpenGraph) — compresses structure into PE / SVD / token bias, no explicit reduction
+- **Hybrid GT** (GraphGPS) — local MPNN + global attention; modular but coarse operator granularity
+- **PFN / Graph-to-table** (GraphPFN, G2T-FM) — graph adapter or hand-crafted graph features into a tabular FM
+
+</div>
+<div class="p-2 bg-green-50 rounded border border-green-200">
+
+### Pivot — operator scaling, not architecture scaling
+Treat as **first-class searchable modules**:
+- **Relation construction** — `A`, `A_r`, kNN, latent graph
+- **Neighborhood reduction** — sum / mean / max / attention
+- **Multi-hop / diffusion** — `A²`, `Aᵏ`, PPR, RW, heat
+- **Structure** — LapPE, RWSE, motif, subgraph
+- **Global** — dense attention / memory
+- **Head** — MLP / RF / XGB / PFN
+
+NN's job becomes: **select, compose, calibrate, fuse** operators. Operator bank carries the graph algorithmic primitives.
+
+</div>
+</div>
+
+<div class="mt-1 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+GraphML-FS already plays this game on the tabular-graph side; the broader thesis generalises it to end-to-end Graph FM training.
+</div>
+
+---
+class: compact
+---
+
+# Operator-search scaling law (proposed)
+
+<div class="grid grid-cols-2 gap-3 mt-2 text-xs">
+<div class="p-2 bg-blue-50 rounded border border-blue-200">
+
+### Hypothesis
+Under matched compute, fit a joint scaling law:
+
+$$\text{Error} = E_\infty + a \cdot C_{\text{NN}}^{-\alpha} + b \cdot C_{\text{Op}}^{-\beta} + c \cdot N_{\text{label}}^{-\gamma}$$
+
+On **operator-dominant graph tasks** the conjecture is **β > α** — i.e. expanding the operator search space yields higher marginal return than continuing to deepen/widen a fixed NN architecture.
+
+### Compute-matched curves
+Three branches at the same FLOP budget: scale NN only, scale Op only, scale both. Plot accuracy vs compute and read off the slopes.
+
+</div>
+<div class="p-2 bg-purple-50 rounded border border-purple-200">
+
+### Decisive ablation — No-op / Oracle-op / Search-op / Bigger-NN
+| Branch | What it isolates |
+|---|---|
+| **No-op** | NN-only baseline (no graph operators) |
+| **Oracle-op** | hand-picked best operator per task — *upper bound* |
+| **Search-op** | our automated search (GraphML-FS-style bank) |
+| **Bigger-NN** | same compute, all going into NN size |
+
+**Decision rule:** if **Search-op ≈ Oracle-op > Bigger-NN**, the gap was a *missing operator*, not insufficient parameters. That's the empirical condition that legitimises operator scaling as the strategy.
+
+</div>
+</div>
+
+---
+class: compact
+---
+
+# Validation plan — synthetic separations + matched empirical scaling
+
+<div class="grid grid-cols-2 gap-3 mt-2 text-xs">
+<div class="p-2 bg-blue-50 rounded border border-blue-200">
+
+### Synthetic tasks — each guarantees a failure mode
+| Task | Architecture that fails | Operator needed |
+|---|---|---|
+| neighborhood copy / sum | PE-only Transformer | `AX` |
+| k-hop pointer chasing | fixed-depth GNN | `Aᵏ` |
+| barbell matching | hard-mask local GNN | global attn |
+| triangle / motif | 1-WL GNN | motif |
+| noisy latent neighbor | observed-edge-only mask | latent `A*` |
+
+Each synthetic task *guarantees* one architecture class can never solve it without adding a specific operator — clean separation evidence.
+
+</div>
+<div class="p-2 bg-green-50 rounded border border-green-200">
+
+### Empirical — comparable settings
+- **Baselines:** GraphGPS, GraphPFN, G2T-FM, OFA, RF-Graph, XGB-Graph
+- **Training regimes reported separately:** scratch supervised, ICL (no target gradient), finetune, OOD transfer
+- **Metrics:** accuracy / AUC + GPU-hours/FLOPs + label efficiency + OOD-size scaling
+- **Claim test:** is the operator-search curve *steeper* than NN-scaling at matched compute?
+
+### Expected take-away
+> *Scale operator coverage, not only neural capacity.*
+
+NN selects, composes, calibrates and fuses operators; the **operator bank** carries the graph algorithmic primitives. GraphML-FS is a working prototype of the bank in the tabular-graph regime — same thesis, different layer.
 
 </div>
 </div>
