@@ -179,43 +179,54 @@ Single submission `graphfs-claude-sonnet-4-6` on the public leaderboard (<a href
 
 ---
 
-# Next steps — bench rigor + closing the upper-bound gap
+# Next steps
 
-<div class="grid grid-cols-2 gap-3 mt-2 text-sm">
-<div class="p-3 bg-blue-50 rounded border border-blue-200">
+<div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+<div class="p-2 bg-blue-50 rounded border border-blue-200">
 
-### 1. Three-axis benchmark vs `MLEvolve` & `open-aibuildai`
+### 1. Three-axis bench vs `MLEvolve` & `open-aibuildai`
 
-Same protocol, three measurements per system × per task:
+Per system × per task: **performance** (leaderboard metric), **API cost** ($ per run), **efficiency** (wall-time + peak RAM).
 
-- **Performance** — leaderboard primary metric
-- **API cost** — total `$` per task run (input + output tokens × current model price)
-- **Efficiency** — wall-time + peak RAM end-to-end
-
-And **swap models**: re-run each system across `claude-sonnet-4-6 / opus-4-7 / gpt-5.4 / haiku-4-5` to see if the pipeline architecture or the LLM choice dominates. Hypothesis: GraphML-FS has the lowest cost-per-point because the operator bank caps token count per LLM call.
+Cross-LLM: rerun each system across `sonnet-4-6 / opus-4-7 / gpt-5.4 / haiku-4-5` — does pipeline architecture or LLM choice dominate? Hypothesis: GraphML-FS lowest **cost-per-point** because the typed operator bank caps token count per LLM call.
 
 </div>
-<div class="p-3 bg-green-50 rounded border border-green-200">
+<div class="p-2 bg-green-50 rounded border border-green-200">
 
-### 2. Close the gap to the upper bound
+### 2. Close the autoresearch ceiling gap
 
-`autoresearch` (test-as-eval oracle, no real eval discipline) sets the ceiling each task can reach with this matrix. We're roughly **5 pts** off on multiple tasks:
+`autoresearch` (test-as-eval oracle) sets the ceiling each task can reach with this matrix. We're ~5 pts off on multiple tasks:
 
-| Task | GraphML-FS | autoresearch ceiling | Δ |
+| Task | now | ceiling | Δ |
 |---|---:|---:|---:|
 | `arxiv-citation` | 0.789 | 0.824 | −0.035 |
 | `figraph` | 0.895 | 0.940 | −0.045 |
 | `ibm-aml` | 0.184 | 0.591 | −0.407 |
 
-Closes via: **K-fold OOF** ensemble members, **Platt / isotonic** calibration before across-class agg, **auto-NS** for binary-imbalanced, **lane meta-prior** routing the worker's budget toward historically high-lift lanes per task type.
+Closes via **K-fold OOF**, **Platt / isotonic calibration**, **auto-NS** for imbalanced, **lane meta-prior**.
+
+</div>
+<div class="p-2 bg-purple-50 rounded border border-purple-200">
+
+### 3. Ship as skills + tools to augment other agents
+
+Package GraphML-FS as drop-ins that **MLEvolve** / **open-aibuildai** can call without modifying their controllers:
+
+- **`graphfs.search`** — returns matrix + per-feature lift given `(task_dir, instruction)`
+- **`graphfs.lane_eval`** — score a candidate spec on val without a full round
+- Distributed as **MCP server** (4023's plug recommendation) — zero host-controller change
+
+</div>
+<div class="p-2 bg-yellow-50 rounded border border-yellow-300">
+
+### 4. *Exploration reminder* — pre-NN vs post-NN graph aggregation
+
+A *stacking* question in our framework:
+- **wide / pre-NN** — operator emits a column the downstream consumes (current 8 lanes, all here)
+- **deep / post-NN** — operator wraps a model whose predictions are then aggregated
+
+Adding deep operators forces a split between **differentiable** (gradients flow end-to-end) and **non-differentiable** lanes — raises orchestration + canonical-hash complexity. **Parked**, not yet on the roadmap.
 
 </div>
 </div>
 
-<div class="mt-2 p-2 bg-purple-50 rounded border border-purple-200 text-xs">
-<strong>Exploration reminder · pre-NN vs post-NN graph aggregation.</strong> In our framework this is a <em>stacking</em> question: should an operator emit a column the downstream consumes (<strong>wide / pre-NN aggregation</strong>) or wrap a model whose predictions are then aggregated (<strong>deep / post-NN aggregation</strong>)? Adding deep operators forces a split between <em>differentiable</em> (gradients flow end-to-end) and <em>non-differentiable</em> (current 8 lanes) operators, which raises orchestration + canonical-hash complexity. Parked, not yet on the roadmap.
-</div>
-
-<div class="mt-1 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Code: <code>github.com/zhuconv/AgenticFS</code> · branch <code>main</code> · 39 tests, 3 commits past the graphagent-4023 state.
-</div>
