@@ -44,5 +44,12 @@
     "assets": [
       "public"
     ]
+  },
+  {
+    "name": "graph-agent-0507",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
   }
 ]
