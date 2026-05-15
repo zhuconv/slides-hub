@@ -201,3 +201,43 @@ class: fill
 <div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
 <strong>Three contributions.</strong> (1) Reframe personalized generation as a sparse-signal, multi-turn problem. (2) Release the PreferImg benchmark + leaderboard. (3) An aesthetic agent composing prompt drafting and embedding steering across backends.
 </div>
+
+---
+class: fill
+---
+
+# Open research questions we are tackling next
+
+<div class="grid grid-cols-3 gap-4 mt-3 text-base" style="min-height: 15rem">
+<div class="p-5 bg-blue-50 rounded-lg border border-blue-200">
+
+### RQ1 · Sparse-reward RL
+
+**Why is RL hard for sparse individual image preference?**
+
+A few liked / disliked images only weakly identify the latent reward — gradients stay noisy and the policy unstable.
+
+</div>
+<div class="p-5 bg-green-50 rounded-lg border border-green-200">
+
+### RQ2 · Backend LMs
+
+**How should we choose evaluator and action backend LMs?**
+
+Which abilities make a trustworthy proxy evaluator versus an effective action backend that drives generation.
+
+</div>
+<div class="p-5 bg-purple-50 rounded-lg border border-purple-200">
+
+### RQ3 · Distillation
+
+**How do we distill expensive backend abilities into small models?**
+
+Move the abilities that drive personalization from costly backends into cheap, deployable models.
+
+</div>
+</div>
+
+<div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
+The agenda ahead — make sparse-signal learning stable, put backend-LM selection on a principled footing, and drive the cost of personalization down.
+</div>
