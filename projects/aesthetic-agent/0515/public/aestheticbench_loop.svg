@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 210" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ah" markerWidth="11" markerHeight="11" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4 L0,8 Z" fill="#555555"/>
+    </marker>
+    <marker id="ahp" markerWidth="11" markerHeight="11" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4 L0,8 Z" fill="#9673a6"/>
+    </marker>
+  </defs>
+
+  <!-- loop-back: evaluator feedback returns to the agent -->
+  <path d="M 830 92 L 830 58 Q 830 44 816 44 L 368 44 Q 354 44 354 58 L 354 92"
+        fill="none" stroke="#9673a6" stroke-width="2.5" marker-end="url(#ahp)"/>
+  <text x="592" y="37" text-anchor="middle" font-size="13.5" font-weight="600" fill="#9673a6">feedback &#8594; agent updates its state for the next turn</text>
+
+  <!-- forward connectors -->
+  <line x1="210" y1="135" x2="260" y2="135" stroke="#555555" stroke-width="2.5" marker-end="url(#ah)"/>
+  <line x1="448" y1="135" x2="498" y2="135" stroke="#555555" stroke-width="2.5" marker-end="url(#ah)"/>
+  <line x1="686" y1="135" x2="736" y2="135" stroke="#555555" stroke-width="2.5" marker-end="url(#ah)"/>
+  <line x1="924" y1="135" x2="974" y2="135" stroke="#555555" stroke-width="2.5" marker-end="url(#ah)"/>
+
+  <!-- box 1: user evidence (I/O) -->
+  <rect x="24" y="92" width="184" height="86" rx="9" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+  <text x="116" y="130" text-anchor="middle" font-size="16.5" font-weight="700" fill="#7a5c00">User evidence</text>
+  <text x="116" y="153" text-anchor="middle" font-size="12" fill="#9a7b1f">liked / disliked images</text>
+  <text x="116" y="197" text-anchor="middle" font-size="11" fill="#9a9a9a">sampled from PreferImg</text>
+
+  <!-- box 2: aesthetic agent (LLM) -->
+  <rect x="262" y="92" width="184" height="86" rx="9" fill="#e1d5e7" stroke="#9673a6" stroke-width="2.5"/>
+  <text x="354" y="130" text-anchor="middle" font-size="16.5" font-weight="700" fill="#62497a">Aesthetic Agent</text>
+  <text x="354" y="153" text-anchor="middle" font-size="12" fill="#7d6592">prompt drafting + steering</text>
+
+  <!-- box 3: candidate images (compute) -->
+  <rect x="500" y="92" width="184" height="86" rx="9" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="592" y="130" text-anchor="middle" font-size="16.5" font-weight="700" fill="#33506f">Candidate images</text>
+  <text x="592" y="153" text-anchor="middle" font-size="12" fill="#4f6f93">any T2I backend</text>
+
+  <!-- box 4: proxy evaluator (LLM) -->
+  <rect x="738" y="92" width="184" height="86" rx="9" fill="#e1d5e7" stroke="#9673a6" stroke-width="2.5"/>
+  <text x="830" y="130" text-anchor="middle" font-size="16.5" font-weight="700" fill="#62497a">Proxy evaluator</text>
+  <text x="830" y="153" text-anchor="middle" font-size="12" fill="#7d6592">LLM-as-human</text>
+  <text x="830" y="197" text-anchor="middle" font-size="11" fill="#9a9a9a">validated by AestheticMCQ</text>
+
+  <!-- box 5: final images (I/O) -->
+  <rect x="976" y="92" width="184" height="86" rx="9" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+  <text x="1068" y="130" text-anchor="middle" font-size="16.5" font-weight="700" fill="#7a5c00">Final images</text>
+  <text x="1068" y="153" text-anchor="middle" font-size="12" fill="#9a7b1f">personalized output</text>
+</svg>
