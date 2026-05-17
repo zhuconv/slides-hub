@@ -22,7 +22,7 @@ Jiajun Zhu · UT Austin · April 2026
 
 <div class="text-sm mt-4">
 
-Prior deck: <a href="https://zhuconv.github.io/slides-hub/graph-analyst-0408/1" target="_blank" class="text-blue-700 underline">zhuconv.github.io/slides-hub/graph-analyst-0408</a>
+Prior deck: <a href="https://zhuconv.github.io/slides-hub/graph-agent/0408/1" target="_blank" class="text-blue-700 underline">zhuconv.github.io/slides-hub/graph-agent/0408</a>
 
 </div>
 

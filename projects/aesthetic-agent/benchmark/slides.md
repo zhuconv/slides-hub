@@ -34,7 +34,7 @@ Jiajun Zhu &mdash; April 2026
 
 <div style="font-size: 0.95em;">
 
-Previously ([slides](https://zhuconv.github.io/slides-hub/aesthetic-agent/)), we explored the **image-to-text inversion reasoning** pipeline on SD1.5:
+Previously ([slides](https://zhuconv.github.io/slides-hub/aesthetic-agent/0319/)), we explored the **image-to-text inversion reasoning** pipeline on SD1.5:
 
 | | Text-Only Refiner | &Delta;+E2T+Claude Diff | &Delta;+Embedding Matching |
 |---|---|---|---|

@@ -2,32 +2,33 @@
 /**
  * sync-slides.mjs — Pull slides from local repos, remote servers, or URLs.
  *
+ * Every deck name is "<project>/<deck>" — the segment before the first "/"
+ * is the project it is archived under on the index page.
+ *
  * projects.json schema:
  * [
- *   // ── 本地 repo，单个 slides ──
+ *   // ── 本地 repo ──
  *   {
- *     "name": "aesthetic-agent",
- *     "src": "/path/to/AestheticAgent",
+ *     "name": "graph-agent/0531",     // <project>/<deck>; deck 建议用 MMDD
+ *     "date": "2026-05-31",           // 用于首页归档排序
+ *     "src": "/path/to/repo",
  *     "slides": "slides.md",
  *     "assets": ["public", "slides_assets"]
  *   },
  *
- *   // ── 本地 repo，多个 slides ──
+ *   // ── 同一 repo 多个 deck —— 换 deck 名即可 ──
  *   {
- *     "name": "diffbpo/main",
- *     "src": "/path/to/DiffBPO",
- *     "slides": "slides.md"
- *   },
- *   {
- *     "name": "diffbpo/ablation",
- *     "src": "/path/to/DiffBPO",
+ *     "name": "graph-agent/ablation",
+ *     "date": "2026-06-02",
+ *     "src": "/path/to/repo",
  *     "slides": "docs/ablation.slides.md",
  *     "assets": ["docs/figures"]
  *   },
  *
  *   // ── 远程 server (rsync over ssh) ──
  *   {
- *     "name": "remote-project",
+ *     "name": "aesthetic-agent/0610",
+ *     "date": "2026-06-10",
  *     "remote": "user@server:/path/to/repo",
  *     "slides": "slides.md",
  *     "assets": ["public"]
@@ -115,21 +116,31 @@ async function interactiveAdd() {
   const ask = (q) => new Promise((res) => rl.question(q, res));
 
   console.log("\n📎 Add a new slides source\n");
+  console.log("Name must be <project>/<deck>. Reuse an existing project name");
+  console.log("(graph-agent / aesthetic-agent) or pick a new one for a new project.\n");
 
-  const name = await ask("Name (e.g. diffbpo/main): ");
+  const today = new Date().toISOString().slice(0, 10);
+  const name = await ask("Name <project>/<deck> (e.g. graph-agent/0531): ");
+  const date = await ask(`Date [${today}]: `) || today;
   const type = await ask("Type — (l)ocal or (r)emote? [l]: ") || "l";
+
+  if (!name.includes("/")) {
+    console.error(`\n✗ "${name}" must be <project>/<deck>, e.g. graph-agent/0531`);
+    rl.close();
+    return;
+  }
 
   let entry;
   if (type.startsWith("r")) {
     const remote = await ask("Remote path (user@host:/path/to/repo): ");
     const slides = await ask("Slides file [slides.md]: ") || "slides.md";
-    entry = { name, remote, slides, assets: ["public"] };
+    entry = { name, date, remote, slides, assets: ["public"] };
   } else {
     const src = await ask("Local repo path: ");
     const slides = await ask("Slides file [slides.md]: ") || "slides.md";
     const assetsRaw = await ask("Asset dirs (comma-separated) [public]: ") || "public";
     const assets = assetsRaw.split(",").map(s => s.trim());
-    entry = { name, src, slides, assets };
+    entry = { name, date, src, slides, assets };
   }
 
   projects.push(entry);

@@ -1,6 +1,7 @@
 [
   {
-    "name": "aesthetic-agent",
+    "name": "aesthetic-agent/0319",
+    "date": "2026-03-19",
     "src": "/work/11012/jiajunzhu2002/vista/AestheticAgent",
     "slides": "slides.md",
     "assets": [
@@ -9,22 +10,9 @@
     ]
   },
   {
-    "name": "graph-analyst",
-    "slides": "slides.md",
-    "assets": [
-      "evoagent_pipeline.png"
-    ]
-  },
-  {
     "name": "aesthetic-agent/benchmark",
+    "date": "2026-04-03",
     "src": "uploaded",
-    "slides": "slides.md",
-    "assets": [
-      "public"
-    ]
-  },
-  {
-    "name": "graph-analyst-0408",
     "slides": "slides.md",
     "assets": [
       "public"
@@ -32,6 +20,7 @@
   },
   {
     "name": "aesthetic-agent/bench-dev",
+    "date": "2026-04-16",
     "src": "uploaded",
     "slides": "slides.md",
     "assets": [
@@ -39,21 +28,44 @@
     ]
   },
   {
-    "name": "graphagent-4023",
-    "slides": "slides.md",
-    "assets": [
-      "public"
-    ]
-  },
-  {
-    "name": "graph-agent-0507",
-    "slides": "slides.md",
-    "assets": [
-      "public"
-    ]
-  },
-  {
     "name": "aesthetic-agent/0515",
+    "date": "2026-05-15",
+    "src": "uploaded",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
+  },
+  {
+    "name": "graph-agent/0324",
+    "date": "2026-03-24",
+    "src": "uploaded",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
+  },
+  {
+    "name": "graph-agent/0408",
+    "date": "2026-04-08",
+    "src": "uploaded",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
+  },
+  {
+    "name": "graph-agent/0423",
+    "date": "2026-04-23",
+    "src": "uploaded",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
+  },
+  {
+    "name": "graph-agent/0507",
+    "date": "2026-05-07",
     "src": "uploaded",
     "slides": "slides.md",
     "assets": [

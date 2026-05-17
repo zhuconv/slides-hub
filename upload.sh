@@ -2,24 +2,36 @@
 #
 # upload.sh — 从任意 server 一键上传 slides 到 slides-hub
 #
+# 名字必须是 <project>/<deck>:
+#   • project —— 已有项目名 (现有: graph-agent / aesthetic-agent)。
+#                开新项目就用一个新名字,kebab-case。
+#   • deck    —— 这次 slides 的子名,建议用 MMDD 日期 (如 0531)。
+#
 # 用法:
 #   # 基本用法 (当前目录有 slides.md)
-#   curl -sL https://raw.githubusercontent.com/zhuconv/slides-hub/main/upload.sh | bash -s -- my-project
+#   curl -sL https://raw.githubusercontent.com/zhuconv/slides-hub/main/upload.sh | bash -s -- graph-agent/0531
 #
 #   # 指定 slides 文件 + assets 目录
-#   curl -sL https://raw.githubusercontent.com/zhuconv/slides-hub/main/upload.sh | bash -s -- my-project slides.md public/
+#   curl -sL https://raw.githubusercontent.com/zhuconv/slides-hub/main/upload.sh | bash -s -- graph-agent/0531 slides.md public/
 #
 #   # 或者本地直接跑
-#   bash upload.sh my-project
-#   bash upload.sh my-project report.slides.md figures/
-#
+#   bash upload.sh aesthetic-agent/0531
+#   bash upload.sh aesthetic-agent/0531 report.slides.md figures/
 set -e
 
 REPO="git@github.com:zhuconv/slides-hub.git"
-NAME="${1:?Usage: upload.sh <project-name> [slides-file] [assets-dir...]}"
+NAME="${1:?Usage: upload.sh <project>/<deck> [slides-file] [assets-dir...]}"
 SLIDES="${2:-slides.md}"
+DATE="$(date +%F)"
 shift 2 2>/dev/null || shift 1 2>/dev/null || true
 ASSETS=("$@")  # remaining args are asset dirs
+
+# Name must be <project>/<deck> so every deck is archived under a project
+if [[ "$NAME" != */* ]]; then
+  echo "Error: name must be <project>/<deck>, e.g. graph-agent/0531 (got: '$NAME')"
+  echo "       project = an existing project (graph-agent / aesthetic-agent) or a new one"
+  exit 1
+fi
 
 # Validate slides file exists
 if [[ ! -f "$SLIDES" ]]; then
@@ -28,7 +40,8 @@ if [[ ! -f "$SLIDES" ]]; then
 fi
 
 echo "=== slides-hub upload ==="
-echo "  Project: $NAME"
+echo "  Deck:    $NAME"
+echo "  Date:    $DATE"
 echo "  Slides:  $SLIDES"
 echo "  Assets:  ${ASSETS[*]:-none}"
 echo ""
@@ -55,7 +68,7 @@ for dir in "${ASSETS[@]}"; do
   fi
 done
 
-# Update projects.json if this project isn't already in it
+# Update projects.json if this deck isn't already in it
 cd "$TMPDIR/hub"
 if ! grep -q "\"$NAME\"" projects.json; then
   # Add entry using node (available) or python or sed
@@ -63,14 +76,14 @@ if ! grep -q "\"$NAME\"" projects.json; then
     node -e "
       const fs = require('fs');
       const p = JSON.parse(fs.readFileSync('projects.json','utf-8'));
-      p.push({name:'$NAME', src:'uploaded', slides:'slides.md', assets:['public']});
+      p.push({name:'$NAME', date:'$DATE', src:'uploaded', slides:'slides.md', assets:['public']});
       fs.writeFileSync('projects.json', JSON.stringify(p,null,2)+'\n');
     "
   elif command -v python3 &>/dev/null; then
     python3 -c "
 import json
 p = json.load(open('projects.json'))
-p.append({'name':'$NAME','src':'uploaded','slides':'slides.md','assets':['public']})
+p.append({'name':'$NAME','date':'$DATE','src':'uploaded','slides':'slides.md','assets':['public']})
 json.dump(p, open('projects.json','w'), indent=2)
 "
   else
