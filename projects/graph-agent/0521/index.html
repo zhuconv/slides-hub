@@ -27,7 +27,7 @@
   /* Reveal forces content-box on .reveal-viewport *; force border-box back for our layout. */
   .reveal, .reveal *, .reveal *::before, .reveal *::after{box-sizing:border-box !important}
 
-  .reveal{font-family:'Inter',system-ui,sans-serif;color:var(--ink);font-size:21px;letter-spacing:0}
+  .reveal{font-family:'Inter',system-ui,sans-serif;color:var(--ink);font-size:23px;letter-spacing:0}
   .reveal .slides{text-align:left}
   .reveal .slides > section,
   .reveal .slides > section > section{
@@ -46,9 +46,9 @@
   .reveal h1,.reveal h2,.reveal h3,.reveal h4{font-family:'Inter',sans-serif;color:var(--ink);text-transform:none;letter-spacing:-0.01em;margin:0;line-height:1.15;font-weight:600;text-shadow:none}
   .reveal p{margin:0;line-height:1.5}
   .reveal ul{margin:0;padding-left:18px;list-style:disc}
-  .reveal ul li{margin:0 0 4px 0;line-height:1.45;font-size:0.95em}
-  .reveal code{background:#f1f5f9;color:#334155;padding:1px 6px;border-radius:3px;font-size:0.86em}
-  .reveal pre{background:#0f172a;color:#e2e8f0;border-radius:6px;padding:12px 14px;margin:8px 0;font-size:0.66em;line-height:1.55;box-shadow:none;width:100%}
+  .reveal ul li{margin:0 0 6px 0;line-height:1.5;font-size:0.95em}
+  .reveal code{background:#f1f5f9;color:#334155;padding:1px 6px;border-radius:3px;font-size:0.88em}
+  .reveal pre{background:#0f172a;color:#e2e8f0;border-radius:6px;padding:14px 18px;margin:10px 0;font-size:0.78em;line-height:1.55;box-shadow:none;width:100%}
   .reveal pre code{background:transparent;padding:0;color:inherit;font-size:1em;display:block;overflow:auto}
   .reveal pre.light{background:#f1f5f9;color:#0f172a;border:1px solid #e2e8f0}
   .reveal a{color:var(--blue-ink);text-decoration:none;border-bottom:1px solid var(--blue-bd)}
@@ -58,72 +58,79 @@
   /* ---- slide canvas ---- */
   .slide{
     width:100%;height:100%;
-    padding:38px 52px 44px 52px;
+    padding:42px 56px 56px 56px;
     display:flex;flex-direction:column;
     position:relative;
+    gap:0;
   }
-  .eyebrow{font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:10px}
-  .eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--purple-ink)}
-  h1.title{font-size:34px;font-weight:600;letter-spacing:-0.02em;margin:0 0 6px 0;line-height:1.1}
-  h2.sub{font-size:17px;font-weight:400;color:var(--muted);margin:0 0 18px 0;line-height:1.4}
-  h3{font-size:15px;font-weight:600;margin:0 0 6px 0}
+  .eyebrow{font-size:13px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--purple-ink)}
+  h1.title{font-size:40px;font-weight:600;letter-spacing:-0.02em;margin:0 0 8px 0;line-height:1.08}
+  h2.sub{font-size:20px;font-weight:400;color:var(--muted);margin:0 0 22px 0;line-height:1.4}
+  h3{font-size:17px;font-weight:600;margin:0 0 6px 0}
 
   .chrome{
-    position:absolute;left:52px;right:52px;bottom:18px;
+    position:absolute;left:56px;right:56px;bottom:22px;
     display:flex;justify-content:space-between;align-items:center;
-    font-size:11.5px;color:var(--muted);letter-spacing:0.06em;
+    font-size:12px;color:var(--muted);letter-spacing:0.06em;
   }
   .chrome .right{font-variant-numeric:tabular-nums}
 
   /* ---- cards ---- */
-  .card{padding:14px 16px;border-radius:8px;border:1px solid;font-size:14.5px;line-height:1.5}
-  .card h3{font-size:14px;margin-bottom:6px;letter-spacing:0.01em}
-  .card p{font-size:14.5px}
+  .card{padding:20px 22px;border-radius:10px;border:1px solid;font-size:17px;line-height:1.55}
+  .card h3{font-size:17px;margin-bottom:10px;letter-spacing:0.01em}
+  .card p{font-size:17px}
   .card-blue{background:var(--blue-bg);border-color:var(--blue-bd)} .card-blue h3{color:var(--blue-ink)}
   .card-green{background:var(--green-bg);border-color:var(--green-bd)} .card-green h3{color:var(--green-ink)}
   .card-purple{background:var(--purple-bg);border-color:var(--purple-bd)} .card-purple h3{color:var(--purple-ink)}
   .card-slate{background:var(--slate-bg);border-color:var(--slate-bd)}
 
-  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-  .grid-2-uneven{display:grid;grid-template-columns:1.15fr 1fr;gap:18px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  .grid-2-uneven{display:grid;grid-template-columns:1.15fr 1fr;gap:20px}
+  /* Prevent grid items from refusing to shrink (min-content can otherwise force grid wider). */
+  .grid-2 > *, .grid-3 > *, .grid-2-uneven > *{min-width:0}
+  /* Grids inside a flex:1 main area should stretch their rows to fill the slide. */
+  .slide > .grid-2[style*="flex:1"],
+  .slide > .grid-3[style*="flex:1"]{align-content:stretch;grid-auto-rows:1fr}
+  .slide > .grid-2-uneven[style*="flex:1"]{align-content:stretch}
 
   .takeaway{
-    margin-top:auto;padding:12px 16px;background:var(--yellow-bg);border:1px solid var(--yellow-bd);
-    border-radius:6px;font-size:14px;line-height:1.5;color:#5b2f0e;
+    margin-top:auto;padding:14px 18px;background:var(--yellow-bg);border:1px solid var(--yellow-bd);
+    border-radius:8px;font-size:16px;line-height:1.5;color:#5b2f0e;
   }
   .takeaway strong{color:var(--yellow-ink)}
 
   /* ---- tables ---- */
-  .reveal table{width:100%;border-collapse:collapse;margin:6px 0;font-size:13px;background:transparent;box-shadow:none}
-  .reveal th{font-weight:600;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1.5px solid #cbd5e1;padding:8px 10px;text-align:left;background:transparent}
-  .reveal td{padding:8px 10px;border-bottom:1px solid var(--line);background:transparent;text-align:left}
+  .reveal table{width:100%;border-collapse:collapse;margin:6px 0;font-size:15px;background:transparent;box-shadow:none}
+  .reveal th{font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1.5px solid #cbd5e1;padding:10px 12px;text-align:left;background:transparent}
+  .reveal td{padding:11px 12px;border-bottom:1px solid var(--line);background:transparent;text-align:left}
   .num{text-align:right !important;font-variant-numeric:tabular-nums}
   .best{font-weight:700;color:var(--green-ink)}
   tr.rank-1 td{background:#ecfdf5}
 
   /* inline bars in leaderboard */
-  .bar-cell{position:relative;padding-right:48px !important;text-align:right;font-variant-numeric:tabular-nums}
-  .bar-cell .bar{position:absolute;right:8px;top:50%;transform:translateY(-50%);height:5px;background:#cbd5e1;border-radius:2px;width:36px;overflow:hidden}
+  .bar-cell{position:relative;padding-right:62px !important;text-align:right;font-variant-numeric:tabular-nums}
+  .bar-cell .bar{position:absolute;right:10px;top:50%;transform:translateY(-50%);height:6px;background:#cbd5e1;border-radius:2px;width:46px;overflow:hidden}
   .bar-cell .bar i{display:block;height:100%;background:#94a3b8;border-radius:2px;transform-origin:left center;transform:scaleX(0);transition:transform .6s cubic-bezier(.22,1,.36,1) .25s}
   section.present .bar-cell .bar i{transform:scaleX(var(--w,0))}
   tr.rank-1 .bar-cell .bar i{background:var(--green-ink)}
 
   /* ---- pills ---- */
-  .pill{display:inline-block;font-size:11.5px;font-weight:500;padding:2px 9px;border-radius:999px;background:#f1f5f9;color:#475569;letter-spacing:0.03em}
+  .pill{display:inline-block;font-size:12.5px;font-weight:500;padding:3px 10px;border-radius:999px;background:#f1f5f9;color:#475569;letter-spacing:0.03em}
   .pill-purple{background:var(--purple-bg);color:var(--purple-ink);border:1px solid var(--purple-bd)}
   .pill-blue{background:var(--blue-bg);color:var(--blue-ink);border:1px solid var(--blue-bd)}
   .pill-green{background:var(--green-bg);color:var(--green-ink);border:1px solid var(--green-bd)}
 
   /* ---- cover ---- */
-  .cover{padding:64px 80px}
-  .cover .badge{align-self:flex-start;font-size:10.5px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--purple-ink);background:var(--purple-bg);border:1px solid var(--purple-bd);padding:5px 11px;border-radius:999px;margin-bottom:24px}
-  .cover h1{font-size:56px;font-weight:600;letter-spacing:-0.025em;line-height:1.05;margin:0 0 18px 0;max-width:780px}
-  .cover .lede{font-size:19px;color:var(--muted);max-width:680px;line-height:1.5;font-weight:400}
-  .cover .meta{margin-top:36px;display:flex;gap:34px;font-size:12px;color:var(--muted)}
-  .cover .meta div strong{display:block;color:var(--ink);font-weight:600;font-size:13.5px;margin-bottom:2px}
+  .cover{padding:72px 88px;justify-content:center}
+  .cover .badge{align-self:flex-start;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--purple-ink);background:var(--purple-bg);border:1px solid var(--purple-bd);padding:6px 13px;border-radius:999px;margin-bottom:28px}
+  .cover h1{font-size:66px;font-weight:600;letter-spacing:-0.025em;line-height:1.04;margin:0 0 22px 0;max-width:820px}
+  .cover .lede{font-size:23px;color:var(--muted);max-width:760px;line-height:1.45;font-weight:400}
+  .cover .meta{margin-top:auto;display:flex;gap:40px;font-size:14px;color:var(--muted)}
+  .cover .meta div strong{display:block;color:var(--ink);font-weight:600;font-size:16px;margin-bottom:3px}
 
-  .cover .graphic{position:absolute;right:60px;top:60px;width:340px;height:340px;opacity:.9}
+  .cover .graphic{position:absolute;right:64px;top:50%;transform:translateY(-50%);width:400px;height:400px;opacity:.92}
 
   /* ---- search-target diagram (slide 3) ---- */
   .target-row{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;margin-bottom:14px}
@@ -258,7 +265,7 @@
       <h1 class="title" data-anim="1">Feature interaction matters most.</h1>
       <h2 class="sub" data-anim="2">For graph tasks, the gain comes from finding the right <em>features</em>, not from a bigger model.</h2>
 
-      <div class="grid-2-uneven" style="flex:1;align-content:start">
+      <div class="grid-2-uneven" style="flex:1;align-content:stretch">
 
         <div style="display:flex;flex-direction:column;gap:10px">
           <div class="card card-slate" data-anim="3">
@@ -313,57 +320,60 @@
       <h1 class="title" data-anim="1">A typed grid of feature operators.</h1>
       <h2 class="sub" data-anim="2">Three classes by hop distance — press <kbd style="background:#f1f5f9;border:1px solid #cbd5e1;border-radius:4px;padding:1px 6px;font-size:12px;font-family:inherit">→</kbd> to reveal a concrete operator in each.</h2>
 
-      <!-- Taxonomy: three cards, bigger and terser -->
-      <div class="grid-3" style="margin-top:10px" data-anim="3">
-        <div class="card card-blue" style="padding:18px 20px">
-          <h3 style="font-size:18px;margin-bottom:10px"><span class="pill pill-blue" style="margin-right:8px;font-size:12px">0-hop</span> Zero-hop</h3>
-          <p style="font-size:15.5px;line-height:1.5;color:#334155">Transforms on the target itself.</p>
+      <!-- Taxonomy: three cards, big and roomy -->
+      <div class="grid-3" style="margin-top:6px" data-anim="3">
+        <div class="card card-blue" style="padding:24px 24px">
+          <h3 style="font-size:22px;margin-bottom:12px;display:flex;align-items:center;gap:12px"><span class="pill pill-blue" style="font-size:13px">0-hop</span> Zero-hop</h3>
+          <p style="font-size:17px;line-height:1.55;color:#334155;margin:0">Local transforms on the target row.</p>
+          <p style="font-size:14px;line-height:1.5;color:var(--muted);margin-top:8px;font-style:italic">column transform · normalize · bucketize</p>
         </div>
-        <div class="card card-green" style="padding:18px 20px">
-          <h3 style="font-size:18px;margin-bottom:10px"><span class="pill pill-green" style="margin-right:8px;font-size:12px">1-hop</span> One-hop</h3>
-          <p style="font-size:15.5px;line-height:1.5;color:#334155">Aggregate from direct neighbors.</p>
+        <div class="card card-green" style="padding:24px 24px">
+          <h3 style="font-size:22px;margin-bottom:12px;display:flex;align-items:center;gap:12px"><span class="pill pill-green" style="font-size:13px">1-hop</span> One-hop</h3>
+          <p style="font-size:17px;line-height:1.55;color:#334155;margin:0">Aggregate from direct neighbors.</p>
+          <p style="font-size:14px;line-height:1.5;color:var(--muted);margin-top:8px;font-style:italic">transactions → account features</p>
         </div>
-        <div class="card card-purple" style="padding:18px 20px">
-          <h3 style="font-size:18px;margin-bottom:10px"><span class="pill pill-purple" style="margin-right:8px;font-size:12px">2-hop</span> Two-hop</h3>
-          <p style="font-size:15.5px;line-height:1.5;color:#334155">Aggregate through a 2-step path.</p>
+        <div class="card card-purple" style="padding:24px 24px">
+          <h3 style="font-size:22px;margin-bottom:12px;display:flex;align-items:center;gap:12px"><span class="pill pill-purple" style="font-size:13px">2-hop</span> Two-hop</h3>
+          <p style="font-size:17px;line-height:1.55;color:#334155;margin:0">Aggregate through a 2-step path.</p>
+          <p style="font-size:14px;line-height:1.5;color:var(--muted);margin-top:8px;font-style:italic">receiver history → back to sender</p>
         </div>
       </div>
 
       <!-- Examples revealed by click; right (2-hop) first, then left (1-hop) -->
-      <div class="grid-2" style="flex:1;align-content:start;margin-top:18px;gap:18px">
+      <div class="grid-2" style="flex:1;align-content:stretch;margin-top:22px;gap:22px">
 
         <!-- LEFT: 1-hop static — appears SECOND -->
-        <div class="fragment fade-up" data-fragment-index="1" style="display:flex;flex-direction:column;gap:10px">
+        <div class="fragment fade-up" data-fragment-index="1" style="display:flex;flex-direction:column;gap:12px;justify-content:center">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="pill pill-green" style="font-size:12px">1-hop · static</span>
-            <strong style="font-size:16px">Aggregate transactions → account</strong>
+            <span class="pill pill-green" style="font-size:13px">1-hop · static</span>
+            <strong style="font-size:17px">Aggregate transactions → account</strong>
           </div>
-          <pre class="light" style="font-size:14px;line-height:1.6;margin:0"><code>target: account
+          <pre class="light" style="font-size:16px;line-height:1.65;margin:0"><code>target: account
 path:   account ← transaction
 agg:    sum / mean / count</code></pre>
-          <div class="card card-green" style="padding:10px 14px">
-            <code style="font-size:13.5px;color:var(--green-ink);background:transparent;padding:0">account_avg_transaction_amount</code>
+          <div class="card card-green" style="padding:12px 16px">
+            <code style="font-size:15px;color:var(--green-ink);background:transparent;padding:0">account_avg_transaction_amount</code>
           </div>
         </div>
 
         <!-- RIGHT: 2-hop temporal — appears FIRST -->
-        <div class="fragment fade-up" data-fragment-index="0" style="display:flex;flex-direction:column;gap:10px">
+        <div class="fragment fade-up" data-fragment-index="0" style="display:flex;flex-direction:column;gap:12px;justify-content:center">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="pill pill-purple" style="font-size:12px">2-hop · temporal</span>
-            <strong style="font-size:16px">Receiver's 7-day history → sender</strong>
+            <span class="pill pill-purple" style="font-size:13px">2-hop · temporal</span>
+            <strong style="font-size:17px">Receiver's 7-day history → sender</strong>
           </div>
-          <pre class="light" style="font-size:14px;line-height:1.6;margin:0"><code>target: sender_account
+          <pre class="light" style="font-size:16px;line-height:1.65;margin:0"><code>target: sender_account
 path:   sender → txn → receiver
 window: receiver inbound [t−7d, t)
 agg:    failure_rate / sum / count</code></pre>
-          <div class="card card-purple" style="padding:10px 14px">
-            <code style="font-size:13.5px;color:var(--purple-ink);background:transparent;padding:0">receiver_7d_failed_payment_rate</code>
+          <div class="card card-purple" style="padding:12px 16px">
+            <code style="font-size:15px;color:var(--purple-ink);background:transparent;padding:0">receiver_7d_failed_payment_rate</code>
           </div>
         </div>
 
       </div>
 
-      <div class="takeaway" data-anim="takeaway"><strong>Same shape, different reach.</strong> Both are typed specs the worker can sample and the controller can validate.</div>
+      <div class="takeaway" data-anim="takeaway"><strong>Same shape, different reach.</strong> Both are typed specs the worker can sample.</div>
 
       <div class="chrome">
         <div class="left">Framework · The search space</div>
@@ -379,33 +389,33 @@ agg:    failure_rate / sum / count</code></pre>
       <h1 class="title" data-anim="1">Typed specs &amp; controller-worker parallelism.</h1>
       <h2 class="sub" data-anim="2">Two engineering lessons that cut the failure rate and unlock throughput.</h2>
 
-      <div class="grid-2" style="flex:1;align-content:start;gap:18px">
+      <div class="grid-2" style="flex:1;align-content:stretch;gap:22px">
 
         <!-- LEFT: typed specs -->
-        <div data-anim="3" style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-blue">Lesson 1</span><strong style="font-size:13.5px">Each Feature OP is a typed, validated spec</strong></div>
-          <pre><code>target_entity: sender_account
+        <div data-anim="3" style="display:flex;flex-direction:column;gap:14px;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:10px"><span class="pill pill-blue">Lesson 1</span><strong style="font-size:16px">Each Feature OP is a typed, validated spec</strong></div>
+          <pre style="flex:1;display:flex;align-items:center"><code>target_entity: sender_account
 path:
   - sender_account -&gt; transaction
   - transaction -&gt; receiver_account
 value_columns: [amount, transaction_status]
 temporal_window: 7d
 aggregation: [sum, count, failure_rate]</code></pre>
-          <div class="card card-blue" style="padding:8px 12px">
-            <h3 style="font-size:11.5px;margin-bottom:3px">Validation catches</h3>
-            <p style="font-size:11.5px;color:var(--blue-ink);line-height:1.45;margin:0">
-              invalid relation path · missing raw column · incompatible type · invalid window · <strong>feature leakage risk</strong>
+          <div class="card card-blue" style="padding:12px 16px">
+            <h3 style="font-size:14px;margin-bottom:5px">Validation catches</h3>
+            <p style="font-size:14px;color:var(--blue-ink);line-height:1.5;margin:0">
+              invalid path · missing column · bad type · bad window · <strong>leakage</strong>
             </p>
           </div>
         </div>
 
         <!-- RIGHT: controller + workers -->
-        <div data-anim="4" style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-purple">Lesson 2</span><strong style="font-size:13.5px">Controller + parallel workers</strong></div>
+        <div data-anim="4" style="display:flex;flex-direction:column;gap:14px;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:10px"><span class="pill pill-purple">Lesson 2</span><strong style="font-size:16px">Controller + parallel workers</strong></div>
 
-          <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;padding:10px;background:#fff;border:1px solid var(--line);border-radius:8px">
-            <div class="cw-box cw-controller">Controller<br><span style="font-weight:400;font-size:11px">round strategy<br>+ summarize</span></div>
-            <svg width="40" height="100" viewBox="0 0 40 100" fill="none">
+          <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;padding:18px;background:#fff;border:1px solid var(--line);border-radius:10px;flex:1">
+            <div class="cw-box cw-controller" style="font-size:15px;padding:14px 16px">Controller<br><span style="font-weight:400;font-size:13px;color:#7c3aed">round strategy<br>+ summarize</span></div>
+            <svg width="48" height="120" viewBox="0 0 40 100" fill="none">
               <path d="M 4 20 L 36 20" stroke="#6d28d9" stroke-width="1.4" stroke-dasharray="3 3"/>
               <path d="M 4 50 L 36 50" stroke="#6d28d9" stroke-width="1.4" stroke-dasharray="3 3"/>
               <path d="M 4 80 L 36 80" stroke="#6d28d9" stroke-width="1.4" stroke-dasharray="3 3"/>
@@ -415,16 +425,16 @@ aggregation: [sum, count, failure_rate]</code></pre>
               <path d="M 4 35 L 36 35" stroke="#1d4ed8" stroke-width="1.2"/>
               <path d="M 4 35 L 10 32 M 4 35 L 10 38" stroke="#1d4ed8" stroke-width="1.2"/>
             </svg>
-            <div class="cw-workers">
-              <div class="cw-worker">Worker · spec sampler</div>
-              <div class="cw-worker">Worker · spec sampler</div>
-              <div class="cw-worker">Worker · spec sampler</div>
+            <div class="cw-workers" style="gap:8px">
+              <div class="cw-worker" style="font-size:13.5px;padding:8px 12px">Worker · spec sampler</div>
+              <div class="cw-worker" style="font-size:13.5px;padding:8px 12px">Worker · spec sampler</div>
+              <div class="cw-worker" style="font-size:13.5px;padding:8px 12px">Worker · spec sampler</div>
             </div>
           </div>
 
-          <div class="card card-purple" style="padding:8px 12px">
-            <p style="font-size:11.5px;line-height:1.45;margin:0;color:var(--purple-ink)">
-              <strong>Controller</strong> sets search strategy &amp; handles failures · <strong>Workers</strong> are LM-guided samplers proposing valid specs in parallel.
+          <div class="card card-purple" style="padding:12px 16px">
+            <p style="font-size:14px;line-height:1.5;margin:0;color:var(--purple-ink)">
+              <strong>Controller</strong> drives the search · <strong>Workers</strong> sample valid specs in parallel.
             </p>
           </div>
         </div>
@@ -525,30 +535,30 @@ aggregation: [sum, count, failure_rate]</code></pre>
       <h1 class="title" data-anim="1">Graph Foundation Agent — in one slide.</h1>
       <h2 class="sub" data-anim="2">Scale the discovery of features, not the size of the model.</h2>
 
-      <div class="grid-2-uneven" style="flex:1;align-content:start;gap:18px">
+      <div class="grid-2-uneven" style="flex:1;align-content:stretch;gap:24px">
 
-        <div data-anim="3">
-          <h3 style="margin-bottom:8px">What we demonstrate</h3>
+        <div data-anim="3" style="display:flex;flex-direction:column;justify-content:center">
+          <h3 style="margin-bottom:14px;font-size:18px">What we demonstrate</h3>
           <ul style="padding-left:0;list-style:none">
-            <li style="position:relative;padding-left:22px;margin-bottom:8px;font-size:13.5px;line-height:1.5"><span style="position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:50%;background:var(--blue-bg);color:var(--blue-ink);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">1</span>Graph performance is bottlenecked by <strong>feature interaction discovery</strong>, not architecture.</li>
-            <li style="position:relative;padding-left:22px;margin-bottom:8px;font-size:13.5px;line-height:1.5"><span style="position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:50%;background:var(--green-bg);color:var(--green-ink);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">2</span>Search over <strong>0-, 1-, 2-hop</strong> feature operators × static/temporal.</li>
-            <li style="position:relative;padding-left:22px;margin-bottom:8px;font-size:13.5px;line-height:1.5"><span style="position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:50%;background:var(--purple-bg);color:var(--purple-ink);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">3</span>Each feature = <strong>typed, validated</strong> Feature OP spec.</li>
-            <li style="position:relative;padding-left:22px;margin-bottom:8px;font-size:13.5px;line-height:1.5"><span style="position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:50%;background:var(--purple-bg);color:var(--purple-ink);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">4</span>Controller orchestrates <strong>parallel workers</strong> proposing &amp; evaluating candidates.</li>
-            <li style="position:relative;padding-left:22px;margin-bottom:0;font-size:13.5px;line-height:1.5"><span style="position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:50%;background:var(--blue-bg);color:var(--blue-ink);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">5</span>Boosting-tree evaluators give <strong>fast, fair</strong> feedback.</li>
+            <li style="position:relative;padding-left:30px;margin-bottom:14px;font-size:17px;line-height:1.5"><span style="position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--blue-bg);color:var(--blue-ink);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center">1</span>Graph perf is bottlenecked by <strong>feature interaction discovery</strong>, not architecture.</li>
+            <li style="position:relative;padding-left:30px;margin-bottom:14px;font-size:17px;line-height:1.5"><span style="position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--green-bg);color:var(--green-ink);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center">2</span>Search over <strong>0-, 1-, 2-hop</strong> operators × static / temporal.</li>
+            <li style="position:relative;padding-left:30px;margin-bottom:14px;font-size:17px;line-height:1.5"><span style="position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--purple-bg);color:var(--purple-ink);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center">3</span>Each feature = <strong>typed, validated</strong> Feature OP spec.</li>
+            <li style="position:relative;padding-left:30px;margin-bottom:14px;font-size:17px;line-height:1.5"><span style="position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--purple-bg);color:var(--purple-ink);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center">4</span>Controller orchestrates <strong>parallel workers</strong>.</li>
+            <li style="position:relative;padding-left:30px;margin-bottom:0;font-size:17px;line-height:1.5"><span style="position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--blue-bg);color:var(--blue-ink);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center">5</span>Boosting-tree evaluators give <strong>fast, fair</strong> feedback.</li>
           </ul>
         </div>
 
-        <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;flex-direction:column;gap:16px;justify-content:center">
           <div class="pitch-box" data-anim="4">
             Instead of scaling a single graph neural architecture, we scale the discovery of useful <strong>relational feature interactions</strong>.
           </div>
           <div class="card card-green" data-anim="5">
-            <h3 style="font-size:12.5px">Status</h3>
-            <p style="font-size:13px;line-height:1.5;margin:0">#1 average on GraphTestbed — best on 3 of 4 tasks among compared agents.</p>
+            <h3 style="font-size:15px;margin-bottom:6px">Status</h3>
+            <p style="font-size:15.5px;line-height:1.5;margin:0">#1 average on GraphTestbed — best on 3 of 4 tasks.</p>
           </div>
           <div class="card card-slate" data-anim="6">
-            <h3 style="font-size:12px">References</h3>
-            <p style="font-size:11.5px;line-height:1.5;margin:0;color:#475569">
+            <h3 style="font-size:14.5px;margin-bottom:6px">References</h3>
+            <p style="font-size:13.5px;line-height:1.55;margin:0;color:#475569">
               [1] Cheng et al. <em>Wide &amp; Deep Learning.</em> DLRS 2016 · <a href="https://arxiv.org/abs/1606.07792">arxiv/1606.07792</a><br>
               [2] Tang et al. <em>GADBench.</em> NeurIPS 2023 D&amp;B · <a href="https://openreview.net/forum?id=U5uRXlLwnM">openreview/U5uRXlLwnM</a>
             </p>
@@ -570,6 +580,7 @@ aggregation: [sum, count, failure_rate]</code></pre>
 </div>
 
 <div class="progress-dots" id="dots"></div>
+<div id="dbg" style="position:fixed;left:8px;top:8px;background:#000;color:#0f0;padding:6px 10px;font:11px monospace;z-index:9999;white-space:pre"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
 <script>
@@ -602,6 +613,17 @@ aggregation: [sum, count, failure_rate]</code></pre>
     d.className = 'd' + (i === 0 ? ' on' : '');
     dotsEl.appendChild(d);
   }
+  setTimeout(() => {
+    const s = (el)=>{ if(!el) return 'null'; const r = el.getBoundingClientRect(); const cs = getComputedStyle(el); return r.width.toFixed(0)+'x'+r.height.toFixed(0)+' fs='+cs.fontSize+' tr='+cs.transform.slice(0,30); };
+    const pres = document.querySelector('.reveal .slides > section.present');
+    const slides = document.querySelector('.reveal .slides');
+    const title = pres && pres.querySelector('h1.title');
+    document.getElementById('dbg').innerText =
+      '.slides: '+s(slides) +
+      '\nsection: '+s(pres) +
+      '\n.slide: '+s(pres&&pres.querySelector('.slide')) +
+      '\ntitle: '+s(title);
+  }, 1500);
   Reveal.on('slidechanged', function (e) {
     var dots = document.querySelectorAll('#dots .d');
     dots.forEach(function (d, i) { d.classList.toggle('on', i === e.indexOf); });
