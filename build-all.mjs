@@ -10,7 +10,7 @@
  * before the first "/" is the project it is archived under.
  */
 
-import { readFileSync, mkdirSync, writeFileSync, existsSync } from "fs";
+import { readFileSync, mkdirSync, writeFileSync, existsSync, cpSync } from "fs";
 import { resolve, join } from "path";
 import { execSync } from "child_process";
 
@@ -33,6 +33,15 @@ function readTitle(slidesFile, fallback) {
   return fallback;
 }
 
+/** Pull the <title>…</title> from a raw HTML deck's index.html. */
+function readHtmlTitle(htmlFile, fallback) {
+  try {
+    const m = readFileSync(htmlFile, "utf-8").match(/<title>([^<]+)<\/title>/i);
+    if (m) return m[1].trim();
+  } catch {}
+  return fallback;
+}
+
 // ── Build every deck ──
 
 const built = [];
@@ -40,24 +49,35 @@ const built = [];
 for (const { name, date } of projects) {
   const projDir = join(hub, "projects", name);
   const slidesFile = join(projDir, "slides.md");
-
-  if (!existsSync(slidesFile)) {
-    console.warn(`⚠  skip ${name}: no slides.md`);
-    continue;
-  }
-
+  const indexFile = join(projDir, "index.html");
   const outDir = join(distRoot, name);
-  console.log(`\n📦 Building ${name}...`);
 
-  try {
-    execSync(
-      `npx slidev build "${slidesFile}" --base /slides-hub/${name}/ --out "${outDir}"`,
-      { cwd: projDir, stdio: "inherit" }
-    );
-    built.push({ name, date: date || "", title: readTitle(slidesFile, name) });
-    console.log(`✓  ${name} → dist/${name}/`);
-  } catch (e) {
-    console.error(`✗  ${name} build failed: ${e.message}`);
+  if (existsSync(slidesFile)) {
+    // ── Slidev deck ──
+    console.log(`\n📦 Building ${name}...`);
+    try {
+      execSync(
+        `npx slidev build "${slidesFile}" --base /slides-hub/${name}/ --out "${outDir}"`,
+        { cwd: projDir, stdio: "inherit" }
+      );
+      built.push({ name, date: date || "", title: readTitle(slidesFile, name) });
+      console.log(`✓  ${name} → dist/${name}/`);
+    } catch (e) {
+      console.error(`✗  ${name} build failed: ${e.message}`);
+    }
+  } else if (existsSync(indexFile)) {
+    // ── Raw HTML deck (reveal.js, hand-rolled, etc.) — copy through ──
+    console.log(`\n📦 Copying ${name} (raw HTML)...`);
+    try {
+      mkdirSync(outDir, { recursive: true });
+      cpSync(projDir, outDir, { recursive: true });
+      built.push({ name, date: date || "", title: readHtmlTitle(indexFile, name) });
+      console.log(`✓  ${name} → dist/${name}/`);
+    } catch (e) {
+      console.error(`✗  ${name} copy failed: ${e.message}`);
+    }
+  } else {
+    console.warn(`⚠  skip ${name}: no slides.md or index.html`);
   }
 }
 

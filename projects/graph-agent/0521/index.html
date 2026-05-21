@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Graph Foundation Agent — Demo Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- reveal.js -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<style>
+  :root{
+    --bg:#fafafa; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --accent:#1e293b;
+    --blue-bg:#eff6ff;   --blue-bd:#bfdbfe;   --blue-ink:#1d4ed8;
+    --green-bg:#ecfdf5;  --green-bd:#a7f3d0;  --green-ink:#047857;
+    --purple-bg:#f5f3ff; --purple-bd:#ddd6fe; --purple-ink:#6d28d9;
+    --yellow-bg:#fffbeb; --yellow-bd:#fde68a; --yellow-ink:#92400e;
+    --slate-bg:#f8fafc;  --slate-bd:#e2e8f0;
+  }
+
+  html,body{background:#e5e7eb;font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  code,pre{font-family:'JetBrains Mono',ui-monospace,monospace}
+
+  /* ---- reveal overrides ---- */
+  .reveal{font-family:'Inter',system-ui,sans-serif;color:var(--ink);font-size:20px;letter-spacing:0}
+  .reveal .slides{text-align:left}
+  .reveal .slides > section,
+  .reveal .slides > section > section{
+    padding:0;
+    box-shadow:0 30px 80px -20px rgba(15,23,42,.25),0 0 0 1px rgba(15,23,42,.05);
+    border-radius:8px;
+    background:var(--bg);
+    overflow:hidden;
+  }
+  .reveal h1,.reveal h2,.reveal h3,.reveal h4{font-family:'Inter',sans-serif;color:var(--ink);text-transform:none;letter-spacing:-0.01em;margin:0;line-height:1.15;font-weight:600;text-shadow:none}
+  .reveal p{margin:0;line-height:1.5}
+  .reveal ul{margin:0;padding-left:18px;list-style:disc}
+  .reveal ul li{margin:0 0 4px 0;line-height:1.45;font-size:0.95em}
+  .reveal code{background:#f1f5f9;color:#334155;padding:1px 6px;border-radius:3px;font-size:0.86em}
+  .reveal pre{background:#0f172a;color:#e2e8f0;border-radius:6px;padding:12px 14px;margin:8px 0;font-size:0.66em;line-height:1.55;box-shadow:none;width:100%}
+  .reveal pre code{background:transparent;padding:0;color:inherit;font-size:1em;display:block;overflow:auto}
+  .reveal pre.light{background:#f1f5f9;color:#0f172a;border:1px solid #e2e8f0}
+  .reveal a{color:var(--blue-ink);text-decoration:none;border-bottom:1px solid var(--blue-bd)}
+  .reveal blockquote{background:#f8fafc;border-left:3px solid #94a3b8;padding:10px 14px;font-style:italic;color:#334155;width:auto;margin:8px 0;box-shadow:none;font-size:0.92em;line-height:1.5;border-radius:0 4px 4px 0}
+  .reveal blockquote strong{color:var(--ink);font-style:normal}
+
+  /* ---- slide canvas ---- */
+  .slide{
+    width:100%;height:100%;
+    padding:38px 52px 44px 52px;
+    display:flex;flex-direction:column;
+    position:relative;
+  }
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+  .eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--purple-ink)}
+  h1.title{font-size:32px;font-weight:600;letter-spacing:-0.02em;margin:0 0 4px 0;line-height:1.1}
+  h2.sub{font-size:16px;font-weight:400;color:var(--muted);margin:0 0 18px 0;line-height:1.35}
+  h3{font-size:14px;font-weight:600;margin:0 0 6px 0}
+
+  .chrome{
+    position:absolute;left:52px;right:52px;bottom:18px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:10.5px;color:var(--muted);letter-spacing:0.06em;
+  }
+  .chrome .right{font-variant-numeric:tabular-nums}
+
+  /* ---- cards ---- */
+  .card{padding:14px 16px;border-radius:8px;border:1px solid;font-size:13.5px;line-height:1.5}
+  .card h3{font-size:13px;margin-bottom:6px;letter-spacing:0.01em}
+  .card p{font-size:13.5px}
+  .card-blue{background:var(--blue-bg);border-color:var(--blue-bd)} .card-blue h3{color:var(--blue-ink)}
+  .card-green{background:var(--green-bg);border-color:var(--green-bd)} .card-green h3{color:var(--green-ink)}
+  .card-purple{background:var(--purple-bg);border-color:var(--purple-bd)} .card-purple h3{color:var(--purple-ink)}
+  .card-slate{background:var(--slate-bg);border-color:var(--slate-bd)}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .grid-2-uneven{display:grid;grid-template-columns:1.15fr 1fr;gap:18px}
+
+  .takeaway{
+    margin-top:auto;padding:10px 14px;background:var(--yellow-bg);border:1px solid var(--yellow-bd);
+    border-radius:6px;font-size:13px;line-height:1.5;color:#5b2f0e;
+  }
+  .takeaway strong{color:var(--yellow-ink)}
+
+  /* ---- tables ---- */
+  .reveal table{width:100%;border-collapse:collapse;margin:6px 0;font-size:13px;background:transparent;box-shadow:none}
+  .reveal th{font-weight:600;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1.5px solid #cbd5e1;padding:8px 10px;text-align:left;background:transparent}
+  .reveal td{padding:8px 10px;border-bottom:1px solid var(--line);background:transparent;text-align:left}
+  .num{text-align:right !important;font-variant-numeric:tabular-nums}
+  .best{font-weight:700;color:var(--green-ink)}
+  tr.rank-1 td{background:#ecfdf5}
+
+  /* inline bars in leaderboard */
+  .bar-cell{position:relative;padding-right:48px !important;text-align:right;font-variant-numeric:tabular-nums}
+  .bar-cell .bar{position:absolute;right:8px;top:50%;transform:translateY(-50%);height:5px;background:#cbd5e1;border-radius:2px;width:36px;overflow:hidden}
+  .bar-cell .bar i{display:block;height:100%;background:#94a3b8;border-radius:2px;transform-origin:left center;transform:scaleX(0);transition:transform .6s cubic-bezier(.22,1,.36,1) .25s}
+  section.present .bar-cell .bar i{transform:scaleX(var(--w,0))}
+  tr.rank-1 .bar-cell .bar i{background:var(--green-ink)}
+
+  /* ---- pills ---- */
+  .pill{display:inline-block;font-size:10.5px;font-weight:500;padding:2px 8px;border-radius:999px;background:#f1f5f9;color:#475569;letter-spacing:0.03em}
+  .pill-purple{background:var(--purple-bg);color:var(--purple-ink);border:1px solid var(--purple-bd)}
+  .pill-blue{background:var(--blue-bg);color:var(--blue-ink);border:1px solid var(--blue-bd)}
+  .pill-green{background:var(--green-bg);color:var(--green-ink);border:1px solid var(--green-bd)}
+
+  /* ---- cover ---- */
+  .cover{padding:64px 80px}
+  .cover .badge{display:inline-block;font-size:10.5px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--purple-ink);background:var(--purple-bg);border:1px solid var(--purple-bd);padding:5px 11px;border-radius:999px;margin-bottom:24px}
+  .cover h1{font-size:56px;font-weight:600;letter-spacing:-0.025em;line-height:1.05;margin:0 0 18px 0;max-width:780px}
+  .cover .lede{font-size:19px;color:var(--muted);max-width:680px;line-height:1.5;font-weight:400}
+  .cover .meta{margin-top:36px;display:flex;gap:34px;font-size:12px;color:var(--muted)}
+  .cover .meta div strong{display:block;color:var(--ink);font-weight:600;font-size:13.5px;margin-bottom:2px}
+
+  .cover .graphic{position:absolute;right:60px;top:60px;width:340px;height:340px;opacity:.9}
+
+  /* ---- search-target diagram (slide 3) ---- */
+  .target-row{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;margin-bottom:14px}
+  .target-row .arrow-x{color:var(--muted);font-size:22px;font-weight:300;text-align:center}
+  .target-row .box{padding:10px 14px;border:1.5px dashed #cbd5e1;border-radius:8px;background:#fff;text-align:center;font-size:13px;color:#475569}
+  .target-row .box.kept{border-style:solid;border-color:var(--blue-bd);background:var(--blue-bg);color:var(--blue-ink);font-weight:500}
+  .target-row .box.searched{border-style:solid;border-color:var(--green-bd);background:var(--green-bg);color:var(--green-ink);font-weight:500}
+
+  /* ---- controller/worker diagram (slide 5) ---- */
+  .cw-diagram{display:grid;grid-template-columns:auto 24px auto;gap:0;align-items:center;margin:6px 0 0 0}
+  .cw-box{padding:10px 14px;border-radius:8px;text-align:center;font-size:12.5px;line-height:1.35;font-weight:500}
+  .cw-controller{background:var(--purple-bg);border:1px solid var(--purple-bd);color:var(--purple-ink)}
+  .cw-workers{display:flex;flex-direction:column;gap:5px}
+  .cw-worker{background:var(--blue-bg);border:1px solid var(--blue-bd);color:var(--blue-ink);padding:5px 10px;border-radius:6px;font-size:11.5px;text-align:center;font-weight:500}
+  .cw-arrows{position:relative;width:24px;height:80px}
+  .cw-arrows svg{position:absolute;inset:0;width:100%;height:100%}
+
+  /* ---- summary slide ---- */
+  .pitch-box{
+    background:linear-gradient(135deg, var(--purple-bg) 0%, var(--blue-bg) 100%);
+    border:1px solid var(--purple-bd);border-radius:10px;padding:22px 24px;
+    font-size:18px;line-height:1.45;color:var(--ink);font-style:italic;
+  }
+  .pitch-box strong{font-style:normal;font-weight:600;color:var(--purple-ink)}
+
+  /* ===== ANIMATIONS — auto stagger entry per slide ===== */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes scaleIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+  @keyframes drawIn{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+
+  section [data-anim]{opacity:0}
+  section.present [data-anim]{
+    animation:fadeUp .55s cubic-bezier(.22,1,.36,1) both;
+  }
+  section.present [data-anim="1"]{animation-delay:.05s}
+  section.present [data-anim="2"]{animation-delay:.16s}
+  section.present [data-anim="3"]{animation-delay:.26s}
+  section.present [data-anim="4"]{animation-delay:.36s}
+  section.present [data-anim="5"]{animation-delay:.46s}
+  section.present [data-anim="6"]{animation-delay:.56s}
+  section.present [data-anim="7"]{animation-delay:.66s}
+  section.present [data-anim="8"]{animation-delay:.76s}
+  section.present [data-anim="takeaway"]{animation:fadeUp .6s cubic-bezier(.22,1,.36,1) both;animation-delay:.9s}
+
+  section .graphic [data-draw]{stroke-dasharray:1000;stroke-dashoffset:1000}
+  section.present .graphic [data-draw]{animation:drawIn 1.6s cubic-bezier(.22,1,.36,1) forwards;animation-delay:.3s}
+  section.present .graphic [data-anim="node"]{animation:scaleIn .6s cubic-bezier(.22,1,.36,1) both;transform-origin:center;transform-box:fill-box}
+  section.present .graphic [data-anim="node"][data-i="1"]{animation-delay:.4s}
+  section.present .graphic [data-anim="node"][data-i="2"]{animation-delay:.55s}
+  section.present .graphic [data-anim="node"][data-i="3"]{animation-delay:.7s}
+  section.present .graphic [data-anim="node"][data-i="4"]{animation-delay:.85s}
+  section.present .graphic [data-anim="node"][data-i="5"]{animation-delay:1.0s}
+  section.present .graphic [data-anim="node"][data-i="6"]{animation-delay:1.15s}
+  section.present .graphic [data-anim="node"][data-i="7"]{animation-delay:1.3s}
+
+  /* progress dots */
+  .progress-dots{position:fixed;top:50%;right:14px;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:40}
+  .progress-dots .d{width:6px;height:6px;border-radius:50%;background:rgba(15,23,42,.18);transition:all .25s}
+  .progress-dots .d.on{background:var(--purple-ink);transform:scale(1.4)}
+</style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+  <!-- ============ 1 · COVER ============ -->
+  <section>
+    <div class="slide cover">
+      <span class="badge" data-anim="1">Demo deck · 2026</span>
+      <h1 data-anim="2">Graph Foundation Agent</h1>
+      <p class="lede" data-anim="3">Turning graph feature engineering into a structured, agentic search problem — where the win comes from <strong style="color:var(--ink);font-weight:600">feature interactions</strong>, not bigger backbones.</p>
+
+      <div class="meta">
+        <div data-anim="4"><strong>Topic</strong>Combinatorial feature engineering<br>for graph ML</div>
+        <div data-anim="5"><strong>Benchmark</strong>GraphTestbed<br>4 relational tasks</div>
+        <div data-anim="6"><strong>Result</strong>#1 average — best on<br>3 of 4 tasks</div>
+      </div>
+
+      <!-- decorative graph network -->
+      <svg class="graphic" viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bgFade" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f5f3ff"/>
+            <stop offset="1" stop-color="#eff6ff"/>
+          </linearGradient>
+        </defs>
+        <circle cx="180" cy="180" r="160" fill="url(#bgFade)" opacity=".6"/>
+        <!-- edges -->
+        <g stroke="#94a3b8" stroke-width="1.2" data-draw>
+          <line x1="180" y1="80" x2="100" y2="180"/>
+          <line x1="180" y1="80" x2="260" y2="180"/>
+          <line x1="100" y1="180" x2="60" y2="280"/>
+          <line x1="100" y1="180" x2="180" y2="280"/>
+          <line x1="260" y1="180" x2="180" y2="280"/>
+          <line x1="260" y1="180" x2="300" y2="280"/>
+          <line x1="180" y1="80" x2="280" y2="100"/>
+          <line x1="100" y1="180" x2="180" y2="280"/>
+        </g>
+        <!-- nodes -->
+        <g>
+          <circle cx="180" cy="80"  r="14" fill="#ddd6fe" stroke="#6d28d9" stroke-width="1.6" data-anim="node" data-i="1"/>
+          <circle cx="100" cy="180" r="11" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="1.4" data-anim="node" data-i="2"/>
+          <circle cx="260" cy="180" r="11" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="1.4" data-anim="node" data-i="3"/>
+          <circle cx="60"  cy="280" r="8"  fill="#a7f3d0" stroke="#047857" stroke-width="1.3" data-anim="node" data-i="4"/>
+          <circle cx="180" cy="280" r="8"  fill="#a7f3d0" stroke="#047857" stroke-width="1.3" data-anim="node" data-i="5"/>
+          <circle cx="300" cy="280" r="8"  fill="#a7f3d0" stroke="#047857" stroke-width="1.3" data-anim="node" data-i="6"/>
+          <circle cx="280" cy="100" r="9"  fill="#fde68a" stroke="#92400e" stroke-width="1.3" data-anim="node" data-i="7"/>
+        </g>
+      </svg>
+
+      <div class="chrome">
+        <div class="left">Graph Foundation Agent</div>
+        <div class="right">01 / 07</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2 · INSIGHT + EVIDENCE ============ -->
+  <section>
+    <div class="slide">
+      <div class="eyebrow" data-anim="1"><span class="dot"></span>Core Insight</div>
+      <h1 class="title" data-anim="1">Feature interaction matters most.</h1>
+      <h2 class="sub" data-anim="2">For graph tasks, the gain comes from finding the right <em>features</em>, not from a bigger model.</h2>
+
+      <div class="grid-2-uneven" style="flex:1;align-content:start">
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="card card-slate" data-anim="3">
+            <h3>Often credited</h3>
+            <ul>
+              <li>Model architecture changes</li>
+              <li>Neural network scaling</li>
+              <li>Switching to a more complex graph backbone</li>
+            </ul>
+          </div>
+          <div class="card card-green" data-anim="4">
+            <h3>Actually decisive</h3>
+            <ul>
+              <li>Discovering useful <strong>feature interactions</strong></li>
+              <li>Relational signal across hops</li>
+              <li>Time-windowed aggregates of neighbors</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="card card-blue" data-anim="5">
+            <h3>Evidence 1 — Wide &amp; Deep [1]</h3>
+            <p style="margin-bottom:4px">Explicit feature crosses still earn their keep <em>alongside</em> a deep network.</p>
+            <ul>
+              <li><strong>Wide:</strong> memorize sparse cross-products</li>
+              <li><strong>Deep:</strong> generalize dense embeddings</li>
+              <li>Combined beats deep-only</li>
+            </ul>
+          </div>
+          <div class="card card-purple" data-anim="6">
+            <h3>Evidence 2 — GADBench [2]</h3>
+            <p style="margin-bottom:4px"><strong>XGBoost</strong> + aggregated neighborhood features <strong>outperforms</strong> graph/neural models with raw features.</p>
+            <p style="font-size:12.5px;color:var(--muted);margin-top:4px">The decisive factor is not the backbone — it's whether the model receives strong relational features.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="takeaway" data-anim="takeaway"><strong>Design commitment.</strong> Make the feature set the search target. Hold the evaluator constant.</div>
+
+      <div class="chrome">
+        <div class="left">Core Insight · W&amp;D 2016 · GADBench 2023</div>
+        <div class="right">02 / 07</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3 · SEARCH TARGET + TAXONOMY ============ -->
+  <section>
+    <div class="slide">
+      <div class="eyebrow" data-anim="1"><span class="dot"></span>Framework · Principles 1 &amp; 2</div>
+      <h1 class="title" data-anim="1">Search over feature sets, in a small typed grid.</h1>
+      <h2 class="sub" data-anim="2">Fix a strong default evaluator. Vary features over <strong>hop &times; time</strong>.</h2>
+
+      <!-- top: search target diagram -->
+      <div data-anim="3" style="margin-bottom:14px">
+        <div class="target-row">
+          <div class="box searched">Search target:<br><strong style="font-size:14px">feature set</strong></div>
+          <div class="arrow-x">vs.</div>
+          <div class="box">Fixed:<br><strong style="font-size:14px;color:var(--blue-ink)">XGBoost / LightGBM evaluator</strong></div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:-6px">Faster evaluation · stable comparison · clean attribution to feature interactions</p>
+      </div>
+
+      <!-- bottom: taxonomy -->
+      <div class="grid-3" style="margin-bottom:10px">
+        <div class="card card-blue" data-anim="4">
+          <h3><span class="pill pill-blue" style="margin-right:6px">0-hop</span> Zero-hop</h3>
+          <p style="font-size:12.5px;color:#475569;margin-top:4px">Local transforms on the target entity.</p>
+          <p style="font-size:12px;color:var(--muted);margin-top:3px"><em>column transform · normalization · bucketization</em></p>
+        </div>
+        <div class="card card-green" data-anim="5">
+          <h3><span class="pill pill-green" style="margin-right:6px">1-hop</span> One-hop</h3>
+          <p style="font-size:12.5px;color:#475569;margin-top:4px">Aggregate from directly connected entities.</p>
+          <p style="font-size:12px;color:var(--muted);margin-top:3px"><em>transactions → account features</em></p>
+        </div>
+        <div class="card card-purple" data-anim="6">
+          <h3><span class="pill pill-purple" style="margin-right:6px">2-hop</span> Two-hop</h3>
+          <p style="font-size:12.5px;color:#475569;margin-top:4px">Aggregate through a two-step relational path.</p>
+          <p style="font-size:12px;color:var(--muted);margin-top:3px"><em>receiver history → back to sender</em></p>
+        </div>
+      </div>
+
+      <div class="grid-2" data-anim="7">
+        <div class="card card-slate" style="padding:10px 14px">
+          <h3 style="font-size:12.5px">Static connection</h3>
+          <p style="font-size:12.5px;line-height:1.4">Use existing graph/table relations. No temporal window.</p>
+        </div>
+        <div class="card card-slate" style="padding:10px 14px">
+          <h3 style="font-size:12.5px">Temporal window</h3>
+          <p style="font-size:12.5px;line-height:1.4">Use only historical relations within a time window.</p>
+        </div>
+      </div>
+
+      <div class="takeaway" data-anim="takeaway"><strong>Why this grid.</strong> Small, complete taxonomy → controller can plan; worker has a typed slot to fill.</div>
+
+      <div class="chrome">
+        <div class="left">Framework · Principle 1 (search target) · Principle 2 (taxonomy)</div>
+        <div class="right">03 / 07</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4 · TWO CONCRETE OPERATORS ============ -->
+  <section>
+    <div class="slide">
+      <div class="eyebrow" data-anim="1"><span class="dot"></span>Two concrete operators</div>
+      <h1 class="title" data-anim="1">From spec to feature, in two flavors.</h1>
+      <h2 class="sub" data-anim="2">The simplest static aggregate, and a temporal two-hop with real bite.</h2>
+
+      <div class="grid-2" style="flex:1;align-content:start">
+
+        <div data-anim="3" style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-green">1-hop · static</span><strong style="font-size:13.5px">Aggregate transactions → account</strong></div>
+          <pre class="light"><code>target:   account
+path:     account &lt;- transaction
+values:   transaction_amount,
+          transaction_type,
+          merchant_category
+agg:      sum / mean / count / max</code></pre>
+          <div class="card card-green" style="padding:10px 12px">
+            <h3 style="font-size:12px;margin-bottom:4px">Resulting features</h3>
+            <pre style="background:transparent;color:var(--green-ink);padding:0;margin:0;font-size:11.5px;box-shadow:none"><code>account_total_transaction_amount
+account_avg_transaction_amount
+account_transaction_count</code></pre>
+          </div>
+        </div>
+
+        <div data-anim="4" style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-purple">2-hop · temporal</span><strong style="font-size:13.5px">Receiver's 7-day history → sender</strong></div>
+          <pre class="light"><code>target:   sender_account
+path:     sender_account
+          -&gt; transaction
+          -&gt; receiver_account
+window:   receiver inbound [t-7d, t)
+values:   amount, count,
+          transaction_status
+agg:      sum / count / failure_rate</code></pre>
+          <div class="card card-purple" style="padding:10px 12px">
+            <h3 style="font-size:12px;margin-bottom:4px">Resulting features</h3>
+            <pre style="background:transparent;color:var(--purple-ink);padding:0;margin:0;font-size:11.5px;box-shadow:none"><code>receiver_7d_incoming_amount_sum
+receiver_7d_incoming_txn_count
+receiver_7d_failed_payment_rate</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="takeaway" data-anim="takeaway"><strong>Why the temporal one bites.</strong> Captures whether the sender is interacting with an unusually active or suspicious counterparty <em>right now</em>.</div>
+
+      <div class="chrome">
+        <div class="left">Framework · Examples</div>
+        <div class="right">04 / 07</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5 · ENGINEERING HARNESS ============ -->
+  <section>
+    <div class="slide">
+      <div class="eyebrow" data-anim="1"><span class="dot"></span>Framework · Principle 3</div>
+      <h1 class="title" data-anim="1">Typed specs &amp; controller-worker parallelism.</h1>
+      <h2 class="sub" data-anim="2">Two engineering lessons that cut the failure rate and unlock throughput.</h2>
+
+      <div class="grid-2" style="flex:1;align-content:start;gap:18px">
+
+        <!-- LEFT: typed specs -->
+        <div data-anim="3" style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-blue">Lesson 1</span><strong style="font-size:13.5px">Each Feature OP is a typed, validated spec</strong></div>
+          <pre><code>target_entity: sender_account
+path:
+  - sender_account -&gt; transaction
+  - transaction -&gt; receiver_account
+value_columns: [amount, transaction_status]
+temporal_window: 7d
+aggregation: [sum, count, failure_rate]</code></pre>
+          <div class="card card-blue" style="padding:8px 12px">
+            <h3 style="font-size:11.5px;margin-bottom:3px">Validation catches</h3>
+            <p style="font-size:11.5px;color:var(--blue-ink);line-height:1.45;margin:0">
+              invalid relation path · missing raw column · incompatible type · invalid window · <strong>feature leakage risk</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- RIGHT: controller + workers -->
+        <div data-anim="4" style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-purple">Lesson 2</span><strong style="font-size:13.5px">Controller + parallel workers</strong></div>
+
+          <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;padding:10px;background:#fff;border:1px solid var(--line);border-radius:8px">
+            <div class="cw-box cw-controller">Controller<br><span style="font-weight:400;font-size:11px">round strategy<br>+ summarize</span></div>
+            <svg width="40" height="100" viewBox="0 0 40 100" fill="none">
+              <path d="M 4 20 L 36 20" stroke="#6d28d9" stroke-width="1.4" stroke-dasharray="3 3"/>
+              <path d="M 4 50 L 36 50" stroke="#6d28d9" stroke-width="1.4" stroke-dasharray="3 3"/>
+              <path d="M 4 80 L 36 80" stroke="#6d28d9" stroke-width="1.4" stroke-dasharray="3 3"/>
+              <path d="M 36 20 L 30 17 M 36 20 L 30 23" stroke="#6d28d9" stroke-width="1.4"/>
+              <path d="M 36 50 L 30 47 M 36 50 L 30 53" stroke="#6d28d9" stroke-width="1.4"/>
+              <path d="M 36 80 L 30 77 M 36 80 L 30 83" stroke="#6d28d9" stroke-width="1.4"/>
+              <path d="M 4 35 L 36 35" stroke="#1d4ed8" stroke-width="1.2"/>
+              <path d="M 4 35 L 10 32 M 4 35 L 10 38" stroke="#1d4ed8" stroke-width="1.2"/>
+            </svg>
+            <div class="cw-workers">
+              <div class="cw-worker">Worker · spec sampler</div>
+              <div class="cw-worker">Worker · spec sampler</div>
+              <div class="cw-worker">Worker · spec sampler</div>
+            </div>
+          </div>
+
+          <div class="card card-purple" style="padding:8px 12px">
+            <p style="font-size:11.5px;line-height:1.45;margin:0;color:var(--purple-ink)">
+              <strong>Controller</strong> sets search strategy &amp; handles failures · <strong>Workers</strong> are LM-guided samplers proposing valid specs in parallel.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="takeaway" data-anim="takeaway"><strong>Effect.</strong> Many candidates per round, validated and evaluated in parallel — controller spends budget on direction, not bookkeeping.</div>
+
+      <div class="chrome">
+        <div class="left">Framework · Principle 3 (harness engineering)</div>
+        <div class="right">05 / 07</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6 · RESULTS ============ -->
+  <section>
+    <div class="slide">
+      <div class="eyebrow" data-anim="1"><span class="dot"></span>Results · GraphTestbed</div>
+      <h1 class="title" data-anim="1"><code style="font-size:0.85em;background:transparent;padding:0;color:var(--green-ink)">graphfs-claude-sonnet-4-6</code> leads on average.</h1>
+      <h2 class="sub" data-anim="2">Best on 3 of 4 tasks · competitive on the fourth · evaluated on <a href="https://huggingface.co/spaces/lanczos/graphtestbed">huggingface.co/spaces/lanczos/graphtestbed</a></h2>
+
+      <table data-anim="3">
+        <thead>
+          <tr>
+            <th style="width:42px">#</th>
+            <th>Agent</th>
+            <th class="num">arxiv-citation</th>
+            <th class="num">figraph</th>
+            <th class="num">ibm-aml</th>
+            <th class="num">ieee-fraud</th>
+            <th class="num">Average</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="rank-1">
+            <td><strong>1</strong></td>
+            <td><code>graphfs-claude-sonnet-4-6</code></td>
+            <td class="num bar-cell" style="--w:1.000"><span class="best">0.789</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:1.000"><span class="best">0.895</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:1.000"><span class="best">0.184</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.992"><span>0.921</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:1.000"><span class="best">0.697</span><span class="bar"><i></i></span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><code>open-aibuildai-claude-sonnet-4-6</code></td>
+            <td class="num bar-cell" style="--w:0.985"><span>0.777</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.994"><span>0.890</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.929"><span>0.171</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.998"><span>0.926</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.991"><span>0.691</span><span class="bar"><i></i></span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><code>aibuildai-claude-sonnet-4-6</code></td>
+            <td class="num bar-cell" style="--w:0.978"><span>0.772</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.915"><span>0.819</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.918"><span>0.169</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:1.000"><span class="best">0.928</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.964"><span>0.672</span><span class="bar"><i></i></span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><code>mlevolve-gpt-5.4</code></td>
+            <td class="num bar-cell" style="--w:0.973"><span>0.768</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.905"><span>0.810</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.418"><span>0.077</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.960"><span>0.891</span><span class="bar"><i></i></span></td>
+            <td class="num bar-cell" style="--w:0.914"><span>0.637</span><span class="bar"><i></i></span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="grid-2" style="margin-top:14px" data-anim="4">
+        <div class="card card-green" style="padding:10px 14px">
+          <h3 style="font-size:12px">Where it wins</h3>
+          <p style="font-size:12.5px;line-height:1.45">Tasks bottlenecked by <strong>feature interaction discovery</strong>, rich relational neighborhoods, useful time-windowed signals.</p>
+        </div>
+        <div class="card card-slate" style="padding:10px 14px">
+          <h3 style="font-size:12px">Where the edge narrows</h3>
+          <p style="font-size:12.5px;line-height:1.45">Tasks where raw features already dominate, or pipelines whose evaluator is already saturated.</p>
+        </div>
+      </div>
+
+      <div class="takeaway" data-anim="takeaway"><strong>Reading.</strong> Structured graph feature search is a competitive, currently leading path on GraphTestbed.</div>
+
+      <div class="chrome">
+        <div class="left">Results · 4 relational tasks · 4 compared agents</div>
+        <div class="right">06 / 07</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7 · SUMMARY ============ -->
+  <section>
+    <div class="slide">
+      <div class="eyebrow" data-anim="1"><span class="dot"></span>Summary</div>
+      <h1 class="title" data-anim="1">Graph Foundation Agent — in one slide.</h1>
+      <h2 class="sub" data-anim="2">Scale the discovery of features, not the size of the model.</h2>
+
+      <div class="grid-2-uneven" style="flex:1;align-content:start;gap:18px">
+
+        <div data-anim="3">
+          <h3 style="margin-bottom:8px">What we demonstrate</h3>
+          <ul style="padding-left:0;list-style:none">
+            <li style="position:relative;padding-left:22px;margin-bottom:8px;font-size:13.5px;line-height:1.5"><span style="position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:50%;background:var(--blue-bg);color:var(--blue-ink);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">1</span>Graph performance is bottlenecked by <strong>feature interaction discovery</strong>, not architecture.</li>
+            <li style="position:relative;padding-left:22px;margin-bottom:8px;font-size:13.5px;line-height:1.5"><span style="position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:50%;background:var(--green-bg);color:var(--green-ink);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">2</span>Search over <strong>0-, 1-, 2-hop</strong> feature operators × static/temporal.</li>
+            <li style="position:relative;padding-left:22px;margin-bottom:8px;font-size:13.5px;line-height:1.5"><span style="position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:50%;background:var(--purple-bg);color:var(--purple-ink);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">3</span>Each feature = <strong>typed, validated</strong> Feature OP spec.</li>
+            <li style="position:relative;padding-left:22px;margin-bottom:8px;font-size:13.5px;line-height:1.5"><span style="position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:50%;background:var(--purple-bg);color:var(--purple-ink);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">4</span>Controller orchestrates <strong>parallel workers</strong> proposing &amp; evaluating candidates.</li>
+            <li style="position:relative;padding-left:22px;margin-bottom:0;font-size:13.5px;line-height:1.5"><span style="position:absolute;left:0;top:1px;width:16px;height:16px;border-radius:50%;background:var(--blue-bg);color:var(--blue-ink);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">5</span>Boosting-tree evaluators give <strong>fast, fair</strong> feedback.</li>
+          </ul>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="pitch-box" data-anim="4">
+            Instead of scaling a single graph neural architecture, we scale the discovery of useful <strong>relational feature interactions</strong>.
+          </div>
+          <div class="card card-green" data-anim="5">
+            <h3 style="font-size:12.5px">Status</h3>
+            <p style="font-size:13px;line-height:1.5;margin:0">#1 average on GraphTestbed — best on 3 of 4 tasks among compared agents.</p>
+          </div>
+          <div class="card card-slate" data-anim="6">
+            <h3 style="font-size:12px">References</h3>
+            <p style="font-size:11.5px;line-height:1.5;margin:0;color:#475569">
+              [1] Cheng et al. <em>Wide &amp; Deep Learning.</em> DLRS 2016 · <a href="https://arxiv.org/abs/1606.07792">arxiv/1606.07792</a><br>
+              [2] Tang et al. <em>GADBench.</em> NeurIPS 2023 D&amp;B · <a href="https://openreview.net/forum?id=U5uRXlLwnM">openreview/U5uRXlLwnM</a>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="takeaway" data-anim="takeaway"><strong>Thanks.</strong> Questions, critique, and benchmark suggestions welcome.</div>
+
+      <div class="chrome">
+        <div class="left">Summary</div>
+        <div class="right">07 / 07</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+
+<div class="progress-dots" id="dots"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 1.4,
+    hash: true,
+    controls: true,
+    controlsTutorial: false,
+    progress: false,
+    slideNumber: false,
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    keyboard: true,
+    touch: true,
+    overview: true,
+  });
+
+  // Right-side progress dots
+  var total = document.querySelectorAll('.reveal .slides > section').length;
+  var dotsEl = document.getElementById('dots');
+  for (var i = 0; i < total; i++) {
+    var d = document.createElement('div');
+    d.className = 'd' + (i === 0 ? ' on' : '');
+    dotsEl.appendChild(d);
+  }
+  Reveal.on('slidechanged', function (e) {
+    var dots = document.querySelectorAll('#dots .d');
+    dots.forEach(function (d, i) { d.classList.toggle('on', i === e.indexOf); });
+  });
+</script>
+</body>
+</html>
