@@ -24,15 +24,24 @@
   code,pre{font-family:'JetBrains Mono',ui-monospace,monospace}
 
   /* ---- reveal overrides ---- */
+  /* Reveal forces content-box on .reveal-viewport *; force border-box back for our layout. */
+  .reveal, .reveal *, .reveal *::before, .reveal *::after{box-sizing:border-box !important}
+
   .reveal{font-family:'Inter',system-ui,sans-serif;color:var(--ink);font-size:20px;letter-spacing:0}
   .reveal .slides{text-align:left}
   .reveal .slides > section,
   .reveal .slides > section > section{
+    width:1280px;
+    height:720px;
     padding:0;
     box-shadow:0 30px 80px -20px rgba(15,23,42,.25),0 0 0 1px rgba(15,23,42,.05);
     border-radius:8px;
     background:var(--bg);
     overflow:hidden;
+  }
+  /* Print-PDF: let reveal manage page-break geometry, drop shadow/radius. */
+  html.print-pdf .reveal .slides > section{
+    box-shadow:none;border-radius:0;
   }
   .reveal h1,.reveal h2,.reveal h3,.reveal h4{font-family:'Inter',sans-serif;color:var(--ink);text-transform:none;letter-spacing:-0.01em;margin:0;line-height:1.15;font-weight:600;text-shadow:none}
   .reveal p{margin:0;line-height:1.5}
@@ -108,7 +117,7 @@
 
   /* ---- cover ---- */
   .cover{padding:64px 80px}
-  .cover .badge{display:inline-block;font-size:10.5px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--purple-ink);background:var(--purple-bg);border:1px solid var(--purple-bd);padding:5px 11px;border-radius:999px;margin-bottom:24px}
+  .cover .badge{align-self:flex-start;font-size:10.5px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--purple-ink);background:var(--purple-bg);border:1px solid var(--purple-bd);padding:5px 11px;border-radius:999px;margin-bottom:24px}
   .cover h1{font-size:56px;font-weight:600;letter-spacing:-0.025em;line-height:1.05;margin:0 0 18px 0;max-width:780px}
   .cover .lede{font-size:19px;color:var(--muted);max-width:680px;line-height:1.5;font-weight:400}
   .cover .meta{margin-top:36px;display:flex;gap:34px;font-size:12px;color:var(--muted)}
@@ -150,6 +159,14 @@
   section.present [data-anim]{
     animation:fadeUp .55s cubic-bezier(.22,1,.36,1) both;
   }
+  /* Print-PDF mode: reveal sets html.print-pdf — reveal everything, kill animations. */
+  html.print-pdf [data-anim],
+  html.print-pdf .graphic [data-anim="node"],
+  html.print-pdf .graphic [data-draw]{
+    opacity:1 !important; animation:none !important; transform:none !important;
+    stroke-dashoffset:0 !important;
+  }
+  html.print-pdf .bar-cell .bar i{transform:scaleX(var(--w,0)) !important}
   section.present [data-anim="1"]{animation-delay:.05s}
   section.present [data-anim="2"]{animation-delay:.16s}
   section.present [data-anim="3"]{animation-delay:.26s}
@@ -605,6 +622,8 @@ aggregation: [sum, count, failure_rate]</code></pre>
     margin: 0.04,
     minScale: 0.2,
     maxScale: 1.4,
+    center: false,        // we lay out each slide ourselves via flex
+    disableLayout: false,
     hash: true,
     controls: true,
     controlsTutorial: false,
