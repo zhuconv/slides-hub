@@ -27,7 +27,7 @@
   /* Reveal forces content-box on .reveal-viewport *; force border-box back for our layout. */
   .reveal, .reveal *, .reveal *::before, .reveal *::after{box-sizing:border-box !important}
 
-  .reveal{font-family:'Inter',system-ui,sans-serif;color:var(--ink);font-size:20px;letter-spacing:0}
+  .reveal{font-family:'Inter',system-ui,sans-serif;color:var(--ink);font-size:21px;letter-spacing:0}
   .reveal .slides{text-align:left}
   .reveal .slides > section,
   .reveal .slides > section > section{
@@ -62,23 +62,23 @@
     display:flex;flex-direction:column;
     position:relative;
   }
-  .eyebrow{font-size:11px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+  .eyebrow{font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:10px}
   .eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--purple-ink)}
-  h1.title{font-size:32px;font-weight:600;letter-spacing:-0.02em;margin:0 0 4px 0;line-height:1.1}
-  h2.sub{font-size:16px;font-weight:400;color:var(--muted);margin:0 0 18px 0;line-height:1.35}
-  h3{font-size:14px;font-weight:600;margin:0 0 6px 0}
+  h1.title{font-size:34px;font-weight:600;letter-spacing:-0.02em;margin:0 0 6px 0;line-height:1.1}
+  h2.sub{font-size:17px;font-weight:400;color:var(--muted);margin:0 0 18px 0;line-height:1.4}
+  h3{font-size:15px;font-weight:600;margin:0 0 6px 0}
 
   .chrome{
     position:absolute;left:52px;right:52px;bottom:18px;
     display:flex;justify-content:space-between;align-items:center;
-    font-size:10.5px;color:var(--muted);letter-spacing:0.06em;
+    font-size:11.5px;color:var(--muted);letter-spacing:0.06em;
   }
   .chrome .right{font-variant-numeric:tabular-nums}
 
   /* ---- cards ---- */
-  .card{padding:14px 16px;border-radius:8px;border:1px solid;font-size:13.5px;line-height:1.5}
-  .card h3{font-size:13px;margin-bottom:6px;letter-spacing:0.01em}
-  .card p{font-size:13.5px}
+  .card{padding:14px 16px;border-radius:8px;border:1px solid;font-size:14.5px;line-height:1.5}
+  .card h3{font-size:14px;margin-bottom:6px;letter-spacing:0.01em}
+  .card p{font-size:14.5px}
   .card-blue{background:var(--blue-bg);border-color:var(--blue-bd)} .card-blue h3{color:var(--blue-ink)}
   .card-green{background:var(--green-bg);border-color:var(--green-bd)} .card-green h3{color:var(--green-ink)}
   .card-purple{background:var(--purple-bg);border-color:var(--purple-bd)} .card-purple h3{color:var(--purple-ink)}
@@ -89,8 +89,8 @@
   .grid-2-uneven{display:grid;grid-template-columns:1.15fr 1fr;gap:18px}
 
   .takeaway{
-    margin-top:auto;padding:10px 14px;background:var(--yellow-bg);border:1px solid var(--yellow-bd);
-    border-radius:6px;font-size:13px;line-height:1.5;color:#5b2f0e;
+    margin-top:auto;padding:12px 16px;background:var(--yellow-bg);border:1px solid var(--yellow-bd);
+    border-radius:6px;font-size:14px;line-height:1.5;color:#5b2f0e;
   }
   .takeaway strong{color:var(--yellow-ink)}
 
@@ -110,7 +110,7 @@
   tr.rank-1 .bar-cell .bar i{background:var(--green-ink)}
 
   /* ---- pills ---- */
-  .pill{display:inline-block;font-size:10.5px;font-weight:500;padding:2px 8px;border-radius:999px;background:#f1f5f9;color:#475569;letter-spacing:0.03em}
+  .pill{display:inline-block;font-size:11.5px;font-weight:500;padding:2px 9px;border-radius:999px;background:#f1f5f9;color:#475569;letter-spacing:0.03em}
   .pill-purple{background:var(--purple-bg);color:var(--purple-ink);border:1px solid var(--purple-bd)}
   .pill-blue{background:var(--blue-bg);color:var(--blue-ink);border:1px solid var(--blue-bd)}
   .pill-green{background:var(--green-bg);color:var(--green-ink);border:1px solid var(--green-bd)}
@@ -246,7 +246,7 @@
 
       <div class="chrome">
         <div class="left">Graph Foundation Agent</div>
-        <div class="right">01 / 07</div>
+        <div class="right">01 / 06</div>
       </div>
     </div>
   </section>
@@ -301,116 +301,73 @@
 
       <div class="chrome">
         <div class="left">Core Insight · W&amp;D 2016 · GADBench 2023</div>
-        <div class="right">02 / 07</div>
+        <div class="right">02 / 06</div>
       </div>
     </div>
   </section>
 
-  <!-- ============ 3 · SEARCH TARGET + TAXONOMY ============ -->
+  <!-- ============ 3 · TAXONOMY + REVEAL-ON-CLICK EXAMPLES ============ -->
   <section>
     <div class="slide">
-      <div class="eyebrow" data-anim="1"><span class="dot"></span>Framework · Principles 1 &amp; 2</div>
-      <h1 class="title" data-anim="1">Search over feature sets, in a small typed grid.</h1>
-      <h2 class="sub" data-anim="2">Fix a strong default evaluator. Vary features over <strong>hop &times; time</strong>.</h2>
+      <div class="eyebrow" data-anim="1"><span class="dot"></span>Framework · The search space</div>
+      <h1 class="title" data-anim="1">A typed grid of feature operators.</h1>
+      <h2 class="sub" data-anim="2">Three classes by hop distance — press <kbd style="background:#f1f5f9;border:1px solid #cbd5e1;border-radius:4px;padding:1px 6px;font-size:12px;font-family:inherit">→</kbd> to reveal a concrete operator in each.</h2>
 
-      <!-- top: search target diagram -->
-      <div data-anim="3" style="margin-bottom:14px">
-        <div class="target-row">
-          <div class="box searched">Search target:<br><strong style="font-size:14px">feature set</strong></div>
-          <div class="arrow-x">vs.</div>
-          <div class="box">Fixed:<br><strong style="font-size:14px;color:var(--blue-ink)">XGBoost / LightGBM evaluator</strong></div>
+      <!-- Taxonomy: three cards, bigger and terser -->
+      <div class="grid-3" style="margin-top:10px" data-anim="3">
+        <div class="card card-blue" style="padding:18px 20px">
+          <h3 style="font-size:18px;margin-bottom:10px"><span class="pill pill-blue" style="margin-right:8px;font-size:12px">0-hop</span> Zero-hop</h3>
+          <p style="font-size:15.5px;line-height:1.5;color:#334155">Transforms on the target itself.</p>
         </div>
-        <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:-6px">Faster evaluation · stable comparison · clean attribution to feature interactions</p>
-      </div>
-
-      <!-- bottom: taxonomy -->
-      <div class="grid-3" style="margin-bottom:10px">
-        <div class="card card-blue" data-anim="4">
-          <h3><span class="pill pill-blue" style="margin-right:6px">0-hop</span> Zero-hop</h3>
-          <p style="font-size:12.5px;color:#475569;margin-top:4px">Local transforms on the target entity.</p>
-          <p style="font-size:12px;color:var(--muted);margin-top:3px"><em>column transform · normalization · bucketization</em></p>
+        <div class="card card-green" style="padding:18px 20px">
+          <h3 style="font-size:18px;margin-bottom:10px"><span class="pill pill-green" style="margin-right:8px;font-size:12px">1-hop</span> One-hop</h3>
+          <p style="font-size:15.5px;line-height:1.5;color:#334155">Aggregate from direct neighbors.</p>
         </div>
-        <div class="card card-green" data-anim="5">
-          <h3><span class="pill pill-green" style="margin-right:6px">1-hop</span> One-hop</h3>
-          <p style="font-size:12.5px;color:#475569;margin-top:4px">Aggregate from directly connected entities.</p>
-          <p style="font-size:12px;color:var(--muted);margin-top:3px"><em>transactions → account features</em></p>
-        </div>
-        <div class="card card-purple" data-anim="6">
-          <h3><span class="pill pill-purple" style="margin-right:6px">2-hop</span> Two-hop</h3>
-          <p style="font-size:12.5px;color:#475569;margin-top:4px">Aggregate through a two-step relational path.</p>
-          <p style="font-size:12px;color:var(--muted);margin-top:3px"><em>receiver history → back to sender</em></p>
+        <div class="card card-purple" style="padding:18px 20px">
+          <h3 style="font-size:18px;margin-bottom:10px"><span class="pill pill-purple" style="margin-right:8px;font-size:12px">2-hop</span> Two-hop</h3>
+          <p style="font-size:15.5px;line-height:1.5;color:#334155">Aggregate through a 2-step path.</p>
         </div>
       </div>
 
-      <div class="grid-2" data-anim="7">
-        <div class="card card-slate" style="padding:10px 14px">
-          <h3 style="font-size:12.5px">Static connection</h3>
-          <p style="font-size:12.5px;line-height:1.4">Use existing graph/table relations. No temporal window.</p>
-        </div>
-        <div class="card card-slate" style="padding:10px 14px">
-          <h3 style="font-size:12.5px">Temporal window</h3>
-          <p style="font-size:12.5px;line-height:1.4">Use only historical relations within a time window.</p>
-        </div>
-      </div>
+      <!-- Examples revealed by click; right (2-hop) first, then left (1-hop) -->
+      <div class="grid-2" style="flex:1;align-content:start;margin-top:18px;gap:18px">
 
-      <div class="takeaway" data-anim="takeaway"><strong>Why this grid.</strong> Small, complete taxonomy → controller can plan; worker has a typed slot to fill.</div>
-
-      <div class="chrome">
-        <div class="left">Framework · Principle 1 (search target) · Principle 2 (taxonomy)</div>
-        <div class="right">03 / 07</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ 4 · TWO CONCRETE OPERATORS ============ -->
-  <section>
-    <div class="slide">
-      <div class="eyebrow" data-anim="1"><span class="dot"></span>Two concrete operators</div>
-      <h1 class="title" data-anim="1">From spec to feature, in two flavors.</h1>
-      <h2 class="sub" data-anim="2">The simplest static aggregate, and a temporal two-hop with real bite.</h2>
-
-      <div class="grid-2" style="flex:1;align-content:start">
-
-        <div data-anim="3" style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-green">1-hop · static</span><strong style="font-size:13.5px">Aggregate transactions → account</strong></div>
-          <pre class="light"><code>target:   account
-path:     account &lt;- transaction
-values:   transaction_amount,
-          transaction_type,
-          merchant_category
-agg:      sum / mean / count / max</code></pre>
-          <div class="card card-green" style="padding:10px 12px">
-            <h3 style="font-size:12px;margin-bottom:4px">Resulting features</h3>
-            <pre style="background:transparent;color:var(--green-ink);padding:0;margin:0;font-size:11.5px;box-shadow:none"><code>account_total_transaction_amount
-account_avg_transaction_amount
-account_transaction_count</code></pre>
+        <!-- LEFT: 1-hop static — appears SECOND -->
+        <div class="fragment fade-up" data-fragment-index="1" style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="pill pill-green" style="font-size:12px">1-hop · static</span>
+            <strong style="font-size:16px">Aggregate transactions → account</strong>
+          </div>
+          <pre class="light" style="font-size:14px;line-height:1.6;margin:0"><code>target: account
+path:   account ← transaction
+agg:    sum / mean / count</code></pre>
+          <div class="card card-green" style="padding:10px 14px">
+            <code style="font-size:13.5px;color:var(--green-ink);background:transparent;padding:0">account_avg_transaction_amount</code>
           </div>
         </div>
 
-        <div data-anim="4" style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;align-items:center;gap:8px"><span class="pill pill-purple">2-hop · temporal</span><strong style="font-size:13.5px">Receiver's 7-day history → sender</strong></div>
-          <pre class="light"><code>target:   sender_account
-path:     sender_account
-          -&gt; transaction
-          -&gt; receiver_account
-window:   receiver inbound [t-7d, t)
-values:   amount, count,
-          transaction_status
-agg:      sum / count / failure_rate</code></pre>
-          <div class="card card-purple" style="padding:10px 12px">
-            <h3 style="font-size:12px;margin-bottom:4px">Resulting features</h3>
-            <pre style="background:transparent;color:var(--purple-ink);padding:0;margin:0;font-size:11.5px;box-shadow:none"><code>receiver_7d_incoming_amount_sum
-receiver_7d_incoming_txn_count
-receiver_7d_failed_payment_rate</code></pre>
+        <!-- RIGHT: 2-hop temporal — appears FIRST -->
+        <div class="fragment fade-up" data-fragment-index="0" style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="pill pill-purple" style="font-size:12px">2-hop · temporal</span>
+            <strong style="font-size:16px">Receiver's 7-day history → sender</strong>
+          </div>
+          <pre class="light" style="font-size:14px;line-height:1.6;margin:0"><code>target: sender_account
+path:   sender → txn → receiver
+window: receiver inbound [t−7d, t)
+agg:    failure_rate / sum / count</code></pre>
+          <div class="card card-purple" style="padding:10px 14px">
+            <code style="font-size:13.5px;color:var(--purple-ink);background:transparent;padding:0">receiver_7d_failed_payment_rate</code>
           </div>
         </div>
+
       </div>
 
-      <div class="takeaway" data-anim="takeaway"><strong>Why the temporal one bites.</strong> Captures whether the sender is interacting with an unusually active or suspicious counterparty <em>right now</em>.</div>
+      <div class="takeaway" data-anim="takeaway"><strong>Same shape, different reach.</strong> Both are typed specs the worker can sample and the controller can validate.</div>
 
       <div class="chrome">
-        <div class="left">Framework · Examples</div>
-        <div class="right">04 / 07</div>
+        <div class="left">Framework · The search space</div>
+        <div class="right">03 / 06</div>
       </div>
     </div>
   </section>
@@ -477,7 +434,7 @@ aggregation: [sum, count, failure_rate]</code></pre>
 
       <div class="chrome">
         <div class="left">Framework · Principle 3 (harness engineering)</div>
-        <div class="right">05 / 07</div>
+        <div class="right">04 / 06</div>
       </div>
     </div>
   </section>
@@ -556,7 +513,7 @@ aggregation: [sum, count, failure_rate]</code></pre>
 
       <div class="chrome">
         <div class="left">Results · 4 relational tasks · 4 compared agents</div>
-        <div class="right">06 / 07</div>
+        <div class="right">05 / 06</div>
       </div>
     </div>
   </section>
@@ -604,7 +561,7 @@ aggregation: [sum, count, failure_rate]</code></pre>
 
       <div class="chrome">
         <div class="left">Summary</div>
-        <div class="right">07 / 07</div>
+        <div class="right">06 / 06</div>
       </div>
     </div>
   </section>
