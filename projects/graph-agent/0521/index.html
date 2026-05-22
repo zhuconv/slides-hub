@@ -156,6 +156,25 @@
   }
   .pitch-box strong{font-style:normal;font-weight:600;color:var(--purple-ink)}
 
+  /* ---- spec renderer (slide 4) ---- */
+  .spec-card{
+    background:#fff;border:1px solid var(--line);border-radius:10px;
+    padding:18px 22px;display:flex;flex-direction:column;gap:12px;
+  }
+  .spec-row{display:grid;grid-template-columns:140px 1fr;align-items:center;gap:14px;font-size:14.5px}
+  .spec-key{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:0.02em}
+  .spec-val{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .spec-chip{
+    display:inline-flex;align-items:center;padding:4px 10px;border-radius:6px;
+    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;
+    border:1px solid;background:#fff;
+  }
+  .spec-chip.entity{background:var(--blue-bg);border-color:var(--blue-bd);color:var(--blue-ink)}
+  .spec-chip.column{background:var(--purple-bg);border-color:var(--purple-bd);color:var(--purple-ink)}
+  .spec-chip.agg{background:var(--green-bg);border-color:var(--green-bd);color:var(--green-ink)}
+  .spec-chip.time{background:var(--yellow-bg);border-color:var(--yellow-bd);color:var(--yellow-ink)}
+  .spec-arrow{color:#94a3b8;font-weight:400;font-size:13px;margin:0 2px}
+
   /* ===== ANIMATIONS — auto stagger entry per slide ===== */
   @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -392,15 +411,45 @@ agg:    failure_rate / sum / count</code></pre>
       <div class="grid-2" style="flex:1;align-content:stretch;gap:22px">
 
         <!-- LEFT: typed specs -->
-        <div data-anim="3" style="display:flex;flex-direction:column;gap:14px;justify-content:space-between">
+        <div data-anim="3" style="display:flex;flex-direction:column;gap:14px">
           <div style="display:flex;align-items:center;gap:10px"><span class="pill pill-blue">Lesson 1</span><strong style="font-size:16px">Each Feature OP is a typed, validated spec</strong></div>
-          <pre style="flex:1;display:flex;align-items:center"><code>target_entity: sender_account
-path:
-  - sender_account -&gt; transaction
-  - transaction -&gt; receiver_account
-value_columns: [amount, transaction_status]
-temporal_window: 7d
-aggregation: [sum, count, failure_rate]</code></pre>
+
+          <div class="spec-card">
+            <div class="spec-row">
+              <span class="spec-key">target_entity</span>
+              <span class="spec-val"><span class="spec-chip entity">sender_account</span></span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">path</span>
+              <span class="spec-val">
+                <span class="spec-chip entity">sender_account</span>
+                <span class="spec-arrow">→</span>
+                <span class="spec-chip entity">transaction</span>
+                <span class="spec-arrow">→</span>
+                <span class="spec-chip entity">receiver_account</span>
+              </span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">value_columns</span>
+              <span class="spec-val">
+                <span class="spec-chip column">amount</span>
+                <span class="spec-chip column">transaction_status</span>
+              </span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">temporal_window</span>
+              <span class="spec-val"><span class="spec-chip time">7d</span></span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">aggregation</span>
+              <span class="spec-val">
+                <span class="spec-chip agg">sum</span>
+                <span class="spec-chip agg">count</span>
+                <span class="spec-chip agg">failure_rate</span>
+              </span>
+            </div>
+          </div>
+
           <div class="card card-blue" style="padding:12px 16px">
             <h3 style="font-size:14px;margin-bottom:5px">Validation catches</h3>
             <p style="font-size:14px;color:var(--blue-ink);line-height:1.5;margin:0">
@@ -580,7 +629,6 @@ aggregation: [sum, count, failure_rate]</code></pre>
 </div>
 
 <div class="progress-dots" id="dots"></div>
-<div id="dbg" style="position:fixed;left:8px;top:8px;background:#000;color:#0f0;padding:6px 10px;font:11px monospace;z-index:9999;white-space:pre"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
 <script>
@@ -613,17 +661,6 @@ aggregation: [sum, count, failure_rate]</code></pre>
     d.className = 'd' + (i === 0 ? ' on' : '');
     dotsEl.appendChild(d);
   }
-  setTimeout(() => {
-    const s = (el)=>{ if(!el) return 'null'; const r = el.getBoundingClientRect(); const cs = getComputedStyle(el); return r.width.toFixed(0)+'x'+r.height.toFixed(0)+' fs='+cs.fontSize+' tr='+cs.transform.slice(0,30); };
-    const pres = document.querySelector('.reveal .slides > section.present');
-    const slides = document.querySelector('.reveal .slides');
-    const title = pres && pres.querySelector('h1.title');
-    document.getElementById('dbg').innerText =
-      '.slides: '+s(slides) +
-      '\nsection: '+s(pres) +
-      '\n.slide: '+s(pres&&pres.querySelector('.slide')) +
-      '\ntitle: '+s(title);
-  }, 1500);
   Reveal.on('slidechanged', function (e) {
     var dots = document.querySelectorAll('#dots .d');
     dots.forEach(function (d, i) { d.classList.toggle('on', i === e.indexOf); });
