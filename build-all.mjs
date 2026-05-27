@@ -42,6 +42,17 @@ function readHtmlTitle(htmlFile, fallback) {
   return fallback;
 }
 
+const NOCACHE_META = `<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">`;
+
+/** Inject the no-cache meta into a built index.html so visitors always see latest. */
+function injectNoCacheMeta(htmlFile) {
+  if (!existsSync(htmlFile)) return;
+  const html = readFileSync(htmlFile, "utf-8");
+  if (html.includes("no-cache, must-revalidate")) return;  // idempotent
+  const patched = html.replace(/<head[^>]*>/i, (m) => `${m}\n  ${NOCACHE_META}`);
+  writeFileSync(htmlFile, patched);
+}
+
 // ── Build every deck ──
 
 const built = [];
@@ -60,6 +71,7 @@ for (const { name, date } of projects) {
         `npx slidev build "${slidesFile}" --base /slides-hub/${name}/ --out "${outDir}"`,
         { cwd: projDir, stdio: "inherit" }
       );
+      injectNoCacheMeta(join(outDir, "index.html"));
       built.push({ name, date: date || "", title: readTitle(slidesFile, name) });
       console.log(`✓  ${name} → dist/${name}/`);
     } catch (e) {
@@ -71,6 +83,7 @@ for (const { name, date } of projects) {
     try {
       mkdirSync(outDir, { recursive: true });
       cpSync(projDir, outDir, { recursive: true });
+      injectNoCacheMeta(join(outDir, "index.html"));
       built.push({ name, date: date || "", title: readHtmlTitle(indexFile, name) });
       console.log(`✓  ${name} → dist/${name}/`);
     } catch (e) {
@@ -145,6 +158,7 @@ const page = (title, body) => `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  ${NOCACHE_META}
   <title>${escapeHtml(title)}</title>
   <style>${style}
   </style>
