@@ -13,6 +13,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10           # auto-fail if a step hangs (e.g. flaky postinstall download)
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1   # slidev build doesn't need a browser; skip the 140MB Chromium download
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
