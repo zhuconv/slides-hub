@@ -141,7 +141,7 @@ No effect on which actions are allowed.
 </div>
 <div class="p-4 bg-purple-50 rounded-lg border border-purple-200">
 
-### Skills / SOPs (passive)
+### Skills (passive)
 
 Distill trajectories into a `SKILL.md` and prepend it.
 
