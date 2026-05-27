@@ -193,11 +193,12 @@ class: fill
 ### Assumption <span class="text-xs opacity-60">— ephemeral, inspector output</span>
 
 ```yaml
-{ principle_id, relevance, status,
-  supporting_experience_ids, required_action }
+{ principle_id, relevance,
+  decision: { status, required_action },
+  supporting_experience_ids }
 ```
 
-### Compliance decision <span class="text-xs opacity-60">— strict enum</span>
+### decision.status <span class="text-xs opacity-60">— strict enum</span>
 
 ```text
 enum { not_relevant | pass | obey_new | violate }
@@ -289,7 +290,7 @@ class: fill
 - **Benchmark** — FrontierCS algorithmic tasks (open-ended, continuous score, long-horizon)
 - **Runner** — Harbor (external evaluator wrapper)
 - **Base agent** — mini-SWE-agent (small, hackable)
-- **Model** — one fixed model, `temp=0.2`, `≤150 steps`, `≤30 evaluator calls`, 2h wall time, seeds `{0,1,2}`
+- **Model backend** — `gpt-5.4` or `claude-sonnet-4.6`
 
 </div>
 <div class="p-5 bg-green-50 rounded-lg border border-green-200">
