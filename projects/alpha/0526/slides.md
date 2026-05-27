@@ -220,46 +220,37 @@ class: fill
 
 # Runtime loop — inspect, gate, act, learn
 
-<div class="grid grid-cols-2 gap-5 mt-3" style="min-height: 17rem">
-<div class="p-4 bg-blue-50 rounded-lg border border-blue-200 text-sm">
+<div class="grid grid-cols-2 gap-6 mt-4" style="min-height: 12rem">
+<div class="p-5 bg-blue-50 rounded-lg border border-blue-200">
 
 ### Inside a task
 
-```text
-while not done:
-    plan       = agent.propose_plan(obs)
-    report     = inspector.inspect(plan, principles)
+<div class="text-base mt-2 mb-3">
 
-    if report.has_violation():
-        plan   = violation_gate.repair(plan, report)
-
-    action     = agent.act(plan,
-                   experiences=report.cited)
-    result     = env.step(action)
-    trajectory.append(...)
-```
-
-Inspect at: first plan · after each evaluator result · after compile/runtime failure · after 3 non-improving attempts · before large rewrite or final submit.
+`plan` → `inspect` → if violate: `repair` → `act` → `env.step` → `log`
 
 </div>
-<div class="p-4 bg-green-50 rounded-lg border border-green-200 text-sm">
+
+Inspector fires at: first plan, each evaluator result, compile/runtime failure, 3 non-improving attempts, before large rewrite or final submit.
+
+</div>
+<div class="p-5 bg-green-50 rounded-lg border border-green-200">
 
 ### After a task
 
-```text
-updates = principle_updater.update(
-    trajectory, score_curve,
-    best_solution, principles)
-principle_store.apply(updates)
-```
+<div class="text-base mt-2 mb-3">
 
-Update rules — at most 3 new experiences per task; every experience cites score delta or error-recovery evidence; merge if semantic-sim &gt; 0.85; reject task-specific names; create a new principle only if none can host the experience.
+`trajectory` → `updater` → append ≤ 3 new experiences
+
+</div>
+
+Each new experience must cite a Δscore or error-recovery event; merge into existing if semantic-sim &gt; 0.85.
 
 </div>
 </div>
 
-<div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-xs">
-<strong>Only the gate actually changes which action runs.</strong> Everything else is text in the prompt — the A1 (no-gate) ablation is what isolates enforcement from prompting.
+<div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
+<strong>Only the gate changes which action runs.</strong> Everything else is text in the prompt — the A1 (no-gate) ablation isolates enforcement from prompting.
 </div>
 
 ---
@@ -321,86 +312,68 @@ Frozen held-out evaluation is the headline cell: <strong>Ours ALPHA vs B2 Trace2
 class: fill
 ---
 
-# Evaluation — three questions, three metric families
+# Evaluation — three questions, one headline cell
 
-<div class="grid grid-cols-3 gap-3 mt-3 text-sm" style="min-height: 15rem">
-<div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+<div class="grid grid-cols-3 gap-4 mt-4" style="min-height: 12rem">
+<div class="p-5 bg-blue-50 rounded-lg border border-blue-200">
 
 ### Q1 · Did ALPHA win?
-<div class="text-xs opacity-60 mt-1">performance metrics</div>
 
 - `BestScore` ↑
-- `FinalScore` ↑
-- `ScoreAUC` ↑ (budget-normalised)
-- `Score@{5,10,20}` evals
+- `AUC` ↑
 - **WinRate vs B2** ↑
 
-Headline cell: held-out frozen eval, `Ours` vs `B2`.
-
 </div>
-<div class="p-4 bg-green-50 rounded-lg border border-green-200">
+<div class="p-5 bg-green-50 rounded-lg border border-green-200">
 
-### Q2 · Did the gate change behavior?
-<div class="text-xs opacity-60 mt-1">behavior metrics</div>
+### Q2 · Did behavior change?
 
 - `RepeatedIdeaRate` ↓
+- `EvaluatorFeedbackResponse` ↑
 - `StagnationLength` ↓
-- `EvaluatorFeedbackResponseRate` ↑
-- `MajorStrategyChangeCount` ↑
-- `InvalidSubmissionRate` ↓
-- `PrematureStopRate` ↓
-
-Tests the mechanism, not the score.
 
 </div>
-<div class="p-4 bg-purple-50 rounded-lg border border-purple-200">
+<div class="p-5 bg-purple-50 rounded-lg border border-purple-200">
 
 ### Q3 · Can we trust it?
-<div class="text-xs opacity-60 mt-1">principle metrics + human audit</div>
 
 - `ViolationRepairSuccess` ↑
-- `ExperienceUtility` (Δscore within 3 evals)
-- `ExperienceReuseCount` ↑
-- `CompressionRatio` (traj ÷ principle tokens)
-- **`HumanAuditAgreement`** ≥ 75% on sampled inspector decisions
-
-Tests the inspector isn't hallucinating compliance.
+- `ExperienceUtility` ↑
+- **`HumanAuditAgreement` ≥ 75%**
 
 </div>
 </div>
 
-<div class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
-Unit of analysis: <strong>(task, seed)</strong>. Significance: paired bootstrap, 10k samples, 95% CI. All eval runs frozen — no knowledge updates during held-out evaluation.
+<div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
+Headline cell: <strong>Ours vs B2</strong> on frozen held-out tasks. Paired bootstrap over (task, seed), 10k samples, 95% CI.
 </div>
 
 ---
 class: fill
 ---
 
-# Success bar & what we want to claim
+# Success bar & paper-worthy claim
 
-<div class="grid grid-cols-2 gap-6 mt-3" style="min-height: 15rem">
-<div class="p-5 bg-blue-50 rounded-lg border border-blue-200 text-sm">
+<div class="grid grid-cols-2 gap-6 mt-4" style="min-height: 13rem">
+<div class="p-5 bg-blue-50 rounded-lg border border-blue-200">
 
-### Minimal success — any 2 of:
+### Minimal success
+<div class="text-xs opacity-60 mt-1">any 2 hold</div>
 
-1. ALPHA beats Trace2Skill on held-out BestScore or AUC
-2. ALPHA beats Trajectory Memory on held-out BestScore or AUC
-3. ALPHA has lower `RepeatedIdeaRate` than Trace2Skill
-4. ALPHA has higher `EvaluatorFeedbackResponseRate` than Trace2Skill
-5. The no-gate ablation is worse than full ALPHA
-6. Human audit finds &gt; 75% of inspector decisions reasonable
+- ALPHA &gt; B2 on `BestScore` or `AUC`
+- ALPHA has lower `RepeatedIdeaRate` than B2
+- The no-gate ablation (A1) loses to full ALPHA
 
 </div>
-<div class="p-5 bg-green-50 rounded-lg border border-green-200 text-sm">
+<div class="p-5 bg-green-50 rounded-lg border border-green-200">
 
-### Strongest result (paper-worthy)
+### Paper-worthy
+<div class="text-xs opacity-60 mt-1">all four hold</div>
 
-- ALPHA &gt; Trace2Skill on **FinalScore** and **AUC**
-- ALPHA &lt; Trace2Skill on **repeated failures**
-- The **no-gate ablation loses** to full ALPHA
-
-These together support the claim that principles are not just compressed memory — they are <strong>executable behavioral constraints</strong>.
+- ALPHA &gt; B2 on both `FinalScore` and `AUC`
+- ALPHA &lt; B2 on repeated-failure rate
+- The no-gate ablation loses to full ALPHA
+- `HumanAuditAgreement` ≥ 75%
 
 </div>
 </div>
