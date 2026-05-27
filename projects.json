@@ -76,5 +76,14 @@
     "name": "graph-agent/0521",
     "date": "2026-05-21",
     "src": "uploaded"
+  },
+  {
+    "name": "alpha/0526",
+    "date": "2026-05-26",
+    "src": "uploaded",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
   }
 ]
