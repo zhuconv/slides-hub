@@ -352,32 +352,36 @@ Headline cell: <strong>Ours vs B2</strong> on frozen held-out tasks. Paired boot
 class: fill
 ---
 
-# Success bar & paper-worthy claim
+# In summary — the bet, the test, the verdict
 
-<div class="grid grid-cols-2 gap-6 mt-4" style="min-height: 13rem">
+<div class="grid grid-cols-3 gap-4 mt-4" style="min-height: 13rem">
 <div class="p-5 bg-blue-50 rounded-lg border border-blue-200">
 
-### Minimal success
-<div class="text-xs opacity-60 mt-1">any 2 hold</div>
+### The bet
+<div class="text-xs opacity-60 mt-1">what we think is true</div>
 
-- ALPHA &gt; B2 on `BestScore` or `AUC`
-- ALPHA has lower `RepeatedIdeaRate` than B2
-- The no-gate ablation (A1) loses to full ALPHA
+Trajectory evidence is more useful as an **enforceable rule** than as retrievable text.
 
 </div>
 <div class="p-5 bg-green-50 rounded-lg border border-green-200">
 
-### Paper-worthy
-<div class="text-xs opacity-60 mt-1">all four hold</div>
+### The test
+<div class="text-xs opacity-60 mt-1">how we'll know</div>
 
-- ALPHA &gt; B2 on both `FinalScore` and `AUC`
-- ALPHA &lt; B2 on repeated-failure rate
-- The no-gate ablation loses to full ALPHA
-- `HumanAuditAgreement` ≥ 75%
+`Ours` vs `B2` on frozen FrontierCS held-out. **A1** and **A2** close the two obvious escape hatches.
+
+</div>
+<div class="p-5 bg-purple-50 rounded-lg border border-purple-200">
+
+### The verdict
+<div class="text-xs opacity-60 mt-1">either way is publishable</div>
+
+**Ours &gt; B2** → principles are executable constraints.  
+**Ours = B2** → trajectory text is enough.
 
 </div>
 </div>
 
-<div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm text-center">
+<div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-base text-center">
 <strong>Memory helps agents remember. Skills help agents act. Principles help agents <em>govern</em> their actions.</strong>
 </div>
