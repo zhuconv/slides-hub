@@ -353,29 +353,26 @@ Headline cell: <strong>Ours vs B2</strong> on frozen held-out tasks. Paired boot
 class: fill
 ---
 
-# In summary — the bet, the test, the verdict
+# Summary
 
 <div class="grid grid-cols-3 gap-4 mt-4" style="min-height: 13rem">
 <div class="p-5 bg-blue-50 rounded-lg border border-blue-200">
 
-### The bet
-<div class="text-xs opacity-60 mt-1">what we think is true</div>
+### Idea
 
 Trajectory evidence is more useful as an **enforceable rule** than as retrievable text.
 
 </div>
 <div class="p-5 bg-green-50 rounded-lg border border-green-200">
 
-### The test
-<div class="text-xs opacity-60 mt-1">how we'll know</div>
+### Experiment
 
 `Ours` vs `B2` on frozen FrontierCS held-out. **A1** and **A2** close the two obvious escape hatches.
 
 </div>
 <div class="p-5 bg-purple-50 rounded-lg border border-purple-200">
 
-### The verdict
-<div class="text-xs opacity-60 mt-1">either way is publishable</div>
+### Insights
 
 **Ours &gt; B2** → principles are executable constraints.  
 **Ours = B2** → trajectory text is enough.
