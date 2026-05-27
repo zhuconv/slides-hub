@@ -110,6 +110,9 @@ const style = `
     a { color: #2563eb; text-decoration: none; }
     a:hover { text-decoration: underline; }
     h1 { border-bottom: 2px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 4px; }
+    .page-head { display: flex; justify-content: space-between; align-items: baseline;
+                 border-bottom: 2px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 4px; }
+    .page-head h1 { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
     .tagline { color: #6b7280; margin-top: 0; }
     .back { margin: 0 0 16px; font-size: 0.9em; }
     .back a { color: #6b7280; }
@@ -127,10 +130,9 @@ const style = `
             font-variant-numeric: tabular-nums; }
     footer { margin-top: 44px; color: #9ca3af; font-size: 0.82em;
              border-top: 1px solid #e5e7eb; padding-top: 12px; }
-    .gh-link { position: fixed; top: 16px; right: 20px; color: #6b7280;
-               font-size: 0.85em; display: inline-flex; align-items: center;
-               gap: 6px; text-decoration: none; }
-    .gh-link svg { width: 18px; height: 18px; fill: currentColor; }
+    .gh-link { color: #6b7280; font-size: 0.85em; display: inline-flex;
+               align-items: center; gap: 6px; text-decoration: none; flex-shrink: 0; }
+    .gh-link svg { width: 16px; height: 16px; fill: currentColor; }
     .gh-link:hover { color: #1a1a1a; text-decoration: none; }`;
 
 const ghLink = `<a class="gh-link" href="https://github.com/zhuconv/slides-hub" target="_blank" rel="noopener" aria-label="View source on GitHub">
@@ -148,7 +150,6 @@ const page = (title, body) => `<!DOCTYPE html>
   </style>
 </head>
 <body>
-  ${ghLink}
 ${body}
 </body>
 </html>
@@ -173,7 +174,7 @@ writeFileSync(
   join(distRoot, "index.html"),
   page(
     "Slides Hub",
-    `  <h1>Slides Hub</h1>
+    `  <div class="page-head"><h1>Slides Hub</h1>${ghLink}</div>
   <p class="tagline">Project slide decks, archived by project.</p>
   <ul class="projects">
 ${projectRows}
@@ -206,7 +207,7 @@ for (const [project, decks] of orderedProjects) {
     page(
       `${project} · Slides Hub`,
       `  <p class="back"><a href="/slides-hub/">&lsaquo; all projects</a></p>
-  <h1>${escapeHtml(project)}</h1>
+  <div class="page-head"><h1>${escapeHtml(project)}</h1>${ghLink}</div>
   <p class="tagline">${decks.length} deck${decks.length === 1 ? "" : "s"}</p>
   <ul class="decks">
 ${deckRows}
