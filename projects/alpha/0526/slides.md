@@ -61,17 +61,17 @@ class: fill
 <div class="p-5 bg-green-50 rounded-lg border border-green-200">
 
 ### 2 · Method
-<div class="text-xs opacity-60 mt-1">slides 5–7</div>
+<div class="text-xs opacity-60 mt-1">slides 5–6</div>
 
-- Four typed objects: principle · experience · assumption · compliance
-- Runtime: inspect → gate → repair → update
+- Store: principle + experience (typed, like skill library)
+- Verify: inspector → assumption.decision → repair if `violate`
 - Four controls (B1 · B2 · A1 · A2) — each isolates one claim
 
 </div>
 <div class="p-5 bg-purple-50 rounded-lg border border-purple-200">
 
 ### 3 · Evaluation
-<div class="text-xs opacity-60 mt-1">slides 8–10</div>
+<div class="text-xs opacity-60 mt-1">slides 7–9</div>
 
 - Setup: FrontierCS · Harbor · mini-SWE-agent
 - Three eval questions: did we win · did behavior change · can we trust it
@@ -167,91 +167,41 @@ If the planned action violates a relevant principle → **block & repair** befor
 class: fill
 ---
 
-# What ALPHA stores — four typed objects
+# ALPHA = principle store + verification gate
 
-<div class="grid grid-cols-2 gap-6 mt-3" style="min-height: 16rem">
+<div class="grid grid-cols-2 gap-6 mt-4" style="min-height: 14rem">
 <div class="p-5 bg-blue-50 rounded-lg border border-blue-200">
 
-### Principle <span class="text-xs opacity-60">— persisted markdown</span>
+### 1 · Store *(like a skill library, but typed)*
 
 ```yaml
-{ id, title, summary, status } + markdown body
+Principle:  { id, summary, status } + body
+Experience: { situation, action, reason,
+              evidence: { task, Δscore } }
 ```
 
-> *P2: When score plateaus after local edits, change the algorithmic hypothesis rather than only tuning constants.*
-
-### Experience <span class="text-xs opacity-60">— append-only under a principle</span>
-
-```yaml
-{ situation, action, reason,
-  evidence: { task, Δscore }, tags }
-```
+Principle = the rule. Experience = evidence appended under it (≤ 3 per task, must cite Δscore).
 
 </div>
 <div class="p-5 bg-green-50 rounded-lg border border-green-200">
 
-### Assumption <span class="text-xs opacity-60">— ephemeral, inspector output</span>
+### 2 · Verify *(inspector gates each action)*
 
 ```yaml
-{ principle_id, relevance,
-  decision: { status, required_action },
-  supporting_experience_ids }
+Assumption: { principle_id, decision }
+decision.status:
+  not_relevant | pass | obey_new | violate
 ```
 
-### decision.status <span class="text-xs opacity-60">— strict enum</span>
-
-```text
-enum { not_relevant | pass | obey_new | violate }
-```
-
-- `pass` — supporting experience exists → inject
-- `obey_new` — no match → allow + log candidate
-- `violate` — **block** and force repair
+- `pass` → inject supporting experience
+- `obey_new` → allow + log
+- **`violate` → block & force repair**
 
 </div>
 </div>
 
-<div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
-Compliance is a strict 4-value enum; the other three are <strong>schema-shaped markdown records</strong>. The "typing" is contract-level — field roles and an enum decision — not language-level. That's enough to make principles <em>auditable</em>.
-</div>
-
----
-class: fill
----
-
-# Runtime loop — inspect, gate, act, learn
-
-<div class="grid grid-cols-2 gap-6 mt-4" style="min-height: 12rem">
-<div class="p-5 bg-blue-50 rounded-lg border border-blue-200">
-
-### Inside a task
-
-<div class="text-base mt-2 mb-3">
-
-`plan` → `inspect` → if violate: `repair` → `act` → `env.step` → `log`
-
-</div>
-
-Inspector fires at: first plan, each evaluator result, compile/runtime failure, 3 non-improving attempts, before large rewrite or final submit.
-
-</div>
-<div class="p-5 bg-green-50 rounded-lg border border-green-200">
-
-### After a task
-
-<div class="text-base mt-2 mb-3">
-
-`trajectory` → `updater` → append ≤ 3 new experiences
-
-</div>
-
-Each new experience must cite a Δscore or error-recovery event; merge into existing if semantic-sim &gt; 0.85.
-
-</div>
-</div>
-
-<div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
-<strong>Only the gate changes which action runs.</strong> Everything else is text in the prompt — the A1 (no-gate) ablation isolates enforcement from prompting.
+<div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm text-center">
+<code>plan → inspect → (if violate) repair → act → step → log</code> · <strong>only the gate changes which action runs</strong> — A1 ablation tests this
 </div>
 
 ---
