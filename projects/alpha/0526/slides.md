@@ -45,6 +45,49 @@ Jiajun Zhu · UT Austin · May 2026
 class: fill
 ---
 
+# Outline
+
+<div class="grid grid-cols-3 gap-4 mt-3" style="min-height: 14rem">
+<div class="p-5 bg-blue-50 rounded-lg border border-blue-200">
+
+### 1 · Problem
+<div class="text-xs opacity-60 mt-1">slides 3–4</div>
+
+- Long-horizon agents repeat themselves
+- Memory just records — passive
+- Skills compress — still passive
+
+</div>
+<div class="p-5 bg-green-50 rounded-lg border border-green-200">
+
+### 2 · Method
+<div class="text-xs opacity-60 mt-1">slides 5–7</div>
+
+- Four typed objects: principle · experience · assumption · compliance
+- Runtime: inspect → gate → repair → update
+- Only baseline with runtime enforcement
+
+</div>
+<div class="p-5 bg-purple-50 rounded-lg border border-purple-200">
+
+### 3 · Experiment
+<div class="text-xs opacity-60 mt-1">slides 8–12</div>
+
+- Setup: FrontierCS · Harbor · mini-SWE-agent
+- Three metric families: performance · behavior · principle
+- Ablations + 5-week milestones
+
+</div>
+</div>
+
+<div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
+The headline cell — <strong>ALPHA vs Trace2Skill-adapted</strong> on frozen held-out FrontierCS tasks: does enforcement beat distillation?
+</div>
+
+---
+class: fill
+---
+
 # Long-horizon coding agents keep repeating themselves
 
 <div class="grid grid-cols-2 gap-6 mt-3" style="min-height: 15rem">
