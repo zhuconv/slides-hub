@@ -199,7 +199,7 @@ Update rules — at most 3 new experiences per task; every experience cites scor
 </div>
 
 <div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-xs">
-The gate is the <strong>measurable intervention point</strong> — it lets us ablate "principle text in context" from "principle that actually changes the action."
+<strong>Only the gate actually changes which action runs.</strong> Everything else is text in the prompt — the A1 (no-gate) ablation is what isolates enforcement from prompting.
 </div>
 
 ---
