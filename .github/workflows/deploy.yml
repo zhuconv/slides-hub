@@ -18,8 +18,9 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 'lts/*'
+          cache: 'npm'
 
-      - run: npm install
+      - run: npm ci
       - run: npm run build    # builds all decks into dist/
 
       - uses: actions/configure-pages@v6
