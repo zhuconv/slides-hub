@@ -65,23 +65,23 @@ class: fill
 
 - Four typed objects: principle · experience · assumption · compliance
 - Runtime: inspect → gate → repair → update
-- Only baseline with runtime enforcement
+- Four controls (B1 · B2 · A1 · A2) — each isolates one claim
 
 </div>
 <div class="p-5 bg-purple-50 rounded-lg border border-purple-200">
 
-### 3 · Experiment
-<div class="text-xs opacity-60 mt-1">slides 8–12</div>
+### 3 · Evaluation
+<div class="text-xs opacity-60 mt-1">slides 8–10</div>
 
 - Setup: FrontierCS · Harbor · mini-SWE-agent
-- Three metric families: performance · behavior · principle
-- Ablations + 5-week milestones
+- Three eval questions: did we win · did behavior change · can we trust it
+- Success bar + paper-worthy claim
 
 </div>
 </div>
 
 <div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
-The headline cell — <strong>ALPHA vs Trace2Skill-adapted</strong> on frozen held-out FrontierCS tasks: does enforcement beat distillation?
+The headline cell — <strong>Ours vs B2 (Trace2Skill-adapted)</strong> on frozen held-out FrontierCS tasks: does enforcement beat distillation?
 </div>
 
 ---
@@ -253,35 +253,38 @@ Update rules — at most 3 new experiences per task; every experience cites scor
 class: fill
 ---
 
-# Methods — what's different at runtime
+# Four controls + Ours — what each one isolates
 
 <div class="text-sm mt-3">
 
-| Method | Learns from trajectories? | Knowledge unit | Runtime use | **Runtime enforcement?** |
-|---|:---:|---|---|:---:|
-| `B0` Vanilla mini-SWE-agent | — | — | — | no |
-| `B1` Trajectory-summary memory | yes | episodic summaries | retrieve → prompt | no |
-| `B2` Static principles | — | seed principles | inspect (no updates) | yes |
-| `B3` **Trace2Skill-adapted** | yes | merged `SKILL.md` | inject → prompt | no |
-| `Ours` **ALPHA** | yes | principle + experiences | **inspect → gate → repair** | **yes** |
+| Method | Knowledge unit | Runtime use | Isolates which claim |
+|---|---|---|---|
+| `B1` Trajectory memory | episodic summaries | retrieve → prompt | retrieval ≠ enforcement |
+| `B2` **Trace2Skill-adapted** | merged `SKILL.md` | inject → prompt | distilled doc ≠ active rule |
+| `A1` Ours w/o gate | principles + experiences | inspect & inject, **no block** | gate is the causal lever |
+| `A2` Ours offline-merge | principles batched once, post-train | inspect → gate → repair | format > update schedule |
+| `Ours` **ALPHA** | continually-updated principles + experiences | **inspect → gate → repair** | full method |
 
 </div>
 
 <div class="grid grid-cols-2 gap-4 mt-4 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
 
-### Why Trace2Skill is the key baseline
-Same trajectory pool, same model, same budget. Both distill experience into reusable knowledge — Trace2Skill into a passive document, ALPHA into an enforceable rule. **Clean comparison of structure & runtime use, not data.**
+### B1 / B2 — prior-art controls
+Same trajectory pool, same model, same budget. Both turn experience into reusable text the agent <em>can read</em>; neither blocks an action. **B2 (Trace2Skill) is the key baseline** — clean structure-vs-runtime comparison.
 
 </div>
 <div class="p-3 bg-green-50 rounded border border-green-200">
 
-### Three baselines isolate three claims
-`B1` — retrieval alone isn't enough.  
-`B2` — static principles isolate "prompting" from "learning."  
-`B3` — distilled skills isolate "passive doc" from "active rule."
+### A1 / A2 — internal isolations
+**A1** keeps everything but the gate → tells us whether enforcement matters beyond prompting.  
+**A2** merges principles once at the end, not online → answers *"Trace2Skill only loses because it's offline."*
 
 </div>
+</div>
+
+<div class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
+Headline cell is <strong>Ours vs B2</strong>; A1 and A2 are the two ablations that pre-empt the obvious reviewer attacks on it.
 </div>
 
 ---
@@ -306,7 +309,7 @@ class: fill
 ### Task split & phases
 
 - **8 train · 16 eval · 2 case studies · 3 seeds**
-- **Train phase** — methods update their knowledge (B1: memories · B3: `SKILL.md` · ALPHA: principles)
+- **Train phase** — methods update their knowledge (B1: memories · B2: `SKILL.md` · ALPHA: principles)
 - **Frozen eval phase (main result)** — load frozen knowledge, run from scratch, **no updates**
 - Optional **online continual eval** — secondary, after frozen works
 
@@ -314,32 +317,34 @@ class: fill
 </div>
 
 <div class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
-Frozen held-out evaluation is the headline cell: <strong>Ours ALPHA vs B3 Trace2Skill-adapted</strong> on tasks neither method has seen.
+Frozen held-out evaluation is the headline cell: <strong>Ours ALPHA vs B2 Trace2Skill-adapted</strong> on tasks neither method has seen.
 </div>
 
 ---
 class: fill
 ---
 
-# Metrics — three families, one comparison
+# Evaluation — three questions, three metric families
 
 <div class="grid grid-cols-3 gap-3 mt-3 text-sm" style="min-height: 15rem">
 <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
 
-### Performance
+### Q1 · Did ALPHA win?
+<div class="text-xs opacity-60 mt-1">performance metrics</div>
 
 - `BestScore` ↑
 - `FinalScore` ↑
-- `ScoreAUC` ↑ (normalised by budget)
+- `ScoreAUC` ↑ (budget-normalised)
 - `Score@{5,10,20}` evals
-- **WinRate vs Trace2Skill** ↑
+- **WinRate vs B2** ↑
 
-Paired bootstrap over (task, seed), 10k samples, 95% CI.
+Headline cell: held-out frozen eval, `Ours` vs `B2`.
 
 </div>
 <div class="p-4 bg-green-50 rounded-lg border border-green-200">
 
-### Behavior
+### Q2 · Did the gate change behavior?
+<div class="text-xs opacity-60 mt-1">behavior metrics</div>
 
 - `RepeatedIdeaRate` ↓
 - `StagnationLength` ↓
@@ -348,121 +353,27 @@ Paired bootstrap over (task, seed), 10k samples, 95% CI.
 - `InvalidSubmissionRate` ↓
 - `PrematureStopRate` ↓
 
-Tests whether the gate **actually changes behavior**, not just score.
+Tests the mechanism, not the score.
 
 </div>
 <div class="p-4 bg-purple-50 rounded-lg border border-purple-200">
 
-### Principle-specific
+### Q3 · Can we trust it?
+<div class="text-xs opacity-60 mt-1">principle metrics + human audit</div>
 
-- `Relevance` / `Pass` / `ObeyNew` / `Violation` rates
 - `ViolationRepairSuccess` ↑
-- `ExperienceReuseCount` ↑
 - `ExperienceUtility` (Δscore within 3 evals)
-- `CompressionRatio` (traj tokens ÷ principle tokens)
-- **HumanAuditAgreement** ≥ 75% on sampled decisions
+- `ExperienceReuseCount` ↑
+- `CompressionRatio` (traj ÷ principle tokens)
+- **`HumanAuditAgreement`** ≥ 75% on sampled inspector decisions
 
-</div>
-</div>
-
-<div class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-xs">
-The strongest result: ALPHA &gt; Trace2Skill on score &amp; AUC <em>and</em> ALPHA &lt; Trace2Skill on repeated failures <em>and</em> the no-gate ablation loses to full ALPHA.
-</div>
-
----
-class: fill
----
-
-# Ablations — what is actually doing the work
-
-<div class="grid grid-cols-2 gap-4 mt-3" style="min-height: 15rem">
-<div class="p-4 bg-blue-50 rounded-lg border border-blue-200 text-sm">
-
-### A1 — no violation gate
-Inspect & inject, but never block.  
-*Tests whether enforcement matters beyond extra prompting.*
-
-### A2 — no continual update
-Seed principles only, never append experience.  
-*Tests whether learned experiences matter.*
-
-</div>
-<div class="p-4 bg-green-50 rounded-lg border border-green-200 text-sm">
-
-### A3 — no experiences
-Principle titles & summaries only.  
-*Tests whether grounded evidence matters.*
-
-### A4 — offline principle merge
-Collect all candidates from training trajectories, merge once at the end.  
-*Separates the knowledge format (principle vs skill) from the update schedule.*
+Tests the inspector isn't hallucinating compliance.
 
 </div>
 </div>
 
 <div class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
-<strong>A4 directly answers the reviewer worry:</strong> "maybe Trace2Skill loses only because it is offline." If A4 still beats Trace2Skill, the win is the principle format itself.
-</div>
-
----
-class: compact
----
-
-# 5-week roadmap
-
-<div class="grid grid-cols-5 gap-2 mt-3">
-<div class="p-2 bg-blue-50 rounded border border-blue-200">
-
-### W1 · Harness
-mini-SWE-agent × Harbor × FrontierCS
-
-↳ trajectory log  
-↳ score curve  
-↳ score parser
-
-**Done when** vanilla runs one task end-to-end.
-
-</div>
-<div class="p-2 bg-green-50 rounded border border-green-200">
-
-### W2 · Baselines
-B1 trajectory memory.
-
-B3 Trace2Skill-adapted: success / error analysts → patches → hierarchical merge → SKILL.
-
-**Done when** B3 trains + evals on 2+2 tasks.
-
-</div>
-<div class="p-2 bg-purple-50 rounded border border-purple-200">
-
-### W3 · ALPHA layer
-store · retriever · **inspector** · **violation gate** · updater · merger
-
-+ inspector / repair / updater prompts
-
-**Done when** one task emits full inspector + violation + update logs.
-
-</div>
-<div class="p-2 bg-orange-50 rounded border border-orange-200">
-
-### W4 · Main PoC
-**8 train · 16 eval · 3 seeds · 5 methods**
-
-Outputs: performance · behavior · principle metric CSVs + case studies.
-
-</div>
-<div class="p-2 bg-yellow-50 rounded border border-yellow-300">
-
-### W5 · Ablations
-A1 no-gate · A2 no-update · A3 no-experience · A4 offline-merge
-
-+ score-curve, win-rate, principle-usage figures.
-
-</div>
-</div>
-
-<div class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
-<strong>Gate before scaling.</strong> Run the 2×2 mini-PoC (B0 · B3 · Ours, 2 train + 2 eval, 1 seed) first. If ALPHA shows any signal on score / AUC / repeated-failure reduction → scale to the full 8×16. Otherwise inspect case studies before changing the method.
+Unit of analysis: <strong>(task, seed)</strong>. Significance: paired bootstrap, 10k samples, 95% CI. All eval runs frozen — no knowledge updates during held-out evaluation.
 </div>
 
 ---
