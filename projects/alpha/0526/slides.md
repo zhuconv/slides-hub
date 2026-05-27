@@ -117,6 +117,10 @@ class: fill
 Memory <em>records</em> what happened. Skills <em>compress</em> what worked. Neither <strong>enforces</strong> what should happen next. The agent reads and ignores.
 </div>
 
+<div class="mt-2 text-xs opacity-60 text-center">
+cf. LongCLI-Bench (arXiv 2602.14337) · SlopCodeBench (arXiv 2603.24755) · NL2Repo-Bench (arXiv 2512.12730) — 2025/26 benchmarks quantifying these long-horizon failure modes.
+</div>
+
 ---
 class: fill
 ---
