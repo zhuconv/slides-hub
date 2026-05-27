@@ -172,33 +172,46 @@ class: fill
 <div class="grid grid-cols-2 gap-6 mt-3" style="min-height: 16rem">
 <div class="p-5 bg-blue-50 rounded-lg border border-blue-200">
 
-### Principle
-A high-level behavioral obligation.
+### Principle <span class="text-xs opacity-60">— persisted markdown</span>
+
+```yaml
+{ id, title, summary, status } + markdown body
+```
 
 > *P2: When score plateaus after local edits, change the algorithmic hypothesis rather than only tuning constants.*
 
-### Experience
-A grounded `situation → action → reason` record under a principle, with evidence (task, score delta).
+### Experience <span class="text-xs opacity-60">— append-only under a principle</span>
+
+```yaml
+{ situation, action, reason,
+  evidence: { task, Δscore }, tags }
+```
 
 </div>
 <div class="p-5 bg-green-50 rounded-lg border border-green-200">
 
-### Assumption
-The inspector's runtime read of *how* the principle applies to the current state.
+### Assumption <span class="text-xs opacity-60">— ephemeral, inspector output</span>
 
-### Compliance decision
-One of four statuses per relevant principle:
+```yaml
+{ principle_id, relevance, status,
+  supporting_experience_ids, required_action }
+```
 
-- `not_relevant` — ignore
+### Compliance decision <span class="text-xs opacity-60">— strict enum</span>
+
+```text
+enum { not_relevant | pass | obey_new | violate }
+```
+
 - `pass` — supporting experience exists → inject
-- `obey_new` — no matching experience → allow + log candidate
+- `obey_new` — no match → allow + log candidate
 - `violate` — **block** and force repair
 
 </div>
 </div>
 
 <div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
-Principles live as markdown files with YAML frontmatter. Experiences append-only under each principle. Both are human-readable — that's the <em>auditable</em> in ALPHA.
+Compliance is a strict 4-value enum; the other three are <strong>schema-shaped markdown records</strong>. The "typing" is contract-level — field roles and an enum decision — not language-level. That's enough to make principles <em>auditable</em>.
 </div>
 
 ---
@@ -257,34 +270,18 @@ class: fill
 
 <div class="text-sm mt-3">
 
-| Method | Knowledge unit | Runtime use | Isolates which claim |
+| Method | Stores | At runtime | Tests claim |
 |---|---|---|---|
-| `B1` Trajectory memory | episodic summaries | retrieve → prompt | retrieval ≠ enforcement |
-| `B2` **Trace2Skill-adapted** | merged `SKILL.md` | inject → prompt | distilled doc ≠ active rule |
-| `A1` Ours w/o gate | principles + experiences | inspect & inject, **no block** | gate is the causal lever |
-| `A2` Ours offline-merge | principles batched once, post-train | inspect → gate → repair | format > update schedule |
-| `Ours` **ALPHA** | continually-updated principles + experiences | **inspect → gate → repair** | full method |
+| `B1` Trajectory memory | episodic summaries | retrieves into prompt | *is retrieval enough?* |
+| `B2` **Trace2Skill-adapted** | merged `SKILL.md` | injects into prompt | *is a distilled doc enough?* |
+| `A1` Ours w/o gate | principles + experiences | injects, **never blocks** | *is enforcement the active ingredient?* |
+| `A2` Ours offline-merge | merged once after training | inspects → **gates** → repairs | *is the win from format, not online schedule?* |
+| `Ours` **ALPHA** | continually-updated principles + experiences | **inspects → gates → repairs** | full method |
 
 </div>
 
-<div class="grid grid-cols-2 gap-4 mt-4 text-sm">
-<div class="p-3 bg-blue-50 rounded border border-blue-200">
-
-### B1 / B2 — prior-art controls
-Same trajectory pool, same model, same budget. Both turn experience into reusable text the agent <em>can read</em>; neither blocks an action. **B2 (Trace2Skill) is the key baseline** — clean structure-vs-runtime comparison.
-
-</div>
-<div class="p-3 bg-green-50 rounded border border-green-200">
-
-### A1 / A2 — internal isolations
-**A1** keeps everything but the gate → tells us whether enforcement matters beyond prompting.  
-**A2** merges principles once at the end, not online → answers *"Trace2Skill only loses because it's offline."*
-
-</div>
-</div>
-
-<div class="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
-Headline cell is <strong>Ours vs B2</strong>; A1 and A2 are the two ablations that pre-empt the obvious reviewer attacks on it.
+<div class="mt-8 p-3 bg-yellow-50 rounded-lg border border-yellow-300 text-sm">
+Headline cell: <strong>Ours vs B2</strong>. A1 and A2 pre-empt the two obvious attacks on that result — <em>"this is just prompting"</em> and <em>"Trace2Skill only loses because it's offline."</em>
 </div>
 
 ---
