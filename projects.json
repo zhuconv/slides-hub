@@ -85,5 +85,11 @@
     "assets": [
       "public"
     ]
+  },
+  {
+    "name": "alpha/0603",
+    "date": "2026-06-03",
+    "src": "uploaded",
+    "slides": "slides.md"
   }
 ]
