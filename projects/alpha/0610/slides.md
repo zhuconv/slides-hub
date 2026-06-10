@@ -90,9 +90,9 @@ class: fill
 
 ### The failure shape
 
-Interactive FrontierCS tasks often reward **query economy**.
+Some FrontierCS tasks are interactive: the solver asks a hidden judge/oracle questions, and reward drops when it uses too many.
 
-A correct one-query-per-unknown solution can still score poorly.
+A correct linear scan - one judge query per candidate - can still score poorly.
 
 </div>
 <div class="card green">
@@ -194,7 +194,7 @@ class: fill
 
 ### Trigger
 
-Use when an interactive problem is graded by query count and the obvious solution resolves roughly one unknown per query.
+Use when an interactive task has a query limit and the obvious plan spends roughly one judge query per candidate.
 
 </div>
 <div class="card green">
@@ -398,20 +398,20 @@ class: fill
 <div class="grid grid-cols-2 gap-6 mt-4">
 <div class="card green">
 
-### Keep the three harnesses
+### Build a real transfer set
 
-Use them as a fixed substrate for comparing principle stores, not as separate experiments.
+Find a compact principle set that improves multiple problems, not only one smoke case, while running unchanged across mini-swe, Codex, and Claude Code.
 
 </div>
 <div class="card blue">
 
-### Move from always-inject to selective intervention
+### Fix execution parity
 
-Inject when there is headroom; correct when the trace commits to a query-wasteful plan.
+Same task/settings should not give opposite conclusions: some CC runs suggest gpt-5.5 is stuck near 0.5, while Codex reaches 1.0. Audit launch flags, env, scorer cases, timeouts, and Harbor/proxy wiring.
 
 </div>
 </div>
 
 <div class="mt-5 p-3 amber rounded-lg text-base text-center">
-Current claim: harness portability works. Next claim to earn: robust transfer across problems.
+Next claim needs both: a principle set that transfers, and a harness-parity audit that makes the rewards comparable.
 </div>
