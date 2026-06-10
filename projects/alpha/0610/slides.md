@@ -145,42 +145,35 @@ Evidence: `RESULTS.md` section 4, `auto_intervention/`, `scripts/run_alpha_v1.py
 class: fill
 ---
 
-# The three harness versions
+# Two integration patterns
 
-<div class="grid grid-cols-3 gap-4 mt-4">
+<div class="grid grid-cols-2 gap-6 mt-4">
 <div class="card blue">
 
-### mini-swe + Harbor
+### Open loop: mini-swe + Harbor
 
-Native ALPHA mode:
+We control the agent loop, so ALPHA hooks into `before_model`, `after_model`, `before_tool`, and `after_tool`.
 
-`alpha_mode=on/off`
-
-Logs selected principles and obeyed assumptions.
+This is the natural place for monitor -> rewind -> inject; the p7 smoke tests use the same hook surface for upfront principle injection.
 
 </div>
 <div class="card green">
 
-### Codex CLI
+### Closed agents: Codex + Claude
 
-Fresh scratch run per trial.
+We cannot interrupt the private loop or stream mini-swe-style trajectory summaries.
 
-Principled arm folds the same ALPHA text into the subject prompt.
-
-</div>
-<div class="card purple">
-
-### Claude Code CLI
-
-Same subject/scorer pattern as Codex.
-
-Keeps the harness surface independent of ALPHA core.
+The adapter renders transcript + final `solution.cpp` for the brain; if it fires, we respawn a fresh run with the principle present from token 0.
 
 </div>
+</div>
+
+<div class="mt-5 p-3 amber rounded-lg text-sm">
+Closed-agent path is implemented twice: `codex_adapter` and `claude_code_adapter`.
 </div>
 
 <div class="source">
-Entry point: `experiments/p7_transfer/run_cell.py`; mini-swe adapter: `alpha_harbor/agents/mini_swe_alpha.py`.
+Entry point: `experiments/p7_transfer/run_cell.py`; open-loop hook: `alpha_adapters/mini_swe.py`; closed-agent brain/respawn: `codex_adapter/run_ab.py`, `claude_code_adapter/run_ab.py`.
 </div>
 
 ---
@@ -318,75 +311,6 @@ Interpretation: the same principle abstraction can reach all three harness surfa
 
 <div class="source">
 All rows are n=3 means on 0-1 reward. Mini-swe injection log: `.../p249__principled/.../agent/alpha/advice.jsonl` cites P1 with `system_addendum_chars=1008`.
-</div>
-
----
-class: fill
----
-
-# What the broader matrix says
-
-<div class="grid grid-cols-2 gap-6 mt-4">
-<div class="card green">
-
-### Positive signal
-
-`run_final`: 8 comparisons, 4 practical improvements, 1 exact significant improvement, 0 significant drops.
-
-</div>
-<div class="card amber">
-
-### Boundary
-
-The global target was **not met**.
-
-Some cells were saturated, and some principles closed orientation gaps but not derivation or implementation gaps.
-
-</div>
-</div>
-
-<div class="source">
-Evidence: `experiments/p7_transfer/run_final/summary.json`, `experiments/p7_transfer/PLAN.md`.
-</div>
-
----
-class: fill
----
-
-# The main insight
-
-<div class="grid grid-cols-3 gap-4 mt-4">
-<div class="card blue">
-
-### Orientation gap
-
-The model can solve it, but points in the wrong direction.
-
-Principles help.
-
-</div>
-<div class="card green">
-
-### Derivation gap
-
-The model needs a missing trick, not just a reminder.
-
-Directive recipes help more.
-
-</div>
-<div class="card purple">
-
-### Implementation gap
-
-The recipe is hard enough that telling it can backfire.
-
-Use correction/gating.
-
-</div>
-</div>
-
-<div class="source">
-Prior evidence: `RESULTS.md` section 3; p0/p2/p4 directive-vs-principle experiments.
 </div>
 
 ---
