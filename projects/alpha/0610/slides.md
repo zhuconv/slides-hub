@@ -21,6 +21,11 @@ mdc: true
 .slidev-layout.fill li { line-height: 1.42; margin: 0.25rem 0; font-size: 0.96rem; }
 .slidev-layout.fill ul { padding-left: 1.1rem; }
 .slidev-layout.fill table { font-size: 0.82rem; }
+.result-table table { font-size: 0.76rem; width: 100%; }
+.result-table th, .result-table td { white-space: nowrap; }
+.pos { color: #047857; font-weight: 700; }
+.neg { color: #b91c1c; font-weight: 700; }
+.neu { color: #475569; font-weight: 700; }
 .card {
   padding: 1.0rem;
   border-radius: 8px;
@@ -211,106 +216,23 @@ Principle file: `principles_mined_p3/batched-bisection-over-scans/SKILL.md`.
 class: fill
 ---
 
-# Example 1: Find Median (p144)
+# Same problems, three harnesses
 
-<div class="grid grid-cols-2 gap-6 mt-4">
-<div class="card blue">
+<div class="result-table mt-5">
 
-### Problem
-
-Hidden permutation. A query returns the two median **values** of a chosen even-size subset.
-
-Goal: find the indices of the two global medians with few queries.
-
-</div>
-<div class="card green">
-
-### Principled behavior
-
-Codex moved from complement/pair scans into balanced batched tests.
-
-Local simulator: n=100 max 60 queries, avg 55.75.
-
-</div>
-</div>
-
-<div class="mt-5 grid grid-cols-2 gap-4 text-sm">
-<div>
-Plain mean: <span class="metric">0.509</span>
-<div class="bar"><span style="width: 50.9%"></span></div>
-</div>
-<div>
-Principled mean: <span class="metric">0.651</span> | best run 0.936
-<div class="bar"><span style="width: 65.1%"></span></div>
-</div>
-</div>
-
-<div class="source">
-Evidence: `experiments/p7_transfer/codex_fit/cells/codex__gpt-5.5__p144__*.json`; trace: `.../principled/run1/trace.txt`.
-</div>
-
----
-class: fill
----
-
-# Example 2: Geemu (p52)
-
-<div class="grid grid-cols-2 gap-6 mt-4">
-<div class="card purple">
-
-### Problem
-
-Query `f(l,r)` returns the number of consecutive-value runs inside a position interval.
-
-Recover the permutation up to complement.
-
-</div>
-<div class="card green">
-
-### Principled behavior
-
-Claude Code reformulated it as recovering edges of a Hamiltonian path, then binary-searched each new position's left-neighbors.
-
-</div>
-</div>
-
-<div class="mt-5 grid grid-cols-2 gap-4 text-sm">
-<div>
-Plain mean: <span class="metric">0.666</span>
-<div class="bar"><span style="width: 66.6%"></span></div>
-</div>
-<div>
-Principled mean: <span class="metric">1.000</span> | `p_up = 0.05`
-<div class="bar"><span style="width: 100%"></span></div>
-</div>
-</div>
-
-<div class="source">
-Evidence: `experiments/p7_transfer/run_final/summary.json`; trace: `.../cc__claude-opus-4-8__p52__principled/run1/trace.txt`.
-</div>
-
----
-class: fill
----
-
-# Single-problem harness smoke tests
-
-<div class="text-sm mt-3">
-
-| Harness | Model | Problem | Plain | Principled | Delta | Evidence |
-|---|---:|---:|---:|---:|---:|---|
-| mini-swe / Harbor | gpt-5.5 | p249 | 0.833 | 0.966 | +0.133 | `run_final` |
-| Codex CLI | gpt-5.5 | p144 | 0.509 | 0.651 | +0.142 | `codex_fit` |
-| Claude Code CLI | Opus 4.8 | p52 | 0.666 | 1.000 | +0.334 | `run_final` |
+| Problem | mini-swe | Codex | Claude Code |
+|---|---:|---:|---:|
+| p52 | 0.6796 -> 0.8519 <span class="pos">+0.1723</span> | 0.8115 -> 0.6171 <span class="neg">-0.1944</span> | 0.6664 -> 1.0000 <span class="pos">+0.3336</span> |
+| p86 | 0.9960 -> 0.8370 <span class="neg">-0.1591</span> | 0.4881 -> 0.5057 <span class="neu">+0.0176 neutral</span> | 0.0000 -> 0.3333 <span class="pos">+0.3333</span> |
 
 </div>
 
 <div class="mt-5 p-3 amber rounded-lg text-sm">
-Interpretation: the same principle abstraction can reach all three harness surfaces and change at least one concrete run distribution per harness.
+Interpretation: the same principle path reaches all three harnesses, but not yet as a robust all-harness lift on the same problem.
 </div>
 
 <div class="source">
-All rows are n=3 means on 0-1 reward. Mini-swe injection log: `.../p249__principled/.../agent/alpha/advice.jsonl` cites P1 with `system_addendum_chars=1008`.
+Evidence: `experiments/p7_transfer/run_final/summary.json`. All cells are n=3 mean rewards on the same 0-1 scorer.
 </div>
 
 ---
