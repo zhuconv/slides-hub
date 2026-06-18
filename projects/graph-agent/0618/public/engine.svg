@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="600" viewBox="0 0 1280 600" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/>
+    </marker>
+    <marker id="arrP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9673a6"/>
+    </marker>
+    <marker id="arrO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d79b00"/>
+    </marker>
+  </defs>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+
+  <!-- ===== Engine harness region ===== -->
+  <rect x="40" y="54" width="1200" height="170" rx="12" fill="#fafafa" stroke="#d0d0d0" stroke-width="1.5"/>
+  <text x="60" y="80" font-size="14" font-weight="bold" fill="#888" letter-spacing="1">ENGINE HARNESS — search layer</text>
+
+  <rect x="70" y="96" width="270" height="98" rx="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="205" y="128" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">Controller</text>
+  <text x="205" y="150" text-anchor="middle" font-size="12" fill="#555">rule-based · no LLM</text>
+  <text x="205" y="170" text-anchor="middle" font-size="12" fill="#555">picks lanes · sets space · stops</text>
+
+  <rect x="400" y="96" width="300" height="98" rx="10" fill="#e1d5e7" stroke="#9673a6" stroke-width="2"/>
+  <text x="550" y="128" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">N Workers (LLM)</text>
+  <text x="550" y="150" text-anchor="middle" font-size="12" fill="#555">parallel · stateless</text>
+  <text x="550" y="170" text-anchor="middle" font-size="12" fill="#555">one atomic feature spec each</text>
+
+  <rect x="760" y="96" width="420" height="98" rx="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="970" y="124" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">enumerate → gate → score → rank</text>
+  <text x="970" y="148" text-anchor="middle" font-size="12" fill="#555">gate = compile + PIT · score = train-only CV</text>
+  <text x="970" y="170" text-anchor="middle" font-size="12" fill="#555">dedup by hash · reuse matrices across rounds</text>
+
+  <line x1="340" y1="145" x2="400" y2="145" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="700" y1="145" x2="760" y2="145" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- loop back round k+1 -->
+  <path d="M 970 96 C 970 40, 205 40, 205 90" fill="none" stroke="#9673a6" stroke-width="2" marker-end="url(#arrP)"/>
+  <text x="587" y="34" text-anchor="middle" font-size="12" fill="#9673a6" font-style="italic">round k+1 — what paid off → next AllowedSpace</text>
+
+  <!-- ===== MCP boundary bar ===== -->
+  <rect x="40" y="262" width="1200" height="60" rx="10" fill="#ffe6cc" stroke="#d79b00" stroke-width="2"/>
+  <text x="64" y="289" font-size="15" font-weight="bold" fill="#9a6a00">srlang MCP server</text>
+  <text x="64" y="309" font-size="12" fill="#a9772a">tools:  compile(IR→SQL) · typecheck(Rule A/B) · pit_check · materialize(DuckDB)</text>
+  <text x="1216" y="289" text-anchor="end" font-size="12" font-style="italic" fill="#c08a2a">(in build)</text>
+
+  <line x1="520" y1="194" x2="520" y2="262" stroke="#d79b00" stroke-width="2" marker-end="url(#arrO)"/>
+  <text x="512" y="240" text-anchor="end" font-size="11" fill="#a9772a" font-style="italic">tool call</text>
+  <line x1="760" y1="262" x2="760" y2="194" stroke="#d79b00" stroke-width="2" marker-end="url(#arrO)"/>
+  <text x="768" y="240" font-size="11" fill="#a9772a" font-style="italic">SQL + values</text>
+
+  <!-- ===== srlang kernel region ===== -->
+  <rect x="40" y="360" width="1200" height="180" rx="12" fill="#fafafa" stroke="#d0d0d0" stroke-width="1.5"/>
+  <text x="60" y="386" font-size="14" font-weight="bold" fill="#888" letter-spacing="1">srlang KERNEL — deterministic layer</text>
+
+  <line x1="640" y1="322" x2="640" y2="398" stroke="#d79b00" stroke-width="2" marker-end="url(#arrO)"/>
+
+  <rect x="70" y="404" width="250" height="116" rx="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="195" y="438" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">Feature-IR</text>
+  <text x="195" y="462" text-anchor="middle" font-size="12" fill="#555">5 grain primitives</text>
+  <text x="195" y="482" text-anchor="middle" font-size="11" fill="#777">Introduce · Preserve · Ascend</text>
+  <text x="195" y="499" text-anchor="middle" font-size="11" fill="#777">Descend · Traverse</text>
+
+  <rect x="350" y="404" width="250" height="116" rx="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="475" y="438" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">type_of</text>
+  <text x="475" y="462" text-anchor="middle" font-size="12" fill="#555">Rule A — causal window</text>
+  <text x="475" y="482" text-anchor="middle" font-size="12" fill="#555">Rule B — label discipline</text>
+  <text x="475" y="502" text-anchor="middle" font-size="11" fill="#777">unsafe feature won't compile</text>
+
+  <rect x="630" y="404" width="250" height="116" rx="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="755" y="438" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">DuckDB codegen</text>
+  <text x="755" y="462" text-anchor="middle" font-size="12" fill="#555">windowed SQL</text>
+  <text x="755" y="482" text-anchor="middle" font-size="12" fill="#555">GROUP BY · CTE hops</text>
+
+  <rect x="910" y="404" width="250" height="116" rx="10" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+  <text x="1035" y="438" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">hash + PIT audit</text>
+  <text x="1035" y="462" text-anchor="middle" font-size="12" fill="#555">SHA256 · as-of replay</text>
+  <text x="1035" y="482" text-anchor="middle" font-size="12" fill="#555">parity 33/33 · 55 laws</text>
+  <text x="1035" y="502" text-anchor="middle" font-size="11" fill="#777">byte-identical, every run</text>
+
+  <line x1="320" y1="462" x2="350" y2="462" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="600" y1="462" x2="630" y2="462" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="880" y1="462" x2="910" y2="462" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ===== Legend ===== -->
+  <g transform="translate(40, 568)">
+    <rect x="0" y="0" width="14" height="14" fill="#e1d5e7" stroke="#9673a6" stroke-width="1.5"/>
+    <text x="20" y="12" font-size="12" fill="#444">LLM</text>
+    <rect x="80" y="0" width="14" height="14" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+    <text x="100" y="12" font-size="12" fill="#444">Compute</text>
+    <rect x="180" y="0" width="14" height="14" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+    <text x="200" y="12" font-size="12" fill="#444">Store / verify</text>
+    <rect x="320" y="0" width="14" height="14" fill="#ffe6cc" stroke="#d79b00" stroke-width="1.5"/>
+    <text x="340" y="12" font-size="12" fill="#444">MCP boundary</text>
+  </g>
+</svg>
