@@ -1,6 +1,6 @@
 ---
 theme: default
-title: "GraphAgent — From Development to Production"
+title: "SchemaRouter — From Development to Production"
 class: text-center
 drawings:
   persist: false
@@ -19,9 +19,9 @@ mdc: true
 .slidev-layout.compact .mt-3 { margin-top: 0.4rem !important; }
 </style>
 
-# GraphAgent
+# SchemaRouter
 
-## From development to production — an end-to-end benchmark, a deterministic feature compiler, an optimized search engine
+## From development to production
 
 <div class="abs-br m-6 text-sm opacity-50">
 Jiajun Zhu · UT Austin · Jun 2026
@@ -29,66 +29,65 @@ Jiajun Zhu · UT Austin · Jun 2026
 
 ---
 
-# The arc — development → production
+# Outline — development → production
 
-<div class="text-sm mt-2">
-
-Prior deck: <a href="https://zhuconv.github.io/slides-hub/graph-agent/0507/1" target="_blank" class="text-blue-700 underline">zhuconv.github.io/slides-hub/graph-agent/0507</a> — the <code>GraphML-FS</code> research prototype.
-
-</div>
-
-<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
+<div class="grid grid-cols-2 gap-4 mt-2 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
 
-### Development — the prototype worked, but…
+### What we have
 
-- **No parallelism inside a round** — one agent, one solution at a time
-- **Errors hard to localise** — a feature bug crashed the whole pipeline
-- **Free-form Python outran the validator** → debug churn ate wall time
-- Measured on a **public leaderboard** we don't own
+- **GraphTestbed** — our bench, a graph-specific MLE-Bench
+- **A method** — a feature-composition **DSL** where an **evolving agent** writes templates → **deterministic compilation** → materialized features
+
+### What's missing
+
+1. a **front-end playground**
+2. true **end-to-end** — raw enterprise DB → prediction
+3. **self-contained code assets**, not a monorepo
 
 </div>
 <div class="p-3 bg-green-50 rounded border border-green-200">
 
-### Production — harden each axis
+### Production
 
-- **Benchmark** — our own end-to-end harness, leakage-safe, hidden test
-- **srlang** — features become *compiled SQL*; unsafe ones won't typecheck
-- **Engine harness** — parallel search over atomic specs, on an MCP server
-- **Playground** — a surface to drive & inspect it all
+1. **Playground** — draft live now *(domain purchased, front-end ready)*
+2. A **multi-level eval harness** — not just a bench: raw DB → prediction, scored across modes
+3. **Split the code** → shareable **AutoML-ecosystem** assets + a **commercial** optimized agent harness
 
 </div>
 </div>
 
-<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Each prototype gap maps to one production component: validator-churn → <b>srlang</b>, no-parallelism → <b>engine harness</b>, ad-hoc eval → <b>benchmark</b>. This deck walks them in that order.
+<div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+The three gaps map 1:1 to the three production tracks — and this deck walks them in that order. Prior prototype: <a href="https://zhuconv.github.io/slides-hub/graph-agent/0507/1" target="_blank" class="text-blue-700 underline">graph-agent/0507</a>.
 </div>
 
 ---
 
 # System at a glance — three components, one loop
 
-<img src="/system.svg" class="w-full mt-2" />
+<img src="/system.svg" class="block mx-auto mt-2" style="max-height: 400px;" />
 
-<div class="mt-1 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-The <b>benchmark</b> sets the tasks and scores predictions. The <b>method</b> splits in two — a deterministic <code>srlang</code> layer compiles features to SQL, an engine harness searches over it via MCP. The <b>playground</b> is the human surface. Order of this deck: benchmark → engine → playground.
+<div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+Read left to right: the <b>eval harness</b> scores it, the two-layer <b>method</b> solves it (<code>srlang</code> ⊥ agent), the <b>playground</b> drives it. This deck walks them in that order.
 </div>
 
 ---
 
-# Benchmark — end-to-end, from raw DB to prediction
+# Eval harness — raw DB in, one-click prediction out
 
 <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
 
-### What it is
+### The task setting
 
-Not a clean feature matrix. Every task hands the system:
+Input: a **raw, multi-table DB** (*not* a clean matrix) + a **prediction demand** in plain words — *e.g. next-month user-churn probability*.
 
-- a **raw multi-table SQLite DB**, and
-- a **business goal** in plain language.
+The system then does it **end-to-end**:
 
-The system must **define the task → build point-in-time features → train → predict**, then is scored on a **hidden test set** held by the eval service.
+1. construct the **training / eval tables**
+2. **search features**
+3. **select** the best models
+4. bundle a **one-click** pipeline over the raw DB → scored on a **hidden test set**
 
 </div>
 <div class="p-3 bg-green-50 rounded border border-green-200">
@@ -96,22 +95,23 @@ The system must **define the task → build point-in-time features → train →
 ### Why it's the right bar
 
 - **Real enterprise data**: banking, delivery, SAP ERP, hospital ops, adtech
-- **Real signal**: leakage-safe baselines beat random by a wide margin (0.74–0.94 AUROC)
-- **Not Kaggle**: mined from relational DBs, signal-tested, low contamination
+- **Real signal**: leakage-safe baselines beat random (0.74–0.94 AUROC)
+- **Multi-level**: scored across 4 modes, not one leaderboard number
+- **Not Kaggle**: mined from relational DBs, signal-tested
 - **8 tasks · ~1.56M test rows**
 
 </div>
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Schema-plausible ≠ usable — every task passes an AUROC-vs-random gate. That single check killed the synthetic "looks real, no signal" candidates and confirmed the 8 keepers.
+Schema-plausible ≠ usable — every task clears an AUROC-vs-random gate. <b>Next:</b> co-built with our customer (Socure) on live data.
 </div>
 
 ---
 class: compact
 ---
 
-# Benchmark — the 8 enterprise tasks
+# Eval harness — the 8 enterprise tasks today
 
 <div class="text-sm mt-3">
 
@@ -134,7 +134,7 @@ class: compact
 
 ---
 
-# Benchmark — four evaluation modes
+# Eval harness — four evaluation modes
 
 <div class="text-sm mt-3">
 
@@ -149,18 +149,13 @@ Each mode exposes a different slice of the pipeline, so we can score **one capab
 
 </div>
 
-<div class="grid grid-cols-2 gap-4 mt-3 text-xs">
-<div class="p-2 bg-blue-50 rounded border border-blue-200">
-Lower modes give the system more scaffolding; <code>business_e2e</code> gives the least. Comparing across modes localises <em>where</em> a system fails.
-</div>
-<div class="p-2 bg-green-50 rounded border border-green-200">
-Every mode is gated by the same leakage checker — a leaky or invalid pipeline never earns a clean score.
-</div>
+<div class="mt-4 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+Lower modes hand over more scaffolding, <code>business_e2e</code> the least — so comparing across modes localises <em>where</em> a system fails. Every mode is gated by the same leakage checker: a leaky pipeline never earns a clean score.
 </div>
 
 ---
 
-# Benchmark — leakage-safe scoring + baselines
+# Eval harness — leakage-safe scoring + baselines
 
 <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
 <div class="p-3 bg-purple-50 rounded border border-purple-200">
@@ -176,16 +171,16 @@ Every mode is gated by the same leakage checker — a leaky or invalid pipeline 
 </div>
 <div class="p-3 bg-green-50 rounded border border-green-200">
 
-### Baselines today *(CC-only = a Claude coding agent)*
+### Baselines today
 
 | mode | metric | CC-only |
 |---|---|--:|
 | `task_build` | valid specs | **8/8** |
-| `feature_bundle` | fixed-model AUROC | 0.878 (+0.077 lift) |
+| `feature_bundle` | fixed-model AUROC | 0.878 (+0.077) |
 | `pipeline_bundle` | AUROC / leak-free | 0.860 / 87.5% |
 | `business_e2e` | AUROC / leak-free | 0.855 / 75% |
 
-<div class="text-xs opacity-60 mt-1">DFS feature baseline: 0.738 (−0.062 lift). our-system = placeholder.</div>
+<div class="text-xs opacity-60 mt-1">CC-only = a Claude coding agent · DFS baseline 0.738 (−0.062) · our-system = placeholder</div>
 
 </div>
 </div>
@@ -214,7 +209,7 @@ The part that must be **exactly right, every time**.
 </div>
 <div class="p-3 bg-green-50 rounded border border-green-200">
 
-### Search layer — engine harness
+### Search layer — agent harness
 
 The part that must be **fast and exploratory**.
 
@@ -228,7 +223,7 @@ The part that must be **fast and exploratory**.
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-This split is the production fix. The prototype let one LLM write free-form Python that <em>outran the validator</em>; now correctness is owned by a deterministic compiler, and the LLM only explores within what compiles.
+Two wins in one split. <b>Correctness</b>: the agent can't outrun a compiler — it only explores what type-checks. <b>Productization</b>: <code>srlang</code> hardens into a shareable AutoML asset, the optimized agent harness is the commercial layer.
 </div>
 
 ---
@@ -241,8 +236,8 @@ This split is the production fix. The prototype let one LLM write free-form Pyth
 ### You write intent (the IR)
 
 ```python
-# "# prior loans for this account
-#  in the strict 365d before origination"
+# prior loans for this account,
+# strict 365d before origination
 prior_loans_365d = Ascend.aggregate(
   source = Source("loan"),
   group_keys = [Col("entity_id")],
@@ -318,17 +313,17 @@ This is why we put correctness in a compiler: the validator <em>can't</em> be ou
 
 ---
 
-# Engine harness — srlang as an MCP server
+# Agent harness — srlang as an MCP server
 
-<img src="/engine.svg" class="w-full mt-2" />
+<img src="/agent.svg" class="block mx-auto mt-2" style="max-height: 400px;" />
 
-<div class="mt-1 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-The engine never re-implements feature semantics — it <b>calls the kernel</b> through MCP tools (<code>compile · typecheck · pit_check · materialize</code>). Controller (rules) and workers (LLM) explore; the kernel guarantees every candidate is safe and reproducible. <i>MCP packaging is in build; <code>sketch.py</code> is the in-repo seed of the loop.</i>
+<div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+The agent never re-implements feature semantics — it <b>calls the kernel</b> via MCP tools. <i>MCP packaging is in build; <code>sketch.py</code> is the in-repo seed.</i>
 </div>
 
 ---
 
-# Engine harness — making search efficient
+# Agent harness — making search efficient
 
 <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
@@ -345,7 +340,7 @@ The engine never re-implements feature semantics — it <b>calls the kernel</b> 
 </div>
 <div class="p-3 bg-green-50 rounded border border-green-200">
 
-### Evidence — engine on GraphTestbed *(prior deck)*
+### Evidence — agent on GraphTestbed *(prior deck)*
 
 | task | metric | GraphML-FS | rank |
 |---|:-:|--:|:-:|
@@ -360,7 +355,7 @@ The engine never re-implements feature semantics — it <b>calls the kernel</b> 
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Round wall-time is bounded by the slowest worker, not total prompt count; errors localise to one spec. Next: re-run the same engine against EnterpriseML-Bench's four modes (our-system column).
+Round wall-time is bounded by the slowest worker, not total prompt count; errors localise to one spec. Next: re-run the same agent against the eval harness's four modes (our-system column).
 </div>
 
 ---
@@ -372,9 +367,9 @@ Drive the search, watch features compile to SQL, and compare runs — all from o
 </div>
 
 <div class="flex justify-center mt-2">
-  <img src="/playground.png" class="rounded shadow-lg border border-gray-200" style="max-height: 380px;" />
+  <img src="/playground.png" class="rounded shadow-lg border border-gray-200" style="max-height: 330px;" />
 </div>
 
 <div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-The playground closes the loop from this deck: pick a benchmark task, let the engine search over <code>srlang</code>, and inspect every compiled feature + score in place. <i>(screenshot — replace <code>public/playground.png</code>)</i>
+Pick a task, let the agent search over <code>srlang</code>, and inspect every compiled feature in place. <i>(screenshot — replace <code>public/playground.png</code>)</i>
 </div>

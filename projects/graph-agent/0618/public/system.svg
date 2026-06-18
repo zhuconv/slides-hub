@@ -18,12 +18,12 @@
   <rect x="880" y="64" width="360" height="476" rx="12" fill="#fafafa" stroke="#d0d0d0" stroke-width="1.5"/>
 
   <!-- ===== Panel 1 : BENCHMARK ===== -->
-  <text x="220" y="98"  text-anchor="middle" font-size="17" font-weight="bold" fill="#333">1 · BENCHMARK</text>
-  <text x="220" y="120" text-anchor="middle" font-size="12" font-style="italic" fill="#888">EnterpriseML-Bench · end-to-end</text>
+  <text x="220" y="98"  text-anchor="middle" font-size="17" font-weight="bold" fill="#333">1 · EVAL HARNESS</text>
+  <text x="220" y="120" text-anchor="middle" font-size="12" font-style="italic" fill="#888">raw DB → one-click pipeline</text>
 
   <rect x="70" y="142" width="300" height="66" rx="9" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
   <text x="220" y="170" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">Raw multi-table DB</text>
-  <text x="220" y="190" text-anchor="middle" font-size="12" fill="#555">+ a business goal</text>
+  <text x="220" y="190" text-anchor="middle" font-size="12" fill="#555">+ prediction demand</text>
 
   <rect x="70" y="256" width="300" height="66" rx="9" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
   <text x="220" y="284" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">8 enterprise tasks</text>
@@ -40,12 +40,12 @@
   <line x1="220" y1="322" x2="220" y2="370" stroke="#444" stroke-width="2" marker-end="url(#arr)"/>
 
   <!-- ===== Panel 2 : METHOD / ENGINE ===== -->
-  <text x="640" y="98"  text-anchor="middle" font-size="17" font-weight="bold" fill="#333">2 · METHOD / ENGINE</text>
+  <text x="640" y="98"  text-anchor="middle" font-size="17" font-weight="bold" fill="#333">2 · METHOD / AGENT</text>
   <text x="640" y="120" text-anchor="middle" font-size="12" font-style="italic" fill="#888">the two-layer split</text>
 
   <text x="500" y="150" font-size="11" fill="#9673a6" font-weight="bold">search layer</text>
   <rect x="490" y="156" width="300" height="84" rx="9" fill="#e1d5e7" stroke="#9673a6" stroke-width="2"/>
-  <text x="640" y="186" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">Engine harness</text>
+  <text x="640" y="186" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">Agent harness</text>
   <text x="640" y="207" text-anchor="middle" font-size="12" fill="#555">LLM controller + N workers</text>
   <text x="640" y="225" text-anchor="middle" font-size="12" fill="#555">parallel search</text>
 
@@ -61,11 +61,11 @@
   <text x="640" y="411" text-anchor="middle" font-size="12" fill="#555">typed · leakage-safe · reproducible</text>
 
   <text x="640" y="470" text-anchor="middle" font-size="11" font-style="italic" fill="#aaa">(MCP boundary — in build)</text>
-  <text x="640" y="492" text-anchor="middle" font-size="12" fill="#777">engine: #1 on 3/4 GraphTestbed</text>
+  <text x="640" y="492" text-anchor="middle" font-size="12" fill="#777">agent: #1 on 3/4 GraphTestbed</text>
 
   <!-- ===== Panel 3 : PLAYGROUND ===== -->
   <text x="1060" y="98"  text-anchor="middle" font-size="17" font-weight="bold" fill="#333">3 · PLAYGROUND</text>
-  <text x="1060" y="120" text-anchor="middle" font-size="12" font-style="italic" fill="#888">GraphAgent Playground</text>
+  <text x="1060" y="120" text-anchor="middle" font-size="12" font-style="italic" fill="#888">SchemaRouter Playground</text>
 
   <rect x="910" y="156" width="300" height="210" rx="8" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
   <rect x="910" y="156" width="300" height="26" rx="8" fill="#82b366"/>
