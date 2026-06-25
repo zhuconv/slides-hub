@@ -112,5 +112,11 @@
     "date": "2026-06-17",
     "src": "uploaded",
     "slides": "slides.md"
+  },
+  {
+    "name": "srlang/usage",
+    "date": "2026-06-23",
+    "src": "uploaded",
+    "slides": "slides.md"
   }
 ]
