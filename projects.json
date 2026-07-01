@@ -118,5 +118,11 @@
     "date": "2026-06-23",
     "src": "uploaded",
     "slides": "slides.md"
+  },
+  {
+    "name": "alpha/0701",
+    "date": "2026-07-01",
+    "src": "uploaded",
+    "slides": "slides.md"
   }
 ]
