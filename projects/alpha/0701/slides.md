@@ -73,11 +73,11 @@ class: fill
 </div>
 <div class="card green">
 
-### SlopCodeBench - in flight
+### SlopCodeBench - complete
 
-- 36 checkpointed coding tasks, `gpt-5.5`
+- 28 checkpointed coding problems, `gpt-5.5`
 - Direction + Correction on the compliant ATS base
-- `16/36` tasks at `k=3`, still running
+- 3 trials each (`k=3`), permutation CIs
 
 </div>
 </div>
@@ -235,63 +235,63 @@ Two axes scored per checkpoint: pass-rate (core, strict - higher better) and slo
 class: fill
 ---
 
-# SlopCodeBench: preliminary signal (in flight)
+# SlopCodeBench: results (28 problems, k=3)
 
 <div class="result-table mt-3">
 
-| metric | better / worse / flat | robustness sd (base -> method) |
-|---|---|---|
-| verbosity (lower) | <span class="pos">7</span> / 0 / 7 | <span class="pos">0.056 -> 0.047</span> |
-| erosion (lower) | <span class="pos">5</span> / 0 / 9 | <span class="pos">0.079 -> 0.069</span> |
-| core-pass (higher) | 0 / <span class="neg">1</span> / 11 | 0.034 -> 0.034 |
-| strict-pass (higher) | <span class="pos">1</span> / <span class="neg">1</span> / 10 | <span class="neg">0.030 -> 0.049</span> |
+| metric | reductions (better) | regressions (worse) | robustness sd (base -> method) |
+|---|---|---|---|
+| verbosity (lower) | <span class="pos">12</span> | 0 | 0.053 -> 0.059 |
+| erosion (lower) | <span class="pos">6</span> | <span class="neg">2</span> | 0.068 -> 0.084 |
+| core-pass (higher) | <span class="pos">1</span> | <span class="neg">2</span> | 0.035 -> 0.036 |
+| strict-pass (higher) | <span class="pos">2</span> | <span class="neg">3</span> | 0.037 -> 0.053 |
 
 </div>
 
 <div class="grid grid-cols-2 gap-6 mt-4">
 <div class="card green">
 
-### Designed effect shows
+### The clean win
 
-- `12` significant slop reductions, `0` slop regressions
-- More consistent on the slop axis
+- 18 significant slop reductions (verbosity 12/0)
+- Large in magnitude (up to -0.23 verbosity)
 
 </div>
 <div class="card slate">
 
-### Honest caveats
+### Honest reading
 
-- Pass-rate held, not lifted (2 minor dips)
-- Strict-pass sd up on one high-variance task
+- Pass-rate held, slight strict-side cost (all <=0.10)
+- Reliability roughly unchanged - correction adds a stochastic re-run
 
 </div>
 </div>
 
 <div class="mt-4 p-3 amber rounded-lg text-sm">
-Cutting slop is robust and free of quality cost so far; lifting pass-rate is the open problem. ~16/36 tasks, k=3 - CIs still tightening.
+The method trades a small pass-rate cost for a large slop reduction, at roughly unchanged reliability - exactly what Direction+Correction was built to do.
 </div>
 
 ---
 class: fill
 ---
 
-# SlopCodeBench: the pass-rate gap is regression
+# SlopCodeBench: where the pass-rate is lost
 
 <div class="grid grid-cols-3 gap-4 mt-4">
-<div class="card amber">
-<div class="metric-label">regression missed</div>
-<div class="metric">13,096</div>
-<p>existing behavior broken</p>
+<div class="card slate">
+<div class="metric-label">core tests</div>
+<div class="metric">~25%</div>
+<p>miss rate</p>
 </div>
 <div class="card blue">
-<div class="metric-label">functionality missed</div>
-<div class="metric">4,971</div>
-<p>new feature incomplete</p>
+<div class="metric-label">functionality tests</div>
+<div class="metric">~31%</div>
+<p>worst by rate - new feature</p>
 </div>
-<div class="card slate">
-<div class="metric-label">core missed</div>
-<div class="metric">1,181</div>
-<p>core spec wrong</p>
+<div class="card amber">
+<div class="metric-label">regression tests</div>
+<div class="metric">~24%</div>
+<p>biggest bucket - existing behavior</p>
 </div>
 </div>
 
@@ -313,7 +313,7 @@ The agent builds the feature, then reorders existing error-handling: `error_code
 </div>
 
 <div class="mt-4 p-3 amber rounded-lg text-sm">
-Tension: our own "consolidate for brevity" principle touches working code, so slop-reduction can induce regressions. The next lever is a regression-preserving directive.
+Regression tests dominate the strict-pass score (most tests), so preserving existing behavior is the biggest lever - and our slop-consolidation can work against it.
 </div>
 
 ---
