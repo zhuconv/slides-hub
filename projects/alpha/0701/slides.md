@@ -125,15 +125,15 @@ class: fill
 </div>
 <div class="card slate">
 
-### Honest reading
+### Reliability
 
-- Significantly better where the method targets
-- No degradation on the rest
-- Run-to-run reliability unchanged - best-of-N re-run is the next test
+- Robust where it counts: near-zero regressions (<span class="pos">0/35</span> FrontierCS, only small dips on SCB)
+- Reliably helps or holds - it seldom hurts
+- Run-to-run variance not yet lower - best-of-N is the next test
 
 </div>
 </div>
 
 <div class="mt-5 p-3 amber rounded-lg text-sm">
-Two benchmarks, same pattern: the method lifts what it targets and leaves the rest intact.
+Two benchmarks, same pattern: significantly better where it targets, near-zero regressions on the rest - reliable in the sense of rarely breaking anything.
 </div>
