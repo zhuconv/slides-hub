@@ -336,8 +336,8 @@ class: fill
 
 ### Next
 
-- Finish the SlopCodeBench full bench, narrow the CIs
-- A/B the `preserve-existing-contracts` principle on regression-heavy tasks
+- A/B the `preserve-existing-contracts` principle to cut the strict-pass cost
+- Add best-of-N selection - correction alone did not lift reliability
 - Wire the per-problem matched-directive router
 
 </div>
