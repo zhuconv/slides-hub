@@ -21,7 +21,7 @@ mdc: true
 .slidev-layout.fill li { line-height: 1.40; margin: 0.24rem 0; font-size: 0.93rem; }
 .slidev-layout.fill ul { padding-left: 1.05rem; }
 .slidev-layout.fill table { font-size: 0.82rem; }
-.result-table table { font-size: 0.86rem; width: 100%; }
+.result-table table { font-size: 0.74rem; width: 100%; }
 .result-table th, .result-table td { white-space: nowrap; }
 .pos { color: #047857; font-weight: 700; }
 .neg { color: #b91c1c; font-weight: 700; }
@@ -66,7 +66,7 @@ class: fill
 <div class="card green">
 <div class="metric-label">good - significantly better</div>
 <div class="metric">4</div>
-<p>p69 +0.52, p231 +0.32, p124 +0.21, p25 +0.15</p>
+<p>avg Δ +0.30 · p69 +0.52, p231 +0.32, p124 +0.21, p25 +0.15</p>
 </div>
 <div class="card slate">
 <div class="metric-label">flat - no change</div>
@@ -94,12 +94,12 @@ class: fill
 
 <div class="result-table mt-4">
 
-| metric | good (better) | flat (no change) | bad (worse) |
-|---|:---:|:---:|:---:|
-| verbosity (lower better) | <span class="pos">12</span> | 16 | 0 |
-| erosion (lower better) | <span class="pos">6</span> | 20 | <span class="neg">2</span> |
-| core-pass (higher better) | <span class="pos">1</span> | 25 | <span class="neg">2</span> |
-| strict-pass (higher better) | <span class="pos">2</span> | 23 | <span class="neg">3</span> |
+| metric | good — n · avg Δ (95% CI) | flat | bad — n · avg Δ (95% CI) |
+|---|:---|:---:|:---|
+| verbosity (lower) | <span class="pos">12 · -0.11 (-0.18, -0.04)</span> | 16 | 0 |
+| erosion (lower) | <span class="pos">6 · -0.13 (-0.20, -0.05)</span> | 20 | <span class="neg">2 · +0.12 (+0.05, +0.20)</span> |
+| core-pass (higher) | <span class="pos">1 · +0.04 (+0.00, +0.09)</span> | 25 | <span class="neg">2 · -0.09 (-0.10, -0.08)</span> |
+| strict-pass (higher) | <span class="pos">2 · +0.06 (+0.04, +0.08)</span> | 23 | <span class="neg">3 · -0.03 (-0.05, -0.01)</span> |
 
 </div>
 
