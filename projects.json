@@ -124,5 +124,14 @@
     "date": "2026-07-01",
     "src": "uploaded",
     "slides": "slides.md"
+  },
+  {
+    "name": "graph-agent/0702",
+    "date": "2026-07-02",
+    "src": "uploaded",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
   }
 ]
