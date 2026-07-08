@@ -126,6 +126,15 @@
     "slides": "slides.md"
   },
   {
+    "name": "alpha/0708",
+    "date": "2026-07-08",
+    "src": "uploaded",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
+  },
+  {
     "name": "graph-agent/0702",
     "date": "2026-07-02",
     "src": "uploaded",

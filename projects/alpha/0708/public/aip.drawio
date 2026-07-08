@@ -1,0 +1,39 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="aip" name="AIP">
+    <mxGraphModel dx="980" dy="440" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="980" pageHeight="430" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="aiplabel" value="Agent Intervention Protocol (AIP)" style="text;html=1;align=center;fontColor=#6a4a86;fontSize=13;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="270" y="118" width="290" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="brain" value="&lt;b&gt;Brain Agent&lt;/b&gt; (outer)&lt;br&gt;&lt;br&gt;starts · monitors&lt;br&gt;the streaming output · decides" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="40" y="170" width="225" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="task" value="&lt;b&gt;Task Agent&lt;/b&gt;  — runs the task, streams as it goes&lt;br&gt;&lt;font style=&quot;font-size:11px&quot; color=&quot;#6c8ebf&quot;&gt;same protocol, either realization&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;verticalAlign=top;spacingTop=8" vertex="1" parent="1">
+          <mxGeometry x="560" y="60" width="380" height="350" as="geometry" />
+        </mxCell>
+
+        <mxCell id="open" value="&lt;b&gt;Open harness&lt;/b&gt; — in-process  (OpenHands SDK)&lt;br&gt;stream = return object · control = Python calls" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="582" y="135" width="336" height="115" as="geometry" />
+        </mxCell>
+
+        <mxCell id="close" value="&lt;b&gt;Close harness&lt;/b&gt; — CLI + files  (Codex, Claude Code)&lt;br&gt;stream = raw JSON file · control = process handle + codex/claude resume" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="582" y="268" width="336" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="observe" value="&lt;b&gt;OBSERVE&lt;/b&gt;  streaming output → Steps (ATIF)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#82b366;strokeWidth=2.5;fontSize=12;fontColor=#2f6b2f;endArrow=block;exitX=0;exitY=0.32;exitDx=0;exitDy=0;entryX=1;entryY=0.28;entryDx=0;entryDy=0;" edge="1" parent="1" source="task" target="brain">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="control" value="&lt;b&gt;CONTROL&lt;/b&gt;  stop · resume · rewind" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#9673a6;strokeWidth=2.5;fontSize=12;fontColor=#6a4a86;endArrow=block;exitX=1;exitY=0.72;exitDx=0;exitDy=0;entryX=0;entryY=0.78;entryDx=0;entryDy=0;" edge="1" parent="1" source="brain" target="task">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
