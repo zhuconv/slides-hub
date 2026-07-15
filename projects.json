@@ -142,5 +142,11 @@
     "assets": [
       "public"
     ]
+  },
+  {
+    "name": "alpha/0715",
+    "date": "2026-07-15",
+    "src": "uploaded",
+    "slides": "slides.md"
   }
 ]
