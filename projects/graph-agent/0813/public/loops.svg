@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 470" width="1280" height="470"
+     font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6c8ebf"/>
+    </marker>
+    <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#9673a6"/>
+    </marker>
+  </defs>
+
+  <style>
+    .h  { font-size: 17px; font-weight: 700; fill: #1f2937; text-anchor: middle; }
+    .t  { font-size: 14.5px; font-weight: 650; fill: #1f2937; text-anchor: middle; }
+    .s  { font-size: 10.5px; fill: #4b5563; text-anchor: middle; }
+    .g  { font-size: 10.5px; fill: #9ca3af; text-anchor: middle; letter-spacing: 0.09em; }
+    .l  { font-size: 11px; fill: #6c8ebf; font-weight: 600; }
+    .lp { font-size: 11px; fill: #9673a6; font-weight: 600; }
+    .box { stroke-width: 1.6; }
+  </style>
+
+  <!-- ============ column headers ============ -->
+  <text class="h" x="340" y="20">RL training</text>
+  <text class="h" x="940" y="20">Harness optimization</text>
+
+  <!-- ============ row 1 — data ============ -->
+  <rect class="box" x="210" y="36" width="260" height="38" rx="6" fill="#f3f4f6" stroke="#9ca3af"/>
+  <text class="t" x="340" y="60">Training data</text>
+  <rect class="box" x="810" y="36" width="260" height="38" rx="6" fill="#f3f4f6" stroke="#9ca3af"/>
+  <text class="t" x="940" y="60">Agent benchmarks</text>
+  <text class="g" x="640" y="59">DATA</text>
+  <path d="M340,74 L340,98" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+  <path d="M940,74 L940,98" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+
+  <!-- ============ row 2 — policy ============ -->
+  <rect class="box" x="210" y="100" width="260" height="48" rx="6" fill="#e1d5e7" stroke="#9673a6"/>
+  <text class="t" x="340" y="121">Model</text>
+  <text class="s" x="340" y="138">weights &#952;</text>
+  <rect class="box" x="810" y="100" width="260" height="48" rx="6" fill="#e1d5e7" stroke="#9673a6"/>
+  <text class="t" x="940" y="121">Harness</text>
+  <text class="s" x="940" y="138">prompts &#183; tools &#183; subagents &#183; code</text>
+  <text class="g" x="640" y="128">POLICY</text>
+  <path d="M300,148 L276,172" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+  <path d="M380,148 L404,172" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+  <path d="M900,148 L876,172" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+  <path d="M980,148 L1004,172" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+
+  <!-- ============ row 3 — rollouts ============ -->
+  <rect class="box" x="215" y="174" width="120" height="42" rx="6" fill="#d5e8d4" stroke="#82b366"/>
+  <text class="t" x="275" y="200">good rollouts</text>
+  <rect class="box" x="345" y="174" width="120" height="42" rx="6" fill="#f8cecc" stroke="#b85450"/>
+  <text class="t" x="405" y="200">bad rollouts</text>
+  <rect class="box" x="815" y="174" width="120" height="42" rx="6" fill="#d5e8d4" stroke="#82b366"/>
+  <text class="t" x="875" y="200">good traces</text>
+  <rect class="box" x="945" y="174" width="120" height="42" rx="6" fill="#f8cecc" stroke="#b85450"/>
+  <text class="t" x="1005" y="200">bad traces</text>
+  <text class="g" x="640" y="199">ROLLOUTS</text>
+  <path d="M275,216 L306,240" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+  <path d="M405,216 L374,240" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+  <path d="M875,216 L906,240" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+  <path d="M1005,216 L974,240" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+
+  <!-- ============ row 4 — reward ============ -->
+  <rect class="box" x="210" y="242" width="260" height="42" rx="6" fill="#fff2cc" stroke="#d6b656"/>
+  <text class="t" x="340" y="261">Reward</text>
+  <text class="s" x="340" y="277">verifier / preference score</text>
+  <rect class="box" x="810" y="242" width="260" height="42" rx="6" fill="#fff2cc" stroke="#d6b656"/>
+  <text class="t" x="940" y="261">Evaluations</text>
+  <text class="s" x="940" y="277">pass rate &#183; cost &#183; quality</text>
+  <text class="g" x="640" y="267">REWARD</text>
+  <path d="M340,284 L340,306" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+  <path d="M940,284 L940,306" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+
+  <!-- ============ row 5 — objective ============ -->
+  <rect class="box" x="210" y="308" width="260" height="42" rx="6" fill="#dae8fc" stroke="#6c8ebf"/>
+  <text class="t" x="340" y="327">Loss function</text>
+  <text class="s" x="340" y="343">computed from reward</text>
+  <rect class="box" x="810" y="308" width="260" height="42" rx="6" fill="#ffffff" stroke="#9673a6"
+        stroke-dasharray="5 3"/>
+  <text class="t" x="940" y="327">Human hypothesis</text>
+  <text class="s" x="940" y="343">an explanation of what to change</text>
+  <text class="g" x="640" y="333">UPDATE SIGNAL</text>
+  <path d="M340,350 L340,372" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+  <path d="M940,350 L940,372" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ag)"/>
+
+  <!-- ============ row 6 — optimizer ============ -->
+  <rect class="box" x="210" y="374" width="260" height="44" rx="6" fill="#dae8fc" stroke="#6c8ebf"/>
+  <text class="t" x="340" y="394">Optimizer</text>
+  <text class="s" x="340" y="410">one bounded gradient step</text>
+  <rect class="box" x="810" y="374" width="260" height="44" rx="6" fill="#e1d5e7" stroke="#9673a6"/>
+  <text class="t" x="940" y="394">Human</text>
+  <text class="s" x="940" y="410">turns the hypothesis into a code update</text>
+  <text class="g" x="640" y="399">OPTIMIZER</text>
+
+  <!-- ============ loop-backs ============ -->
+  <path d="M210,396 L150,396 L150,124 L204,124" fill="none" stroke="#6c8ebf" stroke-width="2"
+        marker-end="url(#ab)"/>
+  <text class="l" x="142" y="252" text-anchor="end">&#916;&#952;</text>
+  <text class="l" x="142" y="266" text-anchor="end">automatic</text>
+
+  <path d="M1070,396 L1130,396 L1130,124 L1076,124" fill="none" stroke="#9673a6" stroke-width="2"
+        stroke-dasharray="6 4" marker-end="url(#ap)"/>
+  <text class="lp" x="1140" y="252">code update</text>
+  <text class="lp" x="1140" y="266">must be verified</text>
+
+  <!-- ============ bottom framing ============ -->
+  <text x="340" y="446" class="s" font-size="11.5" fill="#6b7280">automatic updates</text>
+  <text x="940" y="446" class="s" font-size="11.5" fill="#6b7280">human-paced updates (asynchronous)</text>
+</svg>

@@ -148,5 +148,14 @@
     "date": "2026-07-15",
     "src": "uploaded",
     "slides": "slides.md"
+  },
+  {
+    "name": "graph-agent/0813",
+    "date": "2026-08-13",
+    "src": "uploaded",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
   }
 ]
