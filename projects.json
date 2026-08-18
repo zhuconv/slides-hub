@@ -157,5 +157,14 @@
     "assets": [
       "public"
     ]
+  },
+  {
+    "name": "alpha/0818",
+    "date": "2026-08-18",
+    "src": "uploaded",
+    "slides": "slides.md",
+    "assets": [
+      "public"
+    ]
   }
 ]
