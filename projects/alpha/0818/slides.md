@@ -1,7 +1,7 @@
 ---
 theme: default
-title: "ALPHA - Can Harness Optimization Improve Agents?"
-info: "Wrap-up: generalizable gains versus evaluation noise — August 18, 2026"
+title: "CAN HARNESS OPTIMIZATION IMPROVE AGENTS?"
+info: "GENERALIZABLE GAINS VERSUS EVALUATION NOISE"
 class: text-center cover
 drawings:
   persist: false
@@ -14,6 +14,7 @@ mdc: true
 .slidev-layout.fill h1 { margin-bottom: 0.5rem; }
 .slidev-layout table td, .slidev-layout table th { padding: 0.2em 0.55em; }
 .slidev-layout.cover h1 { font-size: 2.1em !important; line-height: 1.25 !important; }
+.slidev-layout.closing h1 { font-size: 1.65em !important; line-height: 1.15 !important; margin-bottom: 0.2em !important; }
 .slidev-layout.compact h1 { font-size: 1.5em !important; line-height: 1.15 !important; margin-bottom: 0.3em !important; }
 .slidev-layout.compact h3 { font-size: 1em !important; margin: 0.15em 0 !important; }
 .slidev-layout.compact p, .slidev-layout.compact li { line-height: 1.3 !important; font-size: 0.85em !important; }
@@ -23,99 +24,99 @@ mdc: true
 .slidev-layout.compact table td, .slidev-layout.compact table th { padding: 0.12em 0.5em !important; }
 </style>
 
-# Can Harness Optimization<br>Improve Agents?
+# CAN HARNESS OPTIMIZATION<br>IMPROVE AGENTS?
 
 <div class="mt-6 text-base opacity-80">
-Do the reported gains survive repeated runs? — project wrap-up
+GENERALIZABLE GAINS VERSUS EVALUATION NOISE
 </div>
 
 <div class="abs-br m-6 text-sm opacity-50">
-Jiajun Zhu · UT Austin · Aug 18, 2026
+Jiajun Zhu · UT Austin · Aug 19, 2026
 </div>
 
 ---
 class: fill
 ---
 
-# What we set out to test
+# A higher score is not yet an improvement
 
 <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
 
-### The promise
+### What most evaluations report
 
-- Optimizers rewrite prompts, tools, memory, and control logic from traces and reward
-- Meta-Harness, AHE, and Retro Harness all report point-estimate gains
-- No weight updates — the agent improves its own runtime
+- Run a benchmark once, or only a few times
+- Compare the seed and optimized harness by point estimate
+- Call a positive difference an improvement
 
 </div>
-<div class="p-3 bg-green-50 rounded border border-green-200">
+<div class="p-3 bg-purple-50 rounded border border-purple-200">
 
-### The assumption we question
+### What that comparison omits
 
-- That reward is precise enough to identify an improvement
-- Agent runs are stochastic with model, task, harness, and budget fixed
-- None of the three makes uncertainty a condition for accepting a candidate
+- Agent execution stays stochastic with task, model, harness, and budget fixed
+- Search can select a lucky rollout instead of a better harness
+- The real question is whether the gain clears repeat-run uncertainty
 
 </div>
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Search then selects for useful edits <em>and</em> for favorable execution noise. A positive point estimate is not evidence that a candidate beats its seed.
+Without repeated runs, we cannot tell a harness improvement from ordinary execution variance.
 </div>
 
 ---
 class: fill
 ---
 
-# Run everything ten times, then compare
-
-<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
-<div class="p-3 bg-blue-50 rounded border border-blue-200">
-
-### Measurement design
-
-- 3 optimizers × 4 benchmarks: Terminal-Bench, FrontierCS, DeepSWE, APEX-Agents
-- Each optimized harness paired against its own seed, matched model, image, verifier, budget
-- ~10 fresh runs per arm per task; harness content-hashed before held-out execution
-
-</div>
-<div class="p-3 bg-green-50 rounded border border-green-200">
-
-### Decision rule
-
-- Difference taken within task first, then averaged over tasks
-- Hierarchical bootstrap 95% CI: resample tasks, then runs
-- Reliable = lower bound above zero *and* Holm-significant across all 12 comparisons
-
-</div>
-</div>
-
-<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Uncertainty is treated as part of the optimization problem, not as error bars added to a finished plot.
-</div>
-
----
-class: fill
----
-
-# The same task scores differently every time you run it
+# The same task moves by 14–23 points across runs
 
 <img src="/run_to_run_variance.png" class="mx-auto mt-2 rounded" style="max-height: 285px; object-fit: contain" />
 
 <div class="mt-2 text-xs opacity-60">
-Dots are the median within-task SD over repeated runs; whiskers the interquartile range across tasks. Model, task, harness and budget all held fixed.
+Dots: median within-task reward SD. Whiskers: interquartile range across tasks. Task, model, harness, and budget are held fixed.
 </div>
 
 <div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Median within-task reward SD is 14–23 pp. With one run per condition, a single task's paired difference carries a standard error of roughly 20–33 pp — task-level effects only resolve by averaging over repeated runs.
+A single task's one-run difference has roughly 20–33 pp of standard error. Small point-estimate gains are therefore easy to manufacture by chance.
+</div>
+
+---
+class: fill
+---
+
+# We evaluate the gain, not just the score
+
+<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
+<div class="p-3 bg-blue-50 rounded border border-blue-200">
+
+### Repeated comparison
+
+- 3 optimizers × 4 benchmarks
+- Seed and optimized harness matched on model, image, verifier, and budget
+- About 10 fresh runs per arm, per task
+
+</div>
+<div class="p-3 bg-green-50 rounded border border-green-200">
+
+### Reliability rule
+
+- Estimate the difference within each task first
+- Hierarchical bootstrap: resample tasks, then runs
+- Reliable only if the 95% lower bound exceeds zero and survives Holm correction
+
+</div>
+</div>
+
+<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+Confidence intervals are part of the evaluator: a candidate is better only when its gain is repeatable.
 </div>
 
 ---
 class: compact
 ---
 
-# Only 1 of 12 results survives its error bars
+# Only 1 of 12 benchmark comparisons clears zero
 
 <div class="mx-auto" style="max-width: 660px">
 
@@ -137,61 +138,30 @@ class: compact
 </div>
 
 <div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Eight cells have a positive point estimate. One has a lower bound above zero. The comparison that matters is 1 versus 11, not 8 versus 4.
+Eight point estimates are positive, but only Retro Harness on Terminal-Bench is reliable. No method improves reliably across benchmarks.
 </div>
 
 ---
 class: fill
 ---
 
-# What this does and doesn't prove
-
-<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
-<div class="p-3 bg-blue-50 rounded border border-blue-200">
-
-### Supported
-
-- Only Retro Harness on Terminal-Bench survives multiplicity control
-- A single execution could have made several other cells look like gains
-- Optimizer-selected point estimates are especially vulnerable to execution noise
-
-</div>
-<div class="p-3 bg-purple-50 rounded border border-purple-200">
-
-### Not claimed
-
-- Absence of reliable evidence is not proof of zero effect
-- 9 of 11 non-reliable intervals sit inside the ±5 pp band; two stay under-resolved
-- The reliable cell's +0.8 lower bound does not establish a 5 pp effect
-
-</div>
-</div>
-
-<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-The audit narrows what current evidence supports. It does not close the question.
-</div>
-
----
-class: fill
----
-
-# Few tasks improve, about as many get worse
+# For more than 85% of tasks, nothing is detectable
 
 <img src="/task_level_outcomes.png" class="w-full mt-2 rounded" style="max-height: 275px; object-fit: contain" />
 
 <div class="mt-2 text-xs opacity-60">
-Improved / regressed require a CI excluding zero plus within-family BH correction; indistinguishable does not mean unchanged.
+Improved and regressed require a CI excluding zero plus within-family BH correction; indistinguishable does not mean exactly unchanged.
 </div>
 
 <div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Macro-averaged over benchmarks: 7.0–8.6% of method–task comparisons significantly improve, 5.3–7.8% significantly regress, and over 85% are indistinguishable.
+Significant improvements occur on 7.0–8.6% of tasks; significant regressions on 5.3–7.8%. Both tails are small, and neither is negligible.
 </div>
 
 ---
 class: fill
 ---
 
-# Same pattern in every method and benchmark
+# The sparse, two-sided pattern appears everywhere
 
 <div class="mt-3 mx-auto text-sm" style="max-width: 900px">
 
@@ -204,68 +174,129 @@ class: fill
 </div>
 
 <div class="mt-2 text-xs opacity-60">
-Each cell is improved / indistinguishable / regressed; held-out task count in parentheses. Improved and regressed require a CI excluding zero plus within-family BH correction.
+Each cell is significant improvement / indistinguishable / significant regression; held-out task count in parentheses.
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-An average reward hides the regression tail. Harness evaluation has to report both tails, not one number.
+The optimized harness is not a broad upgrade. It helps a few tasks, hurts a few tasks, and cannot be distinguished from its seed on the rest.
 </div>
 
 ---
 class: fill
 ---
 
-# Ten rounds, zero candidates accepted
-
-<img src="/metaharness_tb_iteration_ci.png" class="w-full mt-2 rounded" style="max-height: 285px; object-fit: contain" />
-
-<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Each candidate is tested against the fixed seed on fresh runs with a pre-allocated α/10 budget. Promotion needs the interval's lower bound above zero, not the point — the incumbent never moves.
-</div>
-
----
-class: fill
----
-
-# Fixing the noise did not find a better harness
-
-<div class="mt-2 mx-auto text-sm" style="max-width: 620px">
-
-| Decision threshold | Proposals passing | Promoted |
-|---|:-:|:-:|
-| Post-hoc sign, mean Δ > 0 | 6 / 10 | n/a |
-| Familywise 95% lower bound > 0 | 0 / 10 | 0 / 10 |
-
-</div>
+# Hypothesis: search is optimizing noise
 
 <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
 
-### What this does not support
+### How candidates are produced
 
-- That certifiable improvements are already frequent among candidates and merely selected badly
-- That filtering alone could produce an effect whose interval clears zero
+- The optimizer reads traces from train or evaluation tasks
+- It rewrites prompts, tools, memory, or control logic
+- The same noisy point estimate becomes its reward
 
 </div>
 <div class="p-3 bg-purple-50 rounded border border-purple-200">
 
-### What stays open
+### What this predicts
 
-- Budget-qualified: 10 iterations, one candidate each
-- A larger generation budget or narrower intervals could change it
+- Lucky candidates are promoted as improvements
+- A repeat-run evaluator should reject those false positives
+- Truly better candidates should still survive
 
 </div>
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Correcting evaluation noise is necessary for autonomous harness improvement, and not sufficient for it.
+Test the hypothesis by changing only the search-time evaluator: require every proposed harness to be consistently, significantly better.
 </div>
 
 ---
 class: fill
 ---
 
-# The wins were bug fixes, not advice
+# A robust search evaluator accepts 0 of 10 candidates
+
+<img src="/metaharness_tb_iteration_ci.png" class="w-full mt-2 rounded" style="max-height: 285px; object-fit: contain" />
+
+<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+Meta-Harness on Terminal-Bench: 6/10 candidates have positive point estimates; 0/10 have a familywise 95% lower bound above zero; 0 are promoted.
+</div>
+
+---
+class: fill
+---
+
+# Robust evaluation exposes a generation bottleneck
+
+<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
+<div class="p-3 bg-blue-50 rounded border border-blue-200">
+
+### What the robust evaluator fixed
+
+- It stopped rewarding favorable execution noise
+- It prevented unstable candidates from replacing the seed
+- It made the promotion decision trustworthy
+
+</div>
+<div class="p-3 bg-purple-50 rounded border border-purple-200">
+
+### What it could not supply
+
+- A candidate whose improvement repeats across runs
+- Evidence that reliable candidates were frequent but filtered badly
+- A generally better harness within the tested 10-round budget
+
+</div>
+</div>
+
+<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+Noise-aware evaluation is necessary, but not sufficient. The deeper question is where any real harness gain comes from.
+</div>
+
+---
+class: fill
+---
+
+# Task-level gains reveal three kinds of harness edits
+
+<div class="grid grid-cols-3 gap-3 mt-3 text-sm">
+<div class="p-3 bg-blue-50 rounded border border-blue-200">
+
+### 1 · Compatibility repair
+
+- Fix tool, shell, state, or environment contracts
+- Remove failures that block capability the model already has
+
+</div>
+<div class="p-3 bg-green-50 rounded border border-green-200">
+
+### 2 · Context offloading
+
+- Move long context into a short ReAct loop
+- Use a subagent as a tool to reduce attention rot
+
+</div>
+<div class="p-3 bg-purple-50 rounded border border-purple-200">
+
+### 3 · Directive guidance
+
+- Add instructions that point toward a presumed answer region
+- Try to change the model's downstream reasoning policy
+
+</div>
+</div>
+
+<div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+The key distinction is whether a patch restores access to existing capability or teaches a generally better behavior.
+</div>
+
+---
+class: fill
+---
+
+# Significant wins come from infrastructure, not advice
 
 <div class="mt-3 mx-auto text-sm" style="max-width: 780px">
 
@@ -279,18 +310,53 @@ class: fill
 </div>
 
 <div class="mt-2 text-xs opacity-60">
-Held-out patch–task exposures over all candidates — a finer-grained population than slides 7–8, which evaluate each method's final selected harness. Labels blind to outcomes (κ = 0.82); descriptive attribution, compound patches not causally ablated.
+Held-out patch–task exposures over all candidates. Labels are blind to outcomes (κ = 0.82); compound patches are not causally ablated.
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-19 of 24 significant-win associations (79%) are compatibility repair; 5 are context offloading. Directive guidance accounts for none of them, and for 28 of 35 regressions.
+Compatibility repair contributes 19 of 24 significant wins; context offloading contributes 5. Directive guidance contributes 0 wins and 28 regressions.
 </div>
 
 ---
 class: fill
 ---
 
-# Advice written from a trace only helps that trace
+# Case study: one shell fix unlocks two tasks
+
+<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
+<div class="p-3 bg-blue-50 rounded border border-blue-200">
+
+### Meta-Harness patch
+
+- `persistent_shell_note` fixes persistent-shell behavior
+- Baseline shell-death `RuntimeError`s: **14**
+- Patched shell-death `RuntimeError`s: **0**
+
+</div>
+<div class="p-3 bg-green-50 rounded border border-green-200">
+
+### Where the gain appears
+
+- `compile-compcert`: **+71.8 pp**, CI [+30.2, +90.4]
+- `build-cython-ext`: **+52.7 pp**, CI [+9.1, +79.3]
+- These two tasks contribute ~90% of the aggregate point gain
+
+</div>
+</div>
+
+<div class="mt-3 p-3 bg-purple-50 rounded border border-purple-200 text-sm text-center">
+Terminal-Bench aggregate: <strong>+3.18 pp</strong> · 95% CI <strong>[−1.22, +7.79]</strong> · <em>p</em> = .155
+</div>
+
+<div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
+The patch removes a local compatibility failure; it does not establish general capability improvement. This is a candidate-level case, not a verdict on the whole method.
+</div>
+
+---
+class: fill
+---
+
+# Direct guidance fits source tasks, not new tasks
 
 <div class="mt-3 mx-auto text-sm" style="max-width: 850px">
 
@@ -303,83 +369,89 @@ class: fill
 
 <div class="mt-3 p-3 bg-blue-50 rounded border border-blue-200 text-sm">
 
-- In blinded coding, 37 of 46 directives restate a source-specific action or solution region
-- The instruction is syntactically reusable, but its evidence is a handful of selected trajectories
+- 37 of 46 directives restate a source-specific action or solution region
+- The optimizer turns a high-reward trajectory into a reusable-looking instruction
 
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Consistent with overfitting at the level of behavior rather than parameters: fresh replays of the source task improve, held-out exposures show no significant improvement.
+The optimizer does attempt directive guidance. It simply does not write guidance that transfers: 0 significant held-out wins, 28 regressions.
 </div>
 
 ---
 class: fill
 ---
 
-# One way a good trace becomes a bad instruction
+# A winning trace can become harmful advice
 
 <div class="grid grid-cols-2 gap-3 mt-3 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
 
-### 1 · High-reward source trace
+### 1 · Observe a high-reward trace
 
-Inspects a failing service unit, edits its launch command, restarts the daemon.
+Inspect a failing service unit, edit its launch command, restart the daemon.
 
 </div>
 <div class="p-3 bg-purple-50 rounded border border-purple-200">
 
-### 2 · Generated directive
+### 2 · Rewrite it as a rule
 
-*"For service failures, inspect the unit definition and restart the daemon before deeper diagnosis."*
+*“For service failures, inspect the unit and restart the daemon before deeper diagnosis.”*
 
 </div>
 <div class="p-3 bg-green-50 rounded border border-green-200">
 
-### 3 · Fresh source replay
+### 3 · Replay the source task
 
-Skips the earlier unproductive branch; reward increases significantly.
+The rule skips an unproductive branch, so the same task scores higher.
 
 </div>
 <div class="p-3 bg-red-50 rounded border border-red-200">
 
-### 4 · Held-out task
+### 4 · Apply it to a new task
 
-Root cause is certificate permissions. The directive induces repeated restarts — significant regression.
+The real cause is certificate permissions; repeated restarts waste the run.
 
 </div>
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Outside the source neighborhood a directive can consume context, constrain exploration, or steer toward the wrong solution family.
+This is behavior-level overfitting: the prompt memorizes a successful path, not a general decision rule.
 </div>
 
 ---
-class: fill
+class: fill closing
 ---
 
-# Wrap-up
+# Harness optimization gains come from tools and interfaces—<br>not better instructions and reasoning
 
-<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
+<div class="mt-1 text-xs opacity-60">
+Related finding: VeRO reports tool-use gains but almost no improvement on reasoning-heavy benchmarks. <a href="https://labs.scale.com/blog/vero">Scale Labs, 2026</a>
+</div>
+
+<div class="grid grid-cols-2 gap-4 mt-2 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
 
-### What we can say
+### What the evidence says
 
-- Harnesses matter, but only 1 of 12 method–benchmark comparisons is reliable
-- Optimizing a noisy point estimate *can* manufacture apparent progress
-- Significant patch–task wins concentrate in compatibility repair; guidance showed no held-out transfer
+- Single-run gains are smaller than ordinary execution variance
+- Only 1 of 12 benchmark comparisons is reliable
+- More than 85% of task outcomes are statistically indistinguishable
+- Real wins concentrate in compatibility repair and context offloading
 
 </div>
 <div class="p-3 bg-green-50 rounded border border-green-200">
 
-### Where to push next
+### What should change
 
-- Generate over verifiable invariants: tool contracts, state transitions, context interfaces
-- Require the lower bound to clear a practical threshold, not just zero
-- Allocate repeated runs adaptively; always report the regression tail
+- Evaluate candidates with repeated runs and confidence intervals
+- Optimize verifiable contracts, state transitions, and context interfaces
+- Report significant regressions alongside improvements
+- Require transfer before calling a prompt rewrite better
 
 </div>
 </div>
 
 <div class="mt-3 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Agents can assist with harness engineering. Under the tested budget we find no reliable general behavioral self-improvement — the objective has to shift from a high-scoring harness <em>instance</em> to a repeatable <em>mechanism</em>.
+Under the tested methods and budgets, a base model does not reliably write a generally better harness for itself; it mostly repairs access to capability it already had.
 </div>
