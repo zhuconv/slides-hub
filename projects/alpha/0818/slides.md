@@ -99,16 +99,16 @@ Uncertainty is treated as part of the optimization problem, not as error bars ad
 class: fill
 ---
 
-# The noise is bigger than any effect we're chasing
+# The same task scores differently every time you run it
 
-<img src="/run_to_run_variance.png" class="w-full mt-2 rounded" style="max-height: 300px; object-fit: contain" />
+<img src="/run_to_run_variance.png" class="mx-auto mt-2 rounded" style="max-height: 285px; object-fit: contain" />
 
 <div class="mt-2 text-xs opacity-60">
-Left: dots are the median within-task SD, whiskers the interquartile range over tasks.
+Dots are the median within-task SD over repeated runs; whiskers the interquartile range across tasks. Model, task, harness and budget all held fixed.
 </div>
 
 <div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-300 text-xs">
-Median within-task reward SD is 14–23 pp with everything held fixed, and 33–41% of single-run comparisons disagree in <em>sign</em> with the repeated-run estimate.
+Median within-task reward SD is 14–23 pp. With one run per condition, a single task's paired difference carries a standard error of roughly 20–33 pp — task-level effects only resolve by averaging over repeated runs.
 </div>
 
 ---
