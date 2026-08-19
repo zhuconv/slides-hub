@@ -26,7 +26,7 @@ mdc: true
 # Can Harness Optimization<br>Improve Agents?
 
 <div class="mt-6 text-base opacity-80">
-Generalizable gains versus evaluation noise — project wrap-up
+Do the reported gains survive repeated runs? — project wrap-up
 </div>
 
 <div class="abs-br m-6 text-sm opacity-50">
@@ -68,7 +68,7 @@ Search then selects for useful edits <em>and</em> for favorable execution noise.
 class: fill
 ---
 
-# Protocol: measure the variance, then the effect
+# Run everything ten times, then compare
 
 <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
@@ -99,7 +99,7 @@ Uncertainty is treated as part of the optimization problem, not as error bars ad
 class: fill
 ---
 
-# One run gets the sign wrong a third of the time
+# The noise is bigger than any effect we're chasing
 
 <img src="/run_to_run_variance.png" class="w-full mt-2 rounded" style="max-height: 300px; object-fit: contain" />
 
@@ -115,7 +115,7 @@ Median within-task reward SD is 14–23 pp with everything held fixed, and 33–
 class: compact
 ---
 
-# One of twelve comparisons is reliable
+# Only 1 of 12 results survives its error bars
 
 <div class="mx-auto" style="max-width: 660px">
 
@@ -144,7 +144,7 @@ Eight cells have a positive point estimate. One has a lower bound above zero. Th
 class: fill
 ---
 
-# What the audit does and does not claim
+# What this does and doesn't prove
 
 <div class="grid grid-cols-2 gap-4 mt-3 text-sm">
 <div class="p-3 bg-blue-50 rounded border border-blue-200">
@@ -175,7 +175,7 @@ The audit narrows what current evidence supports. It does not close the question
 class: fill
 ---
 
-# Gains are a small tail — and so are regressions
+# Few tasks improve, about as many get worse
 
 <img src="/task_level_outcomes.png" class="w-full mt-2 rounded" style="max-height: 275px; object-fit: contain" />
 
@@ -191,7 +191,7 @@ Macro-averaged over benchmarks: 7.0–8.6% of method–task comparisons signific
 class: fill
 ---
 
-# Every cell is a large middle with two-sided tails
+# Same pattern in every method and benchmark
 
 <div class="mt-3 mx-auto text-sm" style="max-width: 900px">
 
@@ -215,7 +215,7 @@ An average reward hides the regression tail. Harness evaluation has to report bo
 class: fill
 ---
 
-# Blocking false promotion certifies nothing
+# Ten rounds, zero candidates accepted
 
 <img src="/metaharness_tb_iteration_ci.png" class="w-full mt-2 rounded" style="max-height: 285px; object-fit: contain" />
 
@@ -227,7 +227,7 @@ Each candidate is tested against the fixed seed on fresh runs with a pre-allocat
 class: fill
 ---
 
-# Noise explains false promotion, not missing progress
+# Fixing the noise did not find a better harness
 
 <div class="mt-2 mx-auto text-sm" style="max-width: 620px">
 
@@ -265,7 +265,7 @@ Correcting evaluation noise is necessary for autonomous harness improvement, and
 class: fill
 ---
 
-# Wins concentrate in repair, not in advice
+# The wins were bug fixes, not advice
 
 <div class="mt-3 mx-auto text-sm" style="max-width: 780px">
 
@@ -290,7 +290,7 @@ Held-out patch–task exposures over all candidates — a finer-grained populati
 class: fill
 ---
 
-# Directive guidance looks like source-trace overfitting
+# Advice written from a trace only helps that trace
 
 <div class="mt-3 mx-auto text-sm" style="max-width: 850px">
 
