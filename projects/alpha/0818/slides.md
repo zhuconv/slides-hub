@@ -33,10 +33,6 @@ Generalizable gains versus evaluation noise — project wrap-up
 Jiajun Zhu · UT Austin · Aug 18, 2026
 </div>
 
-<div class="abs-bl m-6 text-xs opacity-40">
-Draft ledger; frozen run outputs pending
-</div>
-
 ---
 class: fill
 ---
